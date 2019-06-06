@@ -13,7 +13,7 @@ local _task = {
 		{tag = "巡回模式", nextTag = "next"},
 		{tag = "选择电脑级别", nextTag = "超巨"},
 		{tag = "阵容展示", nextTag = "next"},
-		{tag = "主场开球", },
+		--{tag = "主场开球", },
 		{tag = "比赛中", timeout = 60},
 		{tag = "终场统计", nextTag = "next", timeout = 900, checkInterval = 1000},
 	},
@@ -44,17 +44,23 @@ end
 insertFunc("其他", fn)
 
 local fn = function()
-	sleep(1000)		--可能在联赛教练模式界面后的一瞬间弹出球队精神提升或任务奖励的确定按钮
-	if page.isExsitNavigation("comfirm") then		--球队精神提升确定
-		Log("确定！")
-		page.tapNavigation("comfirm")
-		sleep(1000)
+	--先跳过所有的确定（领取奖励，精神提升什么的，有可能是先检测到界面后弹出的确定窗口）
+	local lastCheckTime = os.time()
+	while true do
+		if page.isExsitNavigation("comfirm") then
+			lastCheckTime = os.time()
+			page.tapNavigation("comfirm")
+			sleep(200)
+		end
+		if os.time() - lastCheckTime >= 2 then
+			break
+		end
+		sleep(50)
 	end
 	
 	refreshUnmetCoach()
 end
 insertFunc("巡回模式", fn)
-
 
 local fn = function()
 	if page.matchWidget("阵容展示", "身价溢出") then
@@ -68,12 +74,13 @@ local fn = function()
 end
 insertFunc("阵容展示", fn)
 
-local wfn = function(taskIndex)
+local wfn = function(taskIndex)		--主场开球，先发球后才能进入“比赛中”界面
 	sleep(200)
 	local posTb = screen.findColors(scale.getAnchorArea("RB"),
 		scale.scalePos("1059|440|0xfafcfa,987|434|0x335a26-0x232117,1123|475|0x335a26-0x232117,1016|500|0x335a26-0x232117,1098|379|0x335a26-0x232117"),
 		95)
-	if #posTb ~= 0 then	
+	if #posTb ~= 0 then
+		Log("--------------------")
 		local buttonPot = {}
 		--同样位置会有多个点，x、y坐标同时小于offset时判定为同位置的坐标，以20像素/短边750为基准
 		local offset = (CFG.EFFECTIVE_AREA[4] - CFG.EFFECTIVE_AREA[2]) / 750 * 20
@@ -114,69 +121,12 @@ local wfn = function(taskIndex)
 			elseif #buttonPot == 2 then
 				table.insert(buttonPot, buttonPot[1])
 			end
-			
+			Log("主场开球--------------------")
 			tap(buttonPot[2].x, buttonPot[2].y)	--开球
 			tap(buttonPot[3].x, buttonPot[3].y)	--开球
 			sleep(300)
 		else
 			catchError(ERR_NORMAL, "未检测到传球按钮")
-		end
-	end
-end
-insertWaitFunc("主场开球", wfn)
-
-local wfn = function(taskIndex)
-	local posTb = screen.findColors(scale.getAnchorArea("RB"),
-		scale.scalePos("1059|440|0xfafcfa,987|434|0x335a26-0x232117,1123|475|0x335a26-0x232117,1016|500|0x335a26-0x232117,1098|379|0x335a26-0x232117"),
-		95)
-	if #posTb ~= 0 then	
-		local buttonPot = {}
-		--同样位置会有多个点，x、y坐标同时小于offset时判定为同位置的坐标，以20像素/短边750为基准
-		local offset = (CFG.EFFECTIVE_AREA[4] - CFG.EFFECTIVE_AREA[2]) / 750 * 20
-		for k, v in pairs(posTb) do
-			local exsitFlag = false
-			for _k, _v in pairs(buttonPot) do
-				if math.abs(v.x - _v.x) < offset and math.abs(v.y - _v.y) < offset then
-					exsitFlag = true
-					break
-				end
-			end
-			
-			if not exsitFlag then
-				table.insert(buttonPot, {x = v.x, y = v.y})
-			end
-		end
-		
-		local sortMethod = function(a, b)
-			if a.x == nil or a.y == nil or b.x == nil or b.y == nil then
-				return
-			end
-			
-			if a.y == b.y then
-				return a.x < b.x
-			else
-				return a.y < b.y
-			end
-		end
-		
-		sortMethod(buttonPot)
-		--prt(buttonPot)
-		
-		if #buttonPot > 0 then
-			--补足三个按钮
-			if #buttonPot == 1 then
-				table.insert(buttonPot, buttonPot[1])
-				table.insert(buttonPot, buttonPot[1])
-			elseif #buttonPot == 2 then
-				table.insert(buttonPot, buttonPot[1])
-			end
-			
-			local tmp = os.time() % 10
-			if tmp == 0 or tmp == 2 or tmp == 5 or tmp == 7 or tmp == 8 then
-				tap(buttonPot[2].x, buttonPot[2].y)
-			else
-				tap(buttonPot[3].x, buttonPot[3].y)
-			end
 		end
 	end
 end

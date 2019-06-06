@@ -42,11 +42,18 @@ end
 insertFunc("其他", fn)
 
 local fn = function()
-	sleep(1000)		--可能在联赛教练模式界面后的一瞬间弹出球队精神提升或任务奖励的确定按钮
-	if page.isExsitNavigation("comfirm") then		--球队精神提升确定
-		Log("确定！")
-		page.tapNavigation("comfirm")
-		sleep(1000)
+	--先跳过所有的确定（领取奖励，精神提升什么的，有可能是先检测到界面后弹出的确定窗口）
+	local lastCheckTime = os.time()
+	while true do
+		if page.isExsitNavigation("comfirm") then
+			lastCheckTime = os.time()
+			page.tapNavigation("comfirm")
+			sleep(200)
+		end
+		if os.time() - lastCheckTime >= 2 then
+			break
+		end
+		sleep(50)
 	end
 	
 	refreshUnmetCoach()
