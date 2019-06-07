@@ -18,7 +18,7 @@ function switchMainPage(pageName)
 	else
 		catchError(ERR_PARAM, "swich a wrong page")
 	end
-	sleep(1000)
+	sleep(1500)
 end
 
 --获取某个区域内某种状态的所有球员
@@ -190,7 +190,7 @@ function switchPlayer()
 		return
 	end
 	
-
+	
 	--将用户设置的换人位置对应关系写入benchPlayers
 	if #USER.SUBSTITUTE_INDEX_LIST > 0 then
 		for k, v in pairs(benchPlayers) do
@@ -307,12 +307,13 @@ end
 
 --续约球员
 function refreshContract()
-	sleep(1000)
+	sleep(200)
 	if page.isExsitNavigation("comfirm") then	--可能先检测到球员合同失效，再弹出合同失效的提示
 		page.tapNavigation("comfirm")
 	end
 	
 	selectExpiredPlayer()
+	sleep(1000)
 	page.tapCommonWidget("球员续约-点击签约")
 	sleep(1500)
 	page.tapCommonWidget("球员续约-续约")
@@ -321,43 +322,70 @@ function refreshContract()
 	sleep(500)
 end
 
---续约未满足条件的教练(满足条件的直接在比赛结束时处理了)
-function refreshUnmetCoach()
-	sleep(500)
-	if page.isExsitCommonWidget("球队异常") and not isPlayerRedCard then
-		sleep(1000)
-		if page.isExsitNavigation("comfirm") then	--可能先检测到异常，再弹出教练异常的提示
+--遇到稳定的(500ms处于checked状态)staticPage后退出，否则遇到comfirm进行点击跳过
+function skipComfirm(staticPage)
+	local lastCheckTime = os.time()
+	while true do
+		if page.isExsitNavigation("comfirm") then
+			lastCheckTime = os.time()
 			page.tapNavigation("comfirm")
-		end	
-		page.tapCommonWidget("球队异常", 7)
-		sleep(1500)
-		if page.isExsitCommonWidget("教练合约失效") then
-			page.tapCommonWidget("教练合约失效")
-			sleep(1500)
-			page.tapCommonWidget("教练续约")
-			sleep(1500)
-			page.tapCommonWidget("付款确认")
-			sleep(1000)
-			--多个确定
-			local lastCheckTime = os.time()
-			while true do
-				if page.isExsitNavigation("comfirm") then
-					lastCheckTime = os.time()
-					page.tapNavigation("comfirm")
-					sleep(500)
-				end
-				if os.time() - lastCheckTime > 2 then
-					break
-				end
-				sleep(50)
-			end
-			page.tapNavigation("notice")	--关闭续约界面
-			sleep(1000)	
-		else		--如果是球员状态异常，置isPlayerRedCard为true，以防止再次进入refreshUnmetCoach流程
-			isPlayerRedCard = true
+			sleep(500)
 		end
 		
-		page.tapNavigation("back")	--返回
-		sleep(2000)
+		if page.matchPage(staticPage) then
+			Log("checked staticPage 1st: "..staticPage)
+			sleep(500)
+			if page.matchPage(staticPage) then		--排除两个comfirm间过渡时出现checkedPage
+				Log("checked staticPage 2rd: "..staticPage)
+				break
+			end
+		end
+		
+		if os.time() - lastCheckTime > CFG.DEFAULT_TIMEOUT then
+			catchError(ERR_TIMEOUT, "time out in staticPage: "..staticPage)
+		end
+		
+		sleep(200)
 	end
+end
+
+--续约未满足条件的教练(满足条件的直接在比赛结束时处理了)
+function refreshUnmetCoach(taskPage)
+	skipComfirm(taskPage)	--可能先检测到异常，再弹出教练合约失效的提示
+	page.tapCommonWidget("球队异常", 7)		--点击第七个点才能点中
+	sleep(1500)
+	if page.isExsitCommonWidget("教练合约失效") then
+		page.tapCommonWidget("教练合约失效")
+		sleep(1500)
+		page.tapCommonWidget("教练续约")
+		sleep(1500)
+		page.tapCommonWidget("付款确认")
+		sleep(1000)
+		--多个确定
+		local lastCheckTime = os.time()
+		while true do
+			if page.isExsitNavigation("comfirm") then
+				lastCheckTime = os.time()
+				page.tapNavigation("comfirm")
+				sleep(500)
+			end
+			
+			if page.isExsitNavigation("notice") then		--关闭续约界面
+				page.tapNavigation("notice")
+				sleep(1500)
+				break		--出口
+			end
+			
+			if os.time() - lastCheckTime > CFG.DEFAULT_TIMEOUT then
+				catchError(ERR_TIMEOUT, "time out in 教练续约")
+			end
+			
+			sleep(200)
+		end
+	else		--如果是球员状态异常，置isPlayerRedCard为true，以防止再次进入refreshUnmetCoach流程
+		isPlayerRedCard = true
+	end
+	
+	page.tapNavigation("back")	--返回
+	sleep(1500)
 end

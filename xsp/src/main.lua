@@ -16,6 +16,7 @@ require("project/task/rankSim")
 require("project/task/leagueSim")
 require("project/task/tourSim")
 require("project/task/tourManuel")
+
 IS_BREAKING_TASK = exec.isExistBreakingTask()
 require("ui")
 require("zui/base_ui")
@@ -41,16 +42,15 @@ function main()
 	xmod.exit()
 end
 
---storage.purge()
---storage.commit()
+USER.ALLOW_RESTART = false
 
 main()
 
 screen.init(screen.LANDSCAPE_RIGHT)
 sleep(2000)
 
-page.checkCurrentPage()
 
+page.checkCurrentPage()
 
 --refreshUnmetCoach()
 

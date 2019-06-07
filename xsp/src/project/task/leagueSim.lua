@@ -43,43 +43,19 @@ end
 insertFunc("其他", fn)
 
 local fn = function()
-	--先跳过所有的确定（领取奖励，精神提升什么的，有可能是先检测到界面后弹出的确定窗口）
-	local lastCheckTime = os.time()
-	while true do
-		if page.isExsitNavigation("comfirm") then
-			lastCheckTime = os.time()
-			page.tapNavigation("comfirm")
-			sleep(200)
-		end
-		if os.time() - lastCheckTime >= 2 then
-			break
-		end
-		sleep(50)
-	end
+	sleep(200)
+	skipComfirm("联赛教练模式")		--检测到界面后又弹出了确定提示按钮，如领取奖励，精神提升，点击所有的确定
 	
 	if page.matchWidget("联赛教练模式", "跳过余下比赛") then
 		Log("checked need skip league level")
 		page.tapWidget("联赛教练模式", "跳过余下比赛")
-		sleep(1000)
-
-		--多个确定(联赛升级奖励)，循环导航处理
-		local cnt = 0
-		local lastCheckTime = os.time()
-		while true do
-			if page.isExsitNavigation("comfirm") then
-				lastCheckTime = os.time()
-				page.tapNavigation("comfirm")
-				sleep(200)
-				cnt = cnt + 1 
-			end
-			if (os.time() - lastCheckTime >= 2) or cnt >= 3 then
-				break
-			end
-			sleep(50)
-		end
+		sleep(500)
+		skipComfirm("联赛教练模式")
 	end
 	
-	refreshUnmetCoach()
+	if page.isExsitCommonWidget("球队异常") and not isPlayerRedCard then
+		refreshUnmetCoach("联赛教练模式")
+	end
 end
 insertFunc("联赛教练模式", fn)
 
@@ -108,9 +84,9 @@ local wfn = function()
 		catchError(ERR_TIMEOUT, "异常:未检测到比赛界面!")
 	elseif os.time() - lastPlayingPageTime >= 3 then	--3秒内为检测到比赛界面，跳过过长动画
 		Log("try skip replay!")
-		ratioTap(900,30)
+		ratioTap(900,70)
 		sleep(500)
-		ratioTap(900,30)
+		ratioTap(900,70)
 		sleep(500)
 	end
 	

@@ -44,21 +44,12 @@ end
 insertFunc("其他", fn)
 
 local fn = function()
-	--先跳过所有的确定（领取奖励，精神提升什么的，有可能是先检测到界面后弹出的确定窗口）
-	local lastCheckTime = os.time()
-	while true do
-		if page.isExsitNavigation("comfirm") then
-			lastCheckTime = os.time()
-			page.tapNavigation("comfirm")
-			sleep(200)
-		end
-		if os.time() - lastCheckTime >= 2 then
-			break
-		end
-		sleep(50)
-	end
+	sleep(200)
+	skipComfirm("巡回模式")		--检测到界面后又弹出了确定提示按钮，如领取奖励，精神提升，点击所有的确定
 	
-	refreshUnmetCoach()
+	if page.isExsitCommonWidget("球队异常") and not isPlayerRedCard then
+		refreshUnmetCoach("巡回模式")
+	end
 end
 insertFunc("巡回模式", fn)
 
@@ -141,6 +132,45 @@ local wfn = function()
 		return
 	end
 
+	if page.matchPage("点球") then
+		lastPenaltyPageTime = os.time()
+		
+		local posTb = screen.findColors(scale.getAnchorArea("A"),
+		scale.scalePos("934|331|0x00f8ff,930|325|0x00f8ff,938|325|0x00f8ff"),
+		95)
+		if #posTb ~= 0 then		--正处于罚球或守门控制阶段
+			local rnd = os.time() % 4
+			if math.abs(CFG.DST_RESOLUTION.width / 2 - posTb[1].x) > (CFG.EFFECTIVE_AREA[4] - CFG.EFFECTIVE_AREA[2]) / 750 * 100 then --100像素/短边750为基准
+				Log("罚球")
+				if rnd == 0 then		--左角
+					slide(667,485,410,370)
+				elseif rnd == 1 then	--左上角
+					slide(667,485,410,190)
+				elseif rnd == 2 then	--右上角
+					slide(667,485,920,190)
+				else		--右角
+					slide(667,485,920,370)
+				end
+			else
+				Log("守门")
+				if rnd == 1 or rnd == 2 then	--左扑
+					slide(667,280,432,280)
+				else 		--右扑
+					slide(667,280,900,280)
+				end
+			end
+			sleep(3000)
+		end
+	end
+
+	if lastPenaltyPageTime > 0 then		--发生了点球大战
+		if os.time() - lastPenaltyPageTime > CFG.DEFAULT_TIMEOUT + 10 then	--点球大战异常
+			catchError(ERR_TIMEOUT, "异常:手动巡回点球大战界面中断")
+		end
+		
+		return	--发生了点球大战，始终不继续比赛中的检测流程
+	end		
+
 	local posTb = screen.findColors(scale.getAnchorArea("RB"),
 		scale.scalePos("1059|440|0xfafcfa,987|434|0x335a26-0x232117,1123|475|0x335a26-0x232117,1016|500|0x335a26-0x232117,1098|379|0x335a26-0x232117"),
 		95)
@@ -204,9 +234,9 @@ local wfn = function()
 		catchError(ERR_TIMEOUT, "异常:未检测到比赛界面!")
 	elseif os.time() - lastPlayingPageTime >= 3 then	--3秒内为检测到比赛界面，跳过过长动画
 		Log("try skip replay!")
-		ratioTap(900,30)
+		ratioTap(900,70)
 		sleep(500)
-		ratioTap(900,30)
+		ratioTap(900,70)
 		sleep(500)
 	end
 	

@@ -320,25 +320,6 @@ local _pageList = {
 		},
 	},
 	{
-		tag = "主场开球",		--手动巡回赛，作为主场开球时，因为还没有进入“比赛中”流程片，导致会卡在此处，故单独处理
-		widgetList = {
-			{
-				tag = "方向摇杆",
-				enable = true,
-				noCache = true,
-				anchor = "LB",
-				srcPos = "273|560|0xd6d8d4,246|517|0xd2d5ce,298|603|0xadb0a9,259|488|0x405622-0x111608,277|634|0x405622-0x111608,202|572|0x405622-0x111608",
-			},
-			{
-				tag = "动作控制",
-				enable = true,
-				noCache = true,
-				anchor = "RB",
-				srcPos = "1059|440|0xfafcfa,987|434|0x335a26-0x232117,1123|475|0x335a26-0x232117,1016|500|0x335a26-0x232117,1098|379|0x335a26-0x232117",
-			},
-		},
-	},
-	{
 		tag = "初始化界面",
 		widgetList = {
 			{
@@ -378,6 +359,35 @@ local _pageList = {
 			},
 		},
 	},
+	--[[{
+		tag = "俱乐部",
+		widgetList = {
+			{
+				tag = "我的球队",
+				enable = true,
+				anchor = "R",
+				srcPos = "991|337|0xffffff,990|351|0xffffff,981|346|0x007aff,999|346|0x007aff,981|358|0xffffff,999|358|0xffffff,989|366|0x007aff",
+			},
+			{
+				tag = "练习赛",
+				enable = true,
+				anchor = "RB",
+				srcPos = "990|604|0xffffff,970|605|0xffffff,978|604|0x007aff,1001|604|0x007aff,1010|608|0xffffff,1004|620|0x007aff,990|595|0xffffff",
+			},
+			{
+				tag = "成就",
+				enable = true,
+				anchor = "LB",
+				srcPos = "343|628|0x007aff,336|625|0xffffff,351|625|0xffffff,343|597|0x007aff,344|588|0xffffff,336|632|0x007aff,335|642|0x007aff,335|650|0xffffff",
+			},
+			{
+				tag = "待领取奖励",
+				enable = false,
+				anchor = "BM",
+				srcPos = "645|554|0xff3b30,632|554|0xff3b30,644|537|0xff3b30,661|551|0xff3b30,646|567|0xff3b30",
+			},
+		},
+	},]]
 }
 
 --公共导航控件，如下一步、返回、确认、取消、通知
@@ -496,6 +506,13 @@ local _commonWidgetList = {
 		noCache = true,
 		anchor = "A",
 		srcPos = "687|346|0x6db0f9-0x6e3804,711|242|0x6db0f9-0x6e3804,705|150|0x6db0f9-0x6e3804,683|444|0x6db0f9-0x6e3804",
+	},
+	{
+		tag = "罚点球员",
+		enable = true,
+		noCache = true,
+		anchor = "A",
+		srcPos = "934|331|0x00f8ff,930|325|0x00f8ff,938|325|0x00f8ff",
 	},
 }
 

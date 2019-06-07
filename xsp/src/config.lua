@@ -73,7 +73,7 @@ USER = {}	--用户配置表，主要有UI设置
 -----------------用户设置-----------------
 USER.TASK_NAME = "自动联赛"					--任务名称
 
-USER.ALLOW_RESTART = true			--是否允许重启脚本来解决异常
+USER.ALLOW_RESTART = false			--是否允许重启脚本来解决异常
 
 USER.REFRESH_CONCTRACT = false		--自动续约合同
 USER.REPEAT_TIMES = 0				--任务循环次数

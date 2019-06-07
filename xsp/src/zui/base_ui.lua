@@ -11,7 +11,8 @@ local feildPositionSubstituteCondition = "主力红才换,好一档就换,好两
 
 local DevScreen={--开发设备的参数
 	Width=CFG.DEV_RESOLUTION.width,--注意Width要大于Height,开发机分辨率是啥就填啥
-	Height=CFG.DEV_RESOLUTION.height --注意Width要大于Height,开发机分辨率是啥就填啥
+	Height=CFG.DEV_RESOLUTION.height, --注意Width要大于Height,开发机分辨率是啥就填啥
+	countdown = 30
 }
 
 local myui=ZUI:new(DevScreen,{align="left",w=90,h=90,size=40,cancelname="取消",okname="OK",countdown=(IS_BREAKING_TASK == true and 3 or 0),config="zui.dat",bg="bk.png"})--在page中传入的size会成为所有page中所有控件的默认字体大小,同时也会成为所有page控件的最小行距
@@ -91,32 +92,73 @@ local pageSubstitutePic = Page:new(myui,{text = "编号图示",size = 24})
 pageSubstitutePic:addLabel({text="        ",size=20})
 pageSubstitutePic:addImage({src="substitute.jpg",w=70,h=100,xpos=0,align="cnter"})
 
-local pageTestting = Page:new(myui,{text = "相关说明",size = 24})
---pageTestting:nextLine()
+local pageTestting = Page:new(myui,{text = "脚本说明",size = 24})
 pageTestting:nextLine()
-pageTestting:addLabel({text="    1.--",size=20, align="cnter"})
+pageTestting:addLabel({text="                                ------------------------脚本特性说明------------------------",size=20, align="cnter"})
 pageTestting:nextLine()
-pageTestting:addLabel({text="    2.需要开场自动按状态换人的，请在换人设置里设置好换人规则 ",size=20, align="cnter"})
+pageTestting:addLabel({text="    1.一定要原版背景才能使用，换了背景有些界面不能识别。",size=20, align="cnter"})
 pageTestting:nextLine()
-pageTestting:addLabel({text="    3.需要下半场换人的请打开自动换人，另建议所有模式下都关闭自动铲球防止红黄牌 ",size=20, align="cnter"})
+pageTestting:addLabel({text="    2.只支持经典按键模式，不要选划屏模式。",size=20, align="cnter"})
 pageTestting:nextLine()
-pageTestting:addLabel({text="    4.启动脚本前请先切换至游戏主界面 ",size=20, align="cnter"})
+pageTestting:addLabel({text="    3.刘海屏不要留黑边，不要有导航栏，让游戏铺满整个屏幕。",size=20, align="cnter"})
 pageTestting:nextLine()
-pageTestting:addLabel({text="    5.已实现的功能：自动循环刷联赛教练模式，天梯教练模式，支持加时赛和点球，支",size=20, align="cnter"})
+pageTestting:addLabel({text="    4.HOME键(导航栏)放在右边，运行过程中不要让手机旋转方向。",size=20, align="cnter"})
 pageTestting:nextLine()
-pageTestting:addLabel({text="       持开场根据球员状态自动换人，支持自动续约教练和球员，支持游戏崩溃自动重启 ",size=20, align="cnter"})
+pageTestting:addLabel({text="    5.脚本操作的过程中，尽量不要手动操作，或先使用音量键停止脚本运行后再行操作，操作完成后直接重开脚本。",size=20, align="cnter"})
 pageTestting:nextLine()
-pageTestting:addLabel({text="       续接任务 ",size=20, align="cnter"})
+pageTestting:addLabel({text="    6.按照稳定性，优先使用手机，模拟器长时间运行可能会导致游戏崩溃(闪退)等状况。",size=20, align="cnter"})
 pageTestting:nextLine()
-pageTestting:addLabel({text="    6.-- ",size=20, align="cnter"})
+pageTestting:addLabel({text="    7.脚本自动重启(续接任务)功能仅安卓有效。",size=20, align="cnter"})
 pageTestting:nextLine()
-pageTestting:addLabel({text="    7.另外不喜欢XX助手的用户，可以进群下载本脚本专用小精灵应用 ",size=20, align="cnter"})
 pageTestting:nextLine()
-pageTestting:addLabel({text="    8.有任何问题及建议请反馈给作者，Q群：574025168 ",size=20, align="cnter"})
+pageTestting:addLabel({text="                                ------------------------脚本功能说明------------------------",size=20, align="cnter"})
+pageTestting:nextLine()
+pageTestting:addLabel({text="    1.脚本功能主要是模拟点击，实现教练模式自动循环挂机。脚本不是AI，不能手动天梯上分的。",size=20, align="cnter"})
+pageTestting:nextLine()
+pageTestting:addLabel({text="    2.目前可挂机的任务有：教练天梯赛、教练联赛、教练巡回赛、手动巡回赛(简单AI主要混失败奖励点数)。",size=20, align="cnter"})
+pageTestting:nextLine()
+pageTestting:addLabel({text="    3.需要开场自动按状态换人的，请在换人设置里设置好换人规则。",size=20, align="cnter"})
+pageTestting:nextLine()
+pageTestting:addLabel({text="    4.需要下半场换人体力的不足时换人的，请打开游戏自动换人。",size=20, align="cnter"})
+pageTestting:nextLine()
+pageTestting:addLabel({text="    5.建议所有模式下都关闭自动铲球防止红黄牌。",size=20, align="cnter"})
+pageTestting:nextLine()
+pageTestting:addLabel({text="    6.启动脚本前请先切换至游戏主界面-其他(或挂机流程中的任何一个界面)。",size=20, align="cnter"})
+pageTestting:nextLine()
+pageTestting:addLabel({text="    7.任务次数是指挂机场数。",size=20, align="cnter"})
+pageTestting:nextLine()
+pageTestting:addLabel({text="    8.另外不喜欢XX助手的用户，可以进群下载本脚本专用小精灵应用。",size=20, align="cnter"})
+pageTestting:nextLine()
+pageTestting:addLabel({text="    9.年卡和永久卡有专用的VIP微信群，可进Q群让管理邀请加入。",size=20, align="cnter"})
+pageTestting:nextLine()
+pageTestting:addLabel({text="    10.详细说明书请点击脚本教程。",size=20, align="cnter"})
+pageTestting:nextLine()
+pageTestting:addLabel({text="    11.有任何问题及建议请反馈给作者，Q群：574025168 ",size=20, align="cnter"})
+pageTestting:nextLine()
+pageTestting:nextLine()
+pageTestting:addLabel({text="    ",size=20, align="cnter"})
 
+local pageBuyCDKEY = Page:new(myui,{text = "脚本购买",size = 24})
+pageBuyCDKEY:nextLine()
+pageBuyCDKEY:addLabel({text="   购买方式:",size=22, align="cnter"})
+pageBuyCDKEY:nextLine()
+pageBuyCDKEY:addLabel({text="      群内经常有优惠和折扣",size=20, align="cnter"})
+pageBuyCDKEY:nextLine()
+pageBuyCDKEY:addLabel({text="      1.叉叉助手直接购买(安卓)",size=20, align="cnter"})
+pageBuyCDKEY:nextLine()
+pageBuyCDKEY:addLabel({text="      2.叉叉小精灵直接购买(安卓)",size=20, align="cnter"})
+pageBuyCDKEY:nextLine()
+pageBuyCDKEY:addLabel({text="      3.IPA精灵直接购买(IOS)",size=20, align="cnter"})
+pageBuyCDKEY:nextLine()
+pageBuyCDKEY:addLabel({text="      4.在线购买激活码(安卓+IOS)",size=20, align="cnter"})
+
+pageBuyCDKEY:nextLine()
+pageBuyCDKEY:nextLine()
+pageBuyCDKEY:addUrl({text="购买激活码",url="http://cndy1860.linso.pw"})
 
 local pageProSet = Page:new(myui,{text = "高级设置",size = 24})
-
+pageProSet:nextLine()
+pageProSet:addLabel({text="    因稳定性原因以下高级功能暂未开放，后续开放后再行通知",size=24})
 pageProSet:nextLine()
 pageProSet:addLabel({text="    本脚本提供了界面缓存的高级功能（默认开启），即将所有匹配过的界面的数据缓存在本地，",size=24})
 pageProSet:nextLine()
@@ -138,6 +180,8 @@ pageProSet:addRadioGroup({id="radioDropCache",list="开启,关闭",select=1,w=25
 pageProSet:nextLine()
 pageProSet:addLabel({text="低配兼容",size=30})
 pageProSet:addRadioGroup({id="radioLowConfiguration",list="开启,关闭",select=1,w=25,h=12})
+
+
 
 --将位置*转换成对应的数字
 local function _convertIndex(posation)
@@ -210,7 +254,6 @@ function dispUI()
 	USER.REPEAT_TIMES = tonumber(uiRet.editerCircleTimes or CFG.DEFAULT_REPEAT_TIMES)
 	
 	USER.ALLOW_SUBSTITUTE = uiRet.checkBoxFunc.开场换人
-	USER.REFRESH_CONCTRACT = uiRet.checkBoxFunc.自动续约
 	
 	USER.ALLOW_RESTART = uiRet.radioRestart.开启
 	if xmod.PLATFORM == xmod.PLATFORM_IOS then

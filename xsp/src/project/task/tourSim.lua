@@ -42,21 +42,12 @@ end
 insertFunc("其他", fn)
 
 local fn = function()
-	--先跳过所有的确定（领取奖励，精神提升什么的，有可能是先检测到界面后弹出的确定窗口）
-	local lastCheckTime = os.time()
-	while true do
-		if page.isExsitNavigation("comfirm") then
-			lastCheckTime = os.time()
-			page.tapNavigation("comfirm")
-			sleep(200)
-		end
-		if os.time() - lastCheckTime >= 2 then
-			break
-		end
-		sleep(50)
-	end
+	sleep(200)
+	skipComfirm("巡回模式")		--检测到界面后又弹出了确定提示按钮，如领取奖励，精神提升，点击所有的确定
 	
-	refreshUnmetCoach()
+	if page.isExsitCommonWidget("球队异常") and not isPlayerRedCard then
+		refreshUnmetCoach("巡回模式")
+	end
 end
 insertFunc("巡回模式", fn)
 
@@ -85,9 +76,9 @@ local wfn = function()
 		catchError(ERR_TIMEOUT, "异常:未检测到比赛界面!")
 	elseif os.time() - lastPlayingPageTime >= 3 then	--3秒内为检测到比赛界面，跳过过长动画
 		Log("try skip replay!")
-		ratioTap(900,30)
+		ratioTap(900,70)
 		sleep(500)
-		ratioTap(900,30)
+		ratioTap(900,70)
 		sleep(500)
 	end
 	
