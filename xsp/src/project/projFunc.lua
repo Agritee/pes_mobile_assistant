@@ -97,7 +97,8 @@ local function getPlayerStatusInfo(seats)
 			CFG.EFFECTIVE_AREA[3] - CFG.EFFECTIVE_AREA[1], CFG.EFFECTIVE_AREA[4] - CFG.EFFECTIVE_AREA[2])
 	elseif seats == "bench" then		--替补席
 		searchArea = Rect(0, 0,
-			CFG.DEV_RESOLUTION.width/4, CFG.EFFECTIVE_AREA[4] - CFG.EFFECTIVE_AREA[2])
+			--CFG.DEV_RESOLUTION.width/4, CFG.EFFECTIVE_AREA[4] - CFG.EFFECTIVE_AREA[2])
+			CFG.DST_RESOLUTION.width/4, CFG.EFFECTIVE_AREA[4] - CFG.EFFECTIVE_AREA[2])
 	else
 		catchError(ERR_PARAM, "get a worong seats in getPlayerStatusInfo")
 	end
@@ -185,7 +186,7 @@ function switchPlayer()
 	--获取替补状态
 	local benchPlayers = getPlayerStatusInfo("bench")
 	if #benchPlayers ~= 7 then
-		catchError(ERR_PARAM, "cant get 7 players in bench!")
+		catchError(ERR_PARAM, "cant get 7 players in bench! "..#benchPlayers)
 		dialog("cant get 11 players in field, abort switchPlayer!", 5)
 		return
 	end

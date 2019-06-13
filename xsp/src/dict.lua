@@ -3,11 +3,6 @@
 -- Date: 2018-11-19
 -- Descrip: 数据字典,用于生成单词
 
-local pairs = pairs
-local strFind = string.find
-local strLen = string.len
-local tbInsert = table.insert
-
 local modName = "dict"
 local M = {}
 
@@ -508,9 +503,9 @@ function M.getPrefixWord(preStr)
 	local tmpTable = {}
 	
 	for k, v in pairs(M.words) do
-		local i, _ = strFind(v, preStr)
+		local i, _ = string.find(v, preStr)
 		if i == 1 then
-			tbInsert(tmpTable, v)
+			table.insert(tmpTable, v)
 		end
 	end
 	
@@ -531,9 +526,9 @@ function M.getSuffixWord(suffStr)
 	local tmpTable = {}
 	
 	for k, v in pairs(M.words) do
-		local _, j = strFind(v, suffStr)
-		if j == strLen(v) then
-			tbInsert(tmpTable, v)
+		local _, j = string.find(v, suffStr)
+		if j == string.len(v) then
+			table.insert(tmpTable, v)
 		end
 	end
 	
@@ -554,10 +549,10 @@ function M.getPreSuffixWord(preSrt, suffStr)
 	local tmpTable = {}
 	
 	for k, v in pairs(M.words) do
-		local i, _ = strFind(v, preSrt)
-		local _, j = strFind(v, suffStr)
-		if i == 1 and j == strLen(v) then
-			tbInsert(tmpTable, v)
+		local i, _ = string.find(v, preSrt)
+		local _, j = string.find(v, suffStr)
+		if i == 1 and j == string.len(v) then
+			table.insert(tmpTable, v)
 		end
 	end
 	
