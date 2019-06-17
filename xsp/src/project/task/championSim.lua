@@ -1,18 +1,17 @@
--- randSim.lua
+-- tourSim.lua
 -- Author: cndy1860
--- Date: 2018-12-28
--- Descrip: 自动刷联赛赛教练模式
---1.联赛教练模式中，替换红牌伤病球员，是通过"联赛教练模式"中的actionFunc，检测设置上的异常红点后点击自动设置实现。（异常对应两种状态：可能是
---教练合约到期或者球员红牌伤病，因此不使用一键替换功能）
+-- Date: 2019-06-17
+-- Descrip: 自动刷冠军赛教练模式
 
 local _task = {
-	tag = "自动联赛",
+	tag = "自动冠军赛",
 	processes = {
 		{tag = "其他", mode = "firstRun"},
-		{tag = "比赛", nextTag = "联赛", mode = "firstRun"},
-		{tag = "联赛", nextTag = "教练模式联赛", mode = "firstRun"},
+		{tag = "比赛", nextTag = "活动模式", mode = "firstRun"},
+		{tag = "活动模式", nextTag = "自动比赛", mode = "firstRun"},
+		{tag = "决战32强", nextTag = "报名", mode = "firstRun"},
 		
-		{tag = "联赛教练模式", nextTag = "next"},
+		{tag = "冠军赛", nextTag = "next"},
 		{tag = "阵容展示", nextTag = "next"},
 		{tag = "比赛中", timeout = 60},
 		{tag = "终场统计", nextTag = "next", timeout = 900, checkInterval = 1000},
@@ -37,6 +36,7 @@ local function insertWaitFunc(processTag, fn)
 	end
 end
 
+
 local fn = function()
 	switchMainPage("比赛")
 end
@@ -44,27 +44,21 @@ insertFunc("其他", fn)
 
 local fn = function()
 	sleep(200)
-	skipComfirm("联赛教练模式")		--检测到界面后又弹出了确定提示按钮，如领取奖励，精神提升，点击所有的确定
-	
-	while true do
-		if page.matchWidget("联赛教练模式", "跳过余下比赛") then
-			Log("checked need skip league level")
-			page.tapWidget("联赛教练模式", "跳过余下比赛")
-			sleep(500)
-			skipComfirm("联赛教练模式")
-		elseif page.matchWidget("联赛教练模式", "跳过余下比赛-未激活") then
-			Log("matched 跳过余下比赛-未激活")
-			break
-		end
-		
-		sleep(100)
-	end
 	
 	if page.isExsitCommonWidget("球队异常") and not isPlayerRedCard then
-		refreshUnmetCoach("联赛教练模式")
+		refreshUnmetCoach("自动冠军赛")
 	end
 end
-insertFunc("联赛教练模式", fn)
+insertFunc("自动冠军赛", fn)
+
+local wfn = function()
+	if page.matchPage() then
+		Log("本轮冠军赛已结束")
+		dialog("本轮冠军赛已结束")
+		xmod.exit()
+	end
+end
+insertWaitFunc("阵容展示", fn)
 
 local fn = function()
 	if page.matchWidget("阵容展示", "身价溢出") then
@@ -87,8 +81,20 @@ local wfn = function()
 		return
 	end
 	
+	if page.matchPage("点球") then
+		lastPenaltyPageTime = os.time()
+	end
+
+	if lastPenaltyPageTime > 0 then		--发生了点球大战
+		if os.time() - lastPenaltyPageTime > CFG.DEFAULT_TIMEOUT + 10 then	--点球大战异常
+			catchError(ERR_TIMEOUT, "异常:点球大战界面中断")
+		end
+		
+		return	--发生了点球大战，始终不继续比赛中的检测流程
+	end		
+
 	if os.time() - lastPlayingPageTime > CFG.DEFAULT_TIMEOUT + 10 then		--长时间为检测到比赛界面，判定为异常
-		catchError(ERR_TIMEOUT, "异常:未检测到比赛界面!")
+		catchError(ERR_TIMEOUT, "异常:未检测到比赛界面")
 	elseif os.time() - lastPlayingPageTime >= 3 then	--3秒内为检测到比赛界面，跳过过长动画
 		Log("try skip replay!")
 		ratioTap(900,70)
@@ -97,7 +103,7 @@ local wfn = function()
 		sleep(500)
 	end
 	
-	Log("timeAfterLastPlayingPage = "..(os.time() - lastPlayingPageTime).."s yet")
+	--Log("timeAfterLastPlayingPage = "..(os.time() - lastPlayingPageTime).."s yet")
 end
 insertWaitFunc("终场统计", wfn)
 

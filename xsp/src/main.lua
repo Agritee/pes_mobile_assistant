@@ -16,6 +16,7 @@ require("project/task/rankSim")
 require("project/task/leagueSim")
 require("project/task/tourSim")
 require("project/task/tourManuel")
+require("project/task/championSim")
 
 IS_BREAKING_TASK = exec.isExistBreakingTask()
 require("ui")
@@ -52,9 +53,11 @@ sleep(2000)
 
 page.checkCurrentPage()
 
+
+
 --refreshUnmetCoach()
 
---page.matchPage("阵容展示")
+page.matchPage("冠军杯分组")
 --page.tapWidget("阵容展示", "切换状态")
 
 

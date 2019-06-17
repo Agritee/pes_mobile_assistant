@@ -194,6 +194,15 @@ function Log(content)
 	log(content)
 end
 
+--清除日志文件
+function dropLog()
+	local logFile = xmod.getPublicPath()..CFG.LOG_FILE_NAME
+	local file = io.open(logFile, "w")
+	if file then
+		io.close(file)
+	end	
+end
+
 --捕获捕获处理函数
 function catchError(errType, errMsg, forceContinueFlag)
 	local etype = errType or ERR_UNKOWN

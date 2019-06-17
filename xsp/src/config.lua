@@ -69,6 +69,12 @@ CFG.DEFAULT_LONG_TAP_TIME = 800	--默认longtap时间/ms
 CFG.DEFAULT_PAGE_CHECK_INTERVAL = 100
 
 
+CFG.TO_DO_LIST = {
+	"国际服联赛SIM",
+	"领取奖励",
+}
+
+
 USER = {}	--用户配置表，主要有UI设置
 -----------------用户设置-----------------
 USER.TASK_NAME = "自动联赛"					--任务名称
@@ -90,3 +96,5 @@ USER.SUBSTITUTE_INDEX_LIST = {--[[{fieldIndex = 1, substituteCondition = 1},{},{
 }		--替补席对应关系表
 
 USER.DROP_CACHE = false				--清空缓存
+
+

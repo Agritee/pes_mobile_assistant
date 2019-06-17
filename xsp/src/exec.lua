@@ -61,6 +61,12 @@ function M.run(taskName, repeatTimes)
 	
 	if M.isExistTask(taskName) ~= true then		--检查任务是否存在
 		M.setExecStatus("END")	--清空断点任务状态，防止错误卡死
+		for _, v in pairs(CFG.TO_DO_LIST) do
+			if v == taskName then
+				dialog("正在火急火燎的开发中，请少侠稍后再来！")
+				xmod.exit()
+			end
+		end
 		catchError(ERR_PARAM, "have no task: "..taskName)
 	end
 	

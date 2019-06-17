@@ -305,6 +305,13 @@ local _pageList = {
 				anchor = "MTB",
 				srcPos = "652|707|0x52a1f9-0x522904,526|689|0xeeeef4,528|724|0xeeeef4,799|691|0xeeeef4,801|718|0xeeeef4,667|662|0xdfdfe1,482|705|0xdfdfe1,861|708|0xdfdfe1",
 			},
+			{
+				tag = "跳过余下比赛-未激活",
+				enable = false,
+				noCache = true,
+				anchor = "MTB",
+				srcPos = "652|708|0x98989c-0x0b0b0b,526|690|0xc5c5c8,527|719|0xc5c5c8,807|689|0xc5c5c8,804|722|0xc5c5c8",
+			},
 		},
 	},
 	{
@@ -359,35 +366,63 @@ local _pageList = {
 			},
 		},
 	},
-	--[[{
-		tag = "俱乐部",
+	{
+		tag = "决战32强",
 		widgetList = {
 			{
-				tag = "我的球队",
-				enable = true,
-				anchor = "R",
-				srcPos = "991|337|0xffffff,990|351|0xffffff,981|346|0x007aff,999|346|0x007aff,981|358|0xffffff,999|358|0xffffff,989|366|0x007aff",
-			},
-			{
-				tag = "练习赛",
+				tag = "报名",
 				enable = true,
 				anchor = "RB",
-				srcPos = "990|604|0xffffff,970|605|0xffffff,978|604|0x007aff,1001|604|0x007aff,1010|608|0xffffff,1004|620|0x007aff,990|595|0xffffff",
-			},
-			{
-				tag = "成就",
-				enable = true,
-				anchor = "LB",
-				srcPos = "343|628|0x007aff,336|625|0xffffff,351|625|0xffffff,343|597|0x007aff,344|588|0xffffff,336|632|0x007aff,335|642|0x007aff,335|650|0xffffff",
-			},
-			{
-				tag = "待领取奖励",
-				enable = false,
-				anchor = "BM",
-				srcPos = "645|554|0xff3b30,632|554|0xff3b30,644|537|0xff3b30,661|551|0xff3b30,646|567|0xff3b30",
+				srcPos = "926|645|0x0079fe,666|645|0xf5f5f5,630|639|0xcbdef1,700|650|0xcbdef1,216|634|0xcbdef1,1102|663|0xcbdef1,205|92|0x1b0b38,1135|82|0x1a0b38",
 			},
 		},
-	},]]
+	},
+	{
+		tag = "冠军赛",
+		widgetList = {
+			{
+				tag = "球队管理",
+				enable = true,
+				anchor = "LT",
+				srcPos = "65|171|0x0079fd,55|169|0xffffff,65|180|0xffffff,92|172|0x0079fd,91|180|0xffffff,124|176|0x12a42b",
+			},
+			{
+				tag = "比赛历史",
+				enable = true,
+				anchor = "LM",
+				srcPos = "77|303|0xc0c7c7-0x141214,72|328|0x55bd74-0x441a4a,61|329|0x0079fe,93|328|0x0079fe,110|329|0x55bd74-0x441a4a,124|327|0x0079fe",
+			},
+			{
+				tag = "信息框",
+				enable = true,
+				anchor = "RT",
+				srcPos = "1281|207|0x323232,487|210|0x323232,489|603|0x323232,1275|605|0x323232",
+			},
+		}
+	},
+	{
+		tag = "冠军赛结束",
+		widgetList = {
+			{
+				tag = "冠军杯标题",
+				enable = true,
+				anchor = "CLT",
+				srcPos = "75|30|0xf9f9fb,76|55|0xfbfbfd,61|44|0x494780-0x181c2a,213|49|0x021e30,632|29|0x021e30",
+			},
+			{
+				tag = "重置",
+				enable = true,
+				anchor = "BM",
+				srcPos = "681|701|0xf9665f-0x042c30,531|693|0xeeeef4,525|720|0xeeeef4,811|695|0xeeeef4,802|722|0xeeeef4",
+			},
+			{
+				tag = "下一步未激活",
+				enable = true,
+				anchor = "CRB",
+				srcPos = "1278|706|0x8d8d92,1287|687|0x5d5d5e,1039|720|0x5d5d5e,1039|691|0x5d5d5e,1280|722|0x5d5d5e",
+			},
+		},
+	},
 }
 
 --公共导航控件，如下一步、返回、确认、取消、通知
