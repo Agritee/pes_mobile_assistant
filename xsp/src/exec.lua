@@ -1,7 +1,7 @@
 -- exec.lua
 -- Author: cndy1860
 -- Date: 2018-12-25
--- Descrip: 运行任务 
+-- Descrip: 运行任务
 
 local modName = "exec"
 local M = {}
@@ -38,32 +38,14 @@ function M.getTaskProcesses(taskTag)
 	end
 end
 
---设置当前任务运行阶段，开始START，结束END，断点任务BREAKING
-function M.setExecStatus(status)
-	setStringConfig("CurrentExecStatus", status)
-end
-
---是否存在重启游戏的断点任务
-function M.isExistBreakingTask()
-	local status = getStringConfig("CurrentExecStatus", "END")
-	if status == "BREAKING" then
-		setStringConfig("CurrentExecStatus", "END")
-		Log("____________EXIST A BREAKING TASK____________")
-		return true
-	end
-	
-	return false
-end
-
 --执行任务，param:任务名称，任务重复次数
 function M.run(taskName, repeatTimes)
 	local reTimes = repeatTimes or CFG.DEFAULT_REPEAT_TIMES
 	
-	if M.isExistTask(taskName) ~= true then		--检查任务是否存在
-		M.setExecStatus("END")	--清空断点任务状态，防止错误卡死
+	if not M.isExistTask(taskName) then		--检查任务是否存在
 		for _, v in pairs(CFG.TO_DO_LIST) do
 			if v == taskName then
-				dialog("正在火急火燎的开发中，请少侠稍后再来！")
+				dialog("正在火急火燎的开发中\r\n请少侠稍后再来！")
 				xmod.exit()
 			end
 		end
@@ -75,26 +57,25 @@ function M.run(taskName, repeatTimes)
 	end
 	
 	page.setPageEnable(M.getTaskProcesses(taskName))	--设置page.enable
-
-	M.setExecStatus("START")
 	
 	for i = 1, reTimes, 1 do
 		Log("-----------------------START RUN A ROUND OF TASK: "..taskName.."-----------------------")
 		local taskProcesses = M.getTaskProcesses(taskName)	--重新获取流程，如果发生了回溯流程片改变了taskProcesses，在此处恢复
-
-		--设置默认需要跳过的流程片
+		
+		--设置默认需要不跳过所有流程片
 		for k, v in pairs(taskProcesses) do
 			v.skipStatus = false
 		end
+		--根据流程片的属性设置需要跳过的流程片
 		for k, v in pairs(taskProcesses) do
-			if IS_BREAKING_TASK then		--发生断点
+			if PREV.restarted then		--发生断点
 				if i > 2 then
-					if v.mode == "firstRun" or v.mode == "breakingRun" then
+					if v.mode == "firstRun" or v.mode == "restarted" then
 						v.skipStatus = true
 					end
 				end
 			else
-				if v.mode == "breakingRun" then
+				if v.mode == "restarted" then
 					v.skipStatus = true
 				end
 				if i > 1 then
@@ -115,7 +96,6 @@ function M.run(taskName, repeatTimes)
 		for k, v in pairs(taskProcesses) do
 			local checkInterval = v.checkInterval or CFG.DEFAULT_PAGE_CHECK_INTERVAL
 			local timeout = v.timeout or CFG.DEFAULT_TIMEOUT
-			local execNavgFlag = false
 			
 			--监听和执行流程片
 			local startTime = os.time()
@@ -131,9 +111,9 @@ function M.run(taskName, repeatTimes)
 				--截取判定帧，在整个监听和执行流程片的过程中，均以此截取的界面进行判定
 				--为提高效率，screen.keep(true)尽量只在此处使用，但在process.actionFunc和navigation.actionFunc里可能涉及
 				--界面变化，因此进行了刷新帧或者释放帧的操作（这两处在执行完后会返回监听的开始处，重新截取判定帧，所以不影响）
-				screen.keep(true)		
+				screen.keep(true)
 				local currentPage = page.getCurrentPage()
-								
+				
 				--Log("try match process page: "..v.tag)
 				if currentPage == v.tag then
 					--actionFunc中，涉及到界面变化时(actionFunc和next)会放开screen.keep(false)进行界面判定，但是因为完成actionFunc和next后，
@@ -166,6 +146,9 @@ function M.run(taskName, repeatTimes)
 					end
 					
 					Log("--------end execute process: "..v.tag)
+					
+					--重启后，只要续接过流程片，变重置重启状态
+					resetPrevStatus()
 					break	--完成当前流程片
 				end
 				
@@ -193,6 +176,7 @@ function M.run(taskName, repeatTimes)
 							--4.当_k<k-1时，当前界面为在k之前的流程，先设置剩下流程片skipStatus=true，跳过当前流程剩余的
 							--所有流程片，然后等循环到下一个流程时，再通过1跳过_k之前的流程，实现skip至_k的功能
 							if _k > k then				--当前界面为其后的某个流程片中界面，跳过期间的流程
+								Log("currentPage:"..currentPage)
 								Log("set skip latter process")
 								for __k, __v  in pairs(taskProcesses) do
 									if __k >= k and __k < _k then
@@ -210,12 +194,16 @@ function M.run(taskName, repeatTimes)
 									end
 								end
 								break
-							elseif _k == k - 1 then
-								--在等在当前流程片界面的过程中若执行过导航，可能致使上一个流程片的next未生效（此处currentPage ~= nil）
-								--if execNavgFlag and os.time() - startTime > CFG.WAIT_CHECK_SKIP_NEXT then	--execNavgFlag逻辑错误
-								if os.time() - startTime > CFG.WAIT_CHECK_SKIP_NEXT then
-									if page.isExsitNavigation("next") then
-										page.tapNext()	--尝试执行上一个流程的全局next的导航
+							elseif _k == k - 1 then		--正常等待matchPage，可能因为执行了next没有生效
+								if _v.nextTag ~= nil then
+									if _v.nextTag == "next" then		--下一步
+										if page.isExsitNavigation("next") then
+											page.tapNext()
+										end
+									else		--某个控件
+										if page.matchWidget(_v.tag, _v.next) then
+											page.tapWidget(_v.tag, _v.next)
+										end
 									end
 								end
 							end
@@ -227,7 +215,6 @@ function M.run(taskName, repeatTimes)
 				if currentPage == nil and os.time() - startTime >= CFG.WAIT_CHECK_NAVIGATION then
 					if page.tryNavigation() then
 						sleep(200)
-						execNavgFlag = true
 						startTime = os.time()	--防止因执行Navigation.actionFunc超时
 					end
 				end
@@ -241,8 +228,6 @@ function M.run(taskName, repeatTimes)
 		resetTaskData()		--重置部分数据
 		Log("-------------------------END OF THIS ROUND TASK: "..taskName.."-----------------------")
 	end
-	
-	M.setExecStatus("END")
 end
 
 

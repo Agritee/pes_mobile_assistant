@@ -82,7 +82,7 @@ function setValueByStrKey(keyStr, value)
 end
 
 --跳过初始化界面，主要用于自动重启后，跳过初始化界面
-function skipInitPage()
+function processInitPage()
 	local startTime = os.time()
 	while true do
 		local currentPage = page.getCurrentPage(true)
@@ -203,6 +203,16 @@ function dropLog()
 	end	
 end
 
+--保存重启脚本状态
+function setRestartedScripts()
+	setStringConfig("PREV_RESTARTED_SCRIPT", "TRUE")
+end
+
+--保存重启应用状态
+function setRestartedAPP()
+	setStringConfig("PREV_RESTARTED_APP", "TRUE")
+end
+
 --捕获捕获处理函数
 function catchError(errType, errMsg, forceContinueFlag)
 	local etype = errType or ERR_UNKOWN
@@ -255,40 +265,69 @@ function catchError(errType, errMsg, forceContinueFlag)
 	elseif etype == ERR_WARNING then		--警告任何时候只提示
 		LogError("!!!maybe some err in here, care it!!!")
 	elseif etype == ERR_TIMEOUT then		--超时错误允许exit，restart
-		if USER.ALLOW_RESTART then	--允许重启
-			dialog(errMsg.."\r\n等待超时，即将重启", 3)
-			if runtime.getForegroundApp() == CFG.APP_ID then
-				LogError("TIME OUT BUT APP STILL RUNNING！")
-			else
-				LogError("TIME OUT AND APP NOT RUNNING YET！")
-			end
-			
-			if xmod.PROCESS_MODE == xmod.PROCESS_MODE_STANDALONE then	--极客模式需要重启应用
-				LogError("!!!its will close app!!!")
-				runtime.killApp(CFG.APP_ID);
-				sleep(1000)
-				LogError("!!!try restart app!!!")
-				runtime.launchApp(CFG.APP_ID)
-				LogError("!!!try restart script 15s later after restart app!!!")
-				--记录重启状态，重启之后会直接读取上一次保存的设置信息和相关变量，并不会弹出UI以实现自动续接任务
-				exec.setExecStatus("BREAKING")
-				local startTime = os.time()
-				while true do
-					if runtime.getForegroundApp() == CFG.APP_ID then	--重启应用成功
-						sleep(CFG.WAIT_RESTART * 1000)
-						break
-					end
-					
-					if os.time() - startTime > CFG.DEFAULT_TIMEOUT then
-						dialog("重启失败，即将退出")
-						xmod.exit()
-					end
+		if runtime.getForegroundApp() == CFG.APP_ID then
+			LogError("TIME OUT BUT APP STILL RUNNING！")
+		else
+			LogError("TIME OUT AND APP NOT RUNNING YET！")
+		end
+		
+		if USER.RESTART_SCRIPT or USER.RESTART_APP then	--允许重启
+			if USER.RESTART_APP then			--激进模式，APP和script同时重启
+				if PREV.restartedAPP then
+					Log("已重启过APP，未能解决，即将退出!")
+					dialog("已重启过APP，未能解决，即将退出!")
+					xmod.exit()
 				end
+				if PREV.restartedScript then	--已单独重启过脚本
+					Log("已尝试过单独重启脚本，未能解决，即将重启应用和脚本")
+					dialog("已尝试过单独重启脚本，未能解决，即将重启应用和脚本", 3)
+					if xmod.PROCESS_MODE == xmod.PROCESS_MODE_STANDALONE then	--极客模式需要重启应用
+						LogError("close app: "..CFG.APP_ID)
+						runtime.killApp(CFG.APP_ID);
+						sleep(1000)
+						LogError("restart app: "..CFG.APP_ID)
+						runtime.launchApp(CFG.APP_ID)
+			
+						--记录重启状态，重启之后会直接读取上一次保存的设置信息和相关变量，并不会弹出UI以实现自动续接任务
+						local startTime = os.time()
+						while true do
+							if runtime.getForegroundApp() == CFG.APP_ID then	--重启应用成功
+								LogError("restart app success!")
+								sleep(CFG.WAIT_RESTART * 1000)
+								break
+							end
+							
+							if os.time() - startTime > CFG.DEFAULT_TIMEOUT then
+								dialog("重启失败，即将退出")
+								xmod.exit()
+							end
+						end
+						setRestartedAPP()
+						setRestartedAPP()
+						setRestartedScripts()
+						LogError("restart script")
+						xmod.restart()
+					else		--通用模式只需关闭应用，会自动重启应用和脚本
+						LogError("restart app & script")
+						setRestartedAPP()
+						setRestartedScripts()
+						runtime.killApp(CFG.APP_ID);	--沙盒模式下，killApp会强行结束掉脚本，因此不能在此后做任何操作，延时放到重启中
+					end					
+				else
+					Log("超时，将尝试重启脚本")
+					dialog("超时，将尝试重启脚本", 3)
+					setRestartedScripts()
+					xmod.restart()
+				end
+			elseif USER.RESTART_SCRIPT	then	--安全模式，仅允许重启script
+				if PREV.restartedScript then	--已重启过脚本
+					LogError("已重启过脚本，仍未解决，即将退出!")
+					dialog("已重启过脚本，仍未解决，即将退出!")
+					xmod.exit()
+				end
+				
+				setRestartedScripts()
 				xmod.restart()
-			else		--通用模式只需关闭应用，会自动重启应用和脚本
-				LogError("!!!its will close app!!!")
-				exec.setExecStatus("BREAKING")
-				runtime.killApp(CFG.APP_ID);	--沙盒模式下，killApp会强行结束掉脚本，因此不能在此后做任何操作，延时放到重启中
 			end
 		else	--不允许重启直接退出
 			dialog(errMsg.."\r\n等待超时，即将退出")
@@ -381,4 +420,10 @@ function resetTaskData()
 	lastPlayingPageTime = 0
 	lastPenaltyPageTime = 0
 	isPlayerRedCard = false
+	
+end
+
+function resetPrevStatus()
+	PREV.restartedAPP = false
+	PREV.restartedScript = false
 end

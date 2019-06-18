@@ -15,29 +15,25 @@ local DevScreen={--开发设备的参数
 	countdown = 30
 }
 
-local myui=ZUI:new(DevScreen,{align="left",w=90,h=90,size=40,cancelname="取消",okname="OK",countdown=(IS_BREAKING_TASK == true and 3 or 0),config="zui.dat",bg="bk.png"})--在page中传入的size会成为所有page中所有控件的默认字体大小,同时也会成为所有page控件的最小行距
+local myui=ZUI:new(DevScreen,{align="left",w=90,h=90,size=40,cancelname="取消",okname="OK",countdown=(PREV.restarted == true and 3 or 0),config="zui.dat",bg="bk.png"})--在page中传入的size会成为所有page中所有控件的默认字体大小,同时也会成为所有page控件的最小行距
 local pageBaseSet = Page:new(myui,{text = "基本设置", size = 24})
 pageBaseSet:nextLine()
 pageBaseSet:nextLine()
 pageBaseSet:addLabel({text="任务选择",size=32})
---pageBaseSet:addComboBox({id="comboBoxTask",list="自动天梯,自动联赛,自动巡回,手动巡回,特殊抽球,标准抽球,箱式抽球",select=0,w=30,h=12, size = 28})
-pageBaseSet:addComboBox({id="comboBoxTask",list="自动天梯,自动联赛,自动巡回,手动巡回,自动冠军赛,领取奖励,国际服联赛SIM",select=0,w=40,h=12, size = 28})
+pageBaseSet:addComboBox({id="comboBoxTask",list="自动天梯,自动联赛,自动巡回,手动巡回,自动冠军赛,领取奖励,国际服联赛SIM",select=0,w=40,h=12, size = 30})
 
 pageBaseSet:nextLine()
 pageBaseSet:nextLine()
 pageBaseSet:addLabel({text="通用功能",size=30})
---pageBaseSet:addCheckBoxGroup({id="checkBoxFunc", list = "开场换人,自动续约,购买体力,恢复体力",select="1@3",w=80,h=12})
-pageBaseSet:addCheckBoxGroup({id="checkBoxFunc", list = "开场换人,自动续约",select="1",w=80,h=12})
+pageBaseSet:addCheckBoxGroup({id="checkBoxFunc", list = "开场换人,自动续约",select="1",w=80,h=12,size=30})
 
 pageBaseSet:nextLine()
-
-pageBaseSet:nextLine()
-pageBaseSet:addLabel({text="崩溃重启",size=30})
-pageBaseSet:addRadioGroup({id="radioRestart",list="开启,关闭",select=1,w=35,h=12})
+pageBaseSet:addLabel({text="自动重启",size=30})
+pageBaseSet:addRadioGroup({id="radioRestart",list="禁止重启,安全重启,激进重启",select=0,w=80,h=12,size=30})
 
 pageBaseSet:nextLine()
 pageBaseSet:addLabel({text="任务次数",size=30})
-pageBaseSet:addEdit({id="editerCircleTimes",prompt="提示文本1",text=tostring(CFG.DEFAULT_REPEAT_TIMES),color="0,0,255",w=20,h=10,align="right",size=24})
+pageBaseSet:addEdit({id="editerCircleTimes",prompt="提示文本1",text=tostring(CFG.DEFAULT_REPEAT_TIMES),color="0,0,255",w=30,h=10,align="right",size=24})
 
 
 
@@ -174,13 +170,15 @@ pageTestting:addLabel({text="    6.启动脚本前请先切换至游戏主界面
 pageTestting:nextLine()
 pageTestting:addLabel({text="    7.任务次数是指挂机场数。",size=20, align="cnter"})
 pageTestting:nextLine()
-pageTestting:addLabel({text="    8.另外不喜欢XX助手的用户，可以进群下载本脚本专用小精灵应用。",size=20, align="cnter"})
+pageTestting:addLabel({text="    8.安全重启意味着只会重启脚本，而激进重启先尝试重启脚本，如果不能解决将重启游戏",size=20, align="cnter"})
 pageTestting:nextLine()
-pageTestting:addLabel({text="    9.年卡和永久卡有专用的VIP微信群，可进Q群让管理邀请加入。",size=20, align="cnter"})
+pageTestting:addLabel({text="    9.另外不喜欢XX助手的用户，可以进群下载本脚本专用小精灵应用。",size=20, align="cnter"})
 pageTestting:nextLine()
-pageTestting:addLabel({text="    10.详细说明书请点击脚本教程。",size=20, align="cnter"})
+pageTestting:addLabel({text="    10.年卡和永久卡有专用的VIP微信群，可进Q群让管理邀请加入。",size=20, align="cnter"})
 pageTestting:nextLine()
-pageTestting:addLabel({text="    11.有任何问题及建议请反馈给作者，Q群：574025168 ",size=20, align="cnter"})
+pageTestting:addLabel({text="    11.详细说明书请点击脚本教程。",size=20, align="cnter"})
+pageTestting:nextLine()
+pageTestting:addLabel({text="    12.有任何问题及建议请反馈给作者，Q群：574025168 ",size=20, align="cnter"})
 pageTestting:nextLine()
 pageTestting:nextLine()
 pageTestting:addLabel({text="                                ------------------------问题反馈说明------------------------",size=20, align="cnter"})
@@ -273,7 +271,9 @@ function dispUI()
 	
 	USER.ALLOW_SUBSTITUTE = uiRet.checkBoxFunc.开场换人
 	
-	USER.ALLOW_RESTART = uiRet.radioRestart.开启
+	USER.RESTART_SCRIPT = uiRet.radioRestart.安全重启
+	USER.RESTART_APP = uiRet.radioRestart.激进重启
+	
 	if xmod.PLATFORM == xmod.PLATFORM_IOS then
 		USER.ALLOW_RESTART = false
 	end

@@ -64,6 +64,7 @@ local wfn = function()
 	end
 	
 	if page.matchPage("点球") then
+		Log("点球大战中...")
 		lastPenaltyPageTime = os.time()
 	end
 

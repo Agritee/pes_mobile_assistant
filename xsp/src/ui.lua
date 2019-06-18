@@ -1466,7 +1466,7 @@ local function setGridDefualtCallbacks()
 end
 
 function dispUI()
-	if not IS_BREAKING_TASK then
+	if not PREV.restarted then
 		print('show view')
 		context:show()
 		showwingFlag = true

@@ -69,17 +69,28 @@ CFG.DEFAULT_LONG_TAP_TIME = 800	--默认longtap时间/ms
 CFG.DEFAULT_PAGE_CHECK_INTERVAL = 100
 
 
-CFG.TO_DO_LIST = {
+CFG.TO_DO_LIST = {		--TODO,会提示未开放
 	"国际服联赛SIM",
 	"领取奖励",
 }
+
+
+--前一次运行的部分信息
+PREV = {}
+
+PREV.restarted = false			--是否发生过重启
+PREV.restartedScript = false	--是否发生过脚本重启
+PREV.restartedAPP = false		--是否发生过应用重启
+
+
 
 
 USER = {}	--用户配置表，主要有UI设置
 -----------------用户设置-----------------
 USER.TASK_NAME = "自动联赛"					--任务名称
 
-USER.ALLOW_RESTART = false			--是否允许重启脚本来解决异常
+USER.RESTART_SCRIPT = false			--是否允许重启脚本来解决异常
+USER.RESTART_APP = false			--是否允许重启应用来解决异常
 
 USER.REFRESH_CONCTRACT = false		--自动续约合同
 USER.REPEAT_TIMES = 0				--任务循环次数

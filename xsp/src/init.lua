@@ -88,8 +88,28 @@ local function initScalingRatio()
 	--prt(CFG.SCALING_RATIO)
 end
 
-local function initUserSetting()
-
+--初始化上一次运行状态
+local function initPrevStatus()
+	if getStringConfig("PREV_RESTARTED_SCRIPT", "FALSE") == "TRUE" then
+		Log("脚本重启状态")
+		PREV.restartedScript = true
+	else
+		PREV.restartedScript = false
+	end
+	
+	if getStringConfig("PREV_RESTARTED_APP", "FALSE") == "TRUE" then
+		Log("应用重启状态")
+		PREV.restartedAPP = true
+	else
+		PREV.restartedAPP = false
+	end
+	
+	if PREV.restartedScript or PREV.restartedAPP then
+		PREV.restarted = true
+	end
+	
+	setStringConfig("PREV_RESTARTED_SCRIPT", "FALSE")
+	setStringConfig("PREV_RESTARTED_APP", "FALSE")
 end
 
 --初始化环境参数
@@ -98,7 +118,7 @@ local function initEnv()
 	screen.keep(false)
 	
 	initAppID()
-	initUserSetting()
+	initPrevStatus()
 	
 	initDstResolution()
 	initScalingRatio()

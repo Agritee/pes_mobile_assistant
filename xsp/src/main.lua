@@ -17,8 +17,6 @@ require("project/task/leagueSim")
 require("project/task/tourSim")
 require("project/task/tourManuel")
 require("project/task/championSim")
-
-IS_BREAKING_TASK = exec.isExistBreakingTask()
 require("ui")
 require("zui/base_ui")
 
@@ -31,19 +29,17 @@ function main()
 	end
 	CFG.ALLOW_CACHE = false
 
-	if IS_BREAKING_TASK then
+	if PREV.restartedAPP then
 		if xmod.PROCESS_MODE == xmod.PROCESS_MODE_STANDALONE then	--通用模式的延时只能放在重启时
 			sleep(CFG.WAIT_RESTART * 1000)
 		end
 		
-		skipInitPage()	--先跳过未定义界面
+		processInitPage()	--先跳过未定义界面
 	end
 
 	exec.run(USER.TASK_NAME, USER.REPEAT_TIMES)
 	xmod.exit()
 end
-
-USER.ALLOW_RESTART = false
 
 main()
 

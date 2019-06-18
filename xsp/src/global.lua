@@ -16,7 +16,6 @@ ERR_TASK_ABORT = "ERR_TASK_ABORT"
 
 
 CURRENT_TASK = "TASK_NONE"
-IS_BREAKING_TASK = false
 
 lastPlayingPageTime = 0
 lastPenaltyPageTime = 0
