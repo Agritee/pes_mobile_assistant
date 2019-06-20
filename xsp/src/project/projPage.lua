@@ -424,6 +424,29 @@ local _pageList = {
 			},
 		},
 	},
+	{
+		tag = "国际服季节赛",
+		widgetList = {
+			{
+				tag = "球队管理",
+				enable = true,
+				anchor = "LT",
+				srcPos = "65|171|0x0079fd,55|169|0xffffff,65|180|0xffffff,92|172|0x0079fd,91|180|0xffffff,124|176|0x12a42b",
+			},
+			{
+				tag = "比赛历史",
+				enable = true,
+				anchor = "LM",
+				srcPos = "77|303|0xc0c7c7-0x141214,72|328|0x55bd74-0x441a4a,61|329|0x0079fe,93|328|0x0079fe,110|329|0x55bd74-0x441a4a,124|327|0x0079fe",
+			},
+			{
+				tag = "信息框",
+				enable = true,
+				anchor = "LT",
+				srcPos = "494|104|0x2a2a2a,514|577|0x323232,1271|108|0x2a2a2a,1250|591|0x323232,525|479|0xffc000,544|396|0x27ba36",
+			},
+		}
+	},
 }
 
 --公共导航控件，如下一步、返回、确认、取消、通知
@@ -514,7 +537,10 @@ local _commonWidgetList = {
 		tag = "付款确认",
 		enable = true,
 		anchor = "A",
-		srcPos = "519|395|0xa0c3fb-0x0b0804,502|394|0x2361d8-0x211f26,476|395|0x2361d8-0x211f26,532|394|0x2361d8-0x211f26,506|339|0xe6e6ed",
+		--IOS和安卓偏色不一样，注意取色
+		--srcPos = "519|395|0xa0c3fb-0x0b0804,502|394|0x2361d8-0x211f26,476|395|0x2361d8-0x211f26,532|394|0x2361d8-0x211f26,506|339|0xe6e6ed",(只兼容国服)
+		--以下改为兼容国际服偏色
+		srcPos = "519|395|0xaac7fb-0x0f0804,502|394|0x2258d3-0x222829,476|395|0x2258d3-0x222829,532|394|0x2258d3-0x222829,506|339|0xe6e6ed"
 	},
 	{
 		tag = "球队异常",		--教练合约失效或球员红牌、伤病
@@ -555,5 +581,5 @@ local _commonWidgetList = {
 
 
 --将项目的pageList、navigationList和_navigationPriorityList,_commonWidgetList插入page总表
-page.loadPage(_pageList, _navigationList, _navigationPriorityList, _commonWidgetList)
+page.loadPagesData(_pageList, _navigationList, _navigationPriorityList, _commonWidgetList)
 

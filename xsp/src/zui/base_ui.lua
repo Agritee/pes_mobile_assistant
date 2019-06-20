@@ -20,7 +20,7 @@ local pageBaseSet = Page:new(myui,{text = "基本设置", size = 24})
 pageBaseSet:nextLine()
 pageBaseSet:nextLine()
 pageBaseSet:addLabel({text="任务选择",size=32})
-pageBaseSet:addComboBox({id="comboBoxTask",list="自动天梯,自动联赛,自动巡回,手动巡回,自动冠军赛,领取奖励,国际服联赛SIM",select=0,w=40,h=12, size = 30})
+pageBaseSet:addComboBox({id="comboBoxTask",list="自动天梯,自动联赛,自动巡回,手动巡回,自动冠军赛,领取奖励,国际服季节赛SIM",select=0,w=40,h=12, size = 30})
 
 pageBaseSet:nextLine()
 pageBaseSet:nextLine()
@@ -104,15 +104,8 @@ pageProSet:nextLine()
 pageProSet:nextLine()
 
 pageProSet:addLabel({text="缓存模式",size=30})
-pageProSet:addRadioGroup({id="radioAllowCache",list="开启,关闭",select=1,w=25,h=12})
+pageProSet:addRadioGroup({id="radioCachingMode",list="开启,关闭",select=1,w=25,h=12})
 
-pageProSet:nextLine()
-pageProSet:addLabel({text="清空缓存",size=30})
-pageProSet:addRadioGroup({id="radioDropCache",list="开启,关闭",select=1,w=25,h=12})
-
-pageProSet:nextLine()
-pageProSet:addLabel({text="低配兼容",size=30})
-pageProSet:addRadioGroup({id="radioLowConfiguration",list="开启,关闭",select=1,w=25,h=12})
 
 local pageBuyCDKEY = Page:new(myui,{text = "脚本购买",size = 24})
 pageBuyCDKEY:nextLine()
@@ -280,9 +273,8 @@ function dispUI()
 	--prt(USER)
 	
 	
-	CFG.ALLOW_CACHE = uiRet.radioAllowCache.开启
-	USER.DROP_CACHE = uiRet.radioDropCache.开启
-	CFG.LOW_CONFIGURATION = uiRet.radioLowConfiguration.开启
+	CFG.CACHING_MODE = uiRet.radioCachingMode.开启
+
 	
 	for i = 1, 7, 1 do
 		USER.SUBSTITUTE_INDEX_LIST[i].fieldIndex = _convertIndex(uiRet[string.format("comboBoxBench%d",i)])

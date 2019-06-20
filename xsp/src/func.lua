@@ -81,12 +81,11 @@ function setValueByStrKey(keyStr, value)
 	iteratorTb[keysTb[#keysTb]] = value
 end
 
---跳过初始化界面，主要用于自动重启后，跳过初始化界面
+--处理初始化界面，主要用于自动重启后，跳过初始化界面的相关流程
 function processInitPage()
 	local startTime = os.time()
 	while true do
 		local currentPage = page.getCurrentPage(true)
-		prt(currentPage)
 		if currentPage == "初始化界面" then
 			Log("catch init page")
 			local _startTime = os.time()
@@ -204,13 +203,35 @@ function dropLog()
 end
 
 --保存重启脚本状态
-function setRestartedScripts()
+function setRestartedScript()
 	setStringConfig("PREV_RESTARTED_SCRIPT", "TRUE")
+end
+
+--获取重启脚本状态
+function getPrevRestartedScript()
+	if getStringConfig("PREV_RESTARTED_SCRIPT", "FALSE") == "TRUE" then
+		Log("脚本重启状态")
+		setStringConfig("PREV_RESTARTED_SCRIPT", "FALSE") 	--读取之后重置
+		return true
+	else
+		return false
+	end	
 end
 
 --保存重启应用状态
 function setRestartedAPP()
 	setStringConfig("PREV_RESTARTED_APP", "TRUE")
+end
+
+--获取重启应用状态
+function getPrevRestartedAPP()
+	if getStringConfig("PREV_RESTARTED_APP", "FALSE") == "TRUE" then
+		Log("应用重启状态")
+		setStringConfig("PREV_RESTARTED_APP", "FALSE") 	--读取之后重置
+		return true
+	else
+		return false
+	end	
 end
 
 --捕获捕获处理函数
@@ -304,19 +325,19 @@ function catchError(errType, errMsg, forceContinueFlag)
 						end
 						setRestartedAPP()
 						setRestartedAPP()
-						setRestartedScripts()
+						setRestartedScript()
 						LogError("restart script")
 						xmod.restart()
 					else		--通用模式只需关闭应用，会自动重启应用和脚本
 						LogError("restart app & script")
 						setRestartedAPP()
-						setRestartedScripts()
+						setRestartedScript()
 						runtime.killApp(CFG.APP_ID);	--沙盒模式下，killApp会强行结束掉脚本，因此不能在此后做任何操作，延时放到重启中
 					end					
 				else
 					Log("超时，将尝试重启脚本")
 					dialog("超时，将尝试重启脚本", 3)
-					setRestartedScripts()
+					setRestartedScript()
 					xmod.restart()
 				end
 			elseif USER.RESTART_SCRIPT	then	--安全模式，仅允许重启script
@@ -326,7 +347,7 @@ function catchError(errType, errMsg, forceContinueFlag)
 					xmod.exit()
 				end
 				
-				setRestartedScripts()
+				setRestartedScript()
 				xmod.restart()
 			end
 		else	--不允许重启直接退出

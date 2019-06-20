@@ -147,7 +147,7 @@ function M.run(taskName, repeatTimes)
 					
 					Log("--------end execute process: "..v.tag)
 					
-					--重启后，只要续接过流程片，变重置重启状态
+					--重启后，只要续接过流程片，就重置重启状态
 					resetPrevStatus()
 					break	--完成当前流程片
 				end

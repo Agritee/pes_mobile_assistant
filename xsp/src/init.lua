@@ -7,16 +7,13 @@
 local function initAppID()
 	local appid = runtime.getForegroundApp()
 	if appid == nil then
-		dialog("未检测到任何应用")
+		dialog("未检测到任何应用在前台运行！")
 		xmod.exit()
 	else
-		if string.find(appid, CFG.DEFAULT_APP_ID) == nil and string.find(appid, "skzq") == nil then	--不同渠道应用包名
-			--dialog(appid.."请先打开实况足球再开启脚本")
-			--xmod.exit()
-		end
 		CFG.APP_ID = appid
-		Log("APP_ID:"..CFG.APP_ID)
 	end
+	
+	Log("----initAppID: "..CFG.APP_ID)
 end
 
 --初始化设备分辨率
@@ -31,7 +28,9 @@ local function initDstResolution()
 		or CFG.DST_RESOLUTION.height < CFG.SUPPORT_RESOLUTION.min.height then
 		dialog("分辨率不支持")
 		xmod.exit()
-	end	
+	end
+	
+	Log("----initDstResolution: "..CFG.DST_RESOLUTION.width.."*"..CFG.DST_RESOLUTION.height)
 end
 
 --初始化黑边参数，根据黑边临界比例设置，左右相等，上下相等，优先级小于CFG.BLACK_BORDER.borderList预设值
@@ -45,7 +44,7 @@ local function initBlackBorder()
 		end
 	end
 	
-	local ratioLR, ratioTB = CFG.BLACK_BORDER.limitRatio.leftRight, CFG.BLACK_BORDER.limitRatio.topBottom
+	local ratioLR, ratioTB = CFG.BLACK_BORDER.limitRatio.horiz, CFG.BLACK_BORDER.limitRatio.vertical
 	local lr, tb = 0, 0
 	
 	if ratioLR ~= nil then
@@ -61,6 +60,8 @@ local function initBlackBorder()
 	
 	--添加至CFG.BLACK_BORDER.borderList
 	table.insert(CFG.BLACK_BORDER.borderList, {width = w, height = h, left = lr, right = lr, top = tb, bottom = tb})
+	
+	Log("----initBlackBorder: lr="..lr.." tb="..tb)
 end
 
 --初始化有效区域
@@ -78,38 +79,27 @@ local function initEffectiveArea()
 	CFG.EFFECTIVE_AREA[3] = x1
 	CFG.EFFECTIVE_AREA[4] = y1
 	
-	--prt(CFG.EFFECTIVE_AREA)
+	Log("----initEffectiveArea: ("..x0..","..y0.."), ("..x1..","..y1..")")
 end
 
 --初始化缩放比率
 local function initScalingRatio()
 	local devShort = CFG.DEV_RESOLUTION.height <= CFG.DEV_RESOLUTION.width and CFG.DEV_RESOLUTION.height or CFG.DEV_RESOLUTION.width
 	CFG.SCALING_RATIO = CFG.DST_RESOLUTION.height / devShort
-	--prt(CFG.SCALING_RATIO)
+	
+	Log("----initScalingRatio: "..CFG.SCALING_RATIO)
 end
 
 --初始化上一次运行状态
-local function initPrevStatus()
-	if getStringConfig("PREV_RESTARTED_SCRIPT", "FALSE") == "TRUE" then
-		Log("脚本重启状态")
-		PREV.restartedScript = true
-	else
-		PREV.restartedScript = false
-	end
-	
-	if getStringConfig("PREV_RESTARTED_APP", "FALSE") == "TRUE" then
-		Log("应用重启状态")
-		PREV.restartedAPP = true
-	else
-		PREV.restartedAPP = false
-	end
+local function initPrevRestartStatus()
+	PREV.restartedScript = getPrevRestartedScript()
+	PREV.restartedAPP = getPrevRestartedAPP()
 	
 	if PREV.restartedScript or PREV.restartedAPP then
 		PREV.restarted = true
 	end
 	
-	setStringConfig("PREV_RESTARTED_SCRIPT", "FALSE")
-	setStringConfig("PREV_RESTARTED_APP", "FALSE")
+	Log("----initPrevRestartStatus: "..tostring(PREV.restarted))
 end
 
 --初始化环境参数
@@ -118,12 +108,14 @@ local function initEnv()
 	screen.keep(false)
 	
 	initAppID()
-	initPrevStatus()
+	initPrevRestartStatus()
 	
 	initDstResolution()
 	initScalingRatio()
 	initBlackBorder()
 	initEffectiveArea()
+	
+	Log(" ")
 end
 
 initEnv()

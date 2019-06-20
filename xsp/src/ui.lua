@@ -595,7 +595,7 @@ local _gridList = {
 		tag = "缓存模式",
 		checkedList = {3},
 		singleCheck = true,
-		singleBindParam = "CFG.ALLOW_CACHE",
+		singleBindParam = "CFG.CACHING_MODE",
 		list = {
 			{title = "缓存模式", disabled = true},
 			{title = "开启", value = true},

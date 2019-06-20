@@ -275,6 +275,7 @@ function M.getRatioPoint(x, y)
 	return  x1, y1
 end
 
+--偏移
 function M.offsetPos(pos, firstOffsetPot)
 	local posTb = M.toPointsTable(pos)
 	if #posTb < 1 then
@@ -291,10 +292,5 @@ function M.offsetPos(pos, firstOffsetPot)
 	
 	return M.toPointsString(posTb)
 end
-
-
-
-
-
 
 

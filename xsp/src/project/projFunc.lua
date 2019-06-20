@@ -298,7 +298,7 @@ local function selectExpiredPlayer()
 			if exsitFlag == false then
 				table.insert(expiredPlayerLatterHalf, v)
 				tap(v.x, v.y)
-				sleep(200)
+				sleep(400)
 			end
 		end
 		prt(expiredPlayerLatterHalf)
@@ -366,14 +366,18 @@ function refreshUnmetCoach(taskPage)
 		local lastCheckTime = os.time()
 		while true do
 			if page.isExsitNavigation("comfirm") then
-				lastCheckTime = os.time()
 				page.tapNavigation("comfirm")
-				sleep(500)
+				sleep(1000)
 			end
 			
 			if page.isExsitNavigation("notice") then		--关闭续约界面
 				page.tapNavigation("notice")
-				sleep(1500)
+				sleep(1000)
+			end
+			
+			if page.isExsitNavigation("back") then		--关闭续约界面
+				page.tapNavigation("back")
+				sleep(1000)
 				break		--出口
 			end
 			
@@ -387,6 +391,5 @@ function refreshUnmetCoach(taskPage)
 		isPlayerRedCard = true
 	end
 	
-	page.tapNavigation("back")	--返回
-	sleep(1500)
+	sleep(100)
 end

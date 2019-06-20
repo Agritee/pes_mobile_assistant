@@ -14,9 +14,6 @@ ERR_UNKOWN = "ERR_UNKOWN"
 ERR_TASK_ABORT = "ERR_TASK_ABORT"
 
 
-
-CURRENT_TASK = "TASK_NONE"
-
 lastPlayingPageTime = 0
 lastPenaltyPageTime = 0
 isPlayerRedCard = false
