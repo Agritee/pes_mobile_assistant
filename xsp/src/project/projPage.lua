@@ -216,14 +216,12 @@ local _pageList = {
 			{
 				tag = "比赛信息",
 				enable = true,
-				noCache = true,
 				anchor = "dLT",
 				srcPos = "186|22|0xeac278,184|42|0xeac278,289|22|0xeac278,290|39|0xeac278,45|63|0x001e30,153|83|0x001e30,322|60|0x001e30,430|80|0x001e30",
 			},
 			{
 				tag = "门球",
 				enable = false,
-				noCache = true,
 				anchor = "RT",
 				srcPos = "1086|138|0xffffff,1086|168|0xffffff,1084|245|0xffffff,1087|273|0xffffff,1173|127|0xffffff,1175|285|0xffffff",
 			},
@@ -301,14 +299,12 @@ local _pageList = {
 			{
 				tag = "跳过余下比赛",		--仅用于跳过余下比赛，enable == false，不参与matchPage/matchWidgets
 				enable = false,
-				noCache = true,
 				anchor = "MTB",
 				srcPos = "652|707|0x52a1f9-0x522904,526|689|0xeeeef4,528|724|0xeeeef4,799|691|0xeeeef4,801|718|0xeeeef4,667|662|0xdfdfe1,482|705|0xdfdfe1,861|708|0xdfdfe1",
 			},
 			{
 				tag = "跳过余下比赛-未激活",
 				enable = false,
-				noCache = true,
 				anchor = "MTB",
 				srcPos = "652|708|0x98989c-0x0b0b0b,526|690|0xc5c5c8,527|719|0xc5c5c8,807|689|0xc5c5c8,804|722|0xc5c5c8",
 			},
@@ -320,7 +316,6 @@ local _pageList = {
 			{
 				tag = "比分综合特征",
 				enable = true,
-				noCache = true,
 				anchor = "BM",
 				--srcPos = "103|654|0x001e30,222|663|0x001e30,1169|596|0x001e30,1168|714|0x001e30,421|652|0x001e30,909|652|0x001e30",
 				srcPos = "622|626|0xf0ca8a,710|685|0xf0ca8a,590|646|0x001e30,742|623|0x001e30,1065|636|0x001e30,1218|653|0x001e30,1163|714|0x001e30,114|654|0x001e30,157|601|0x001e30",
@@ -454,7 +449,7 @@ local _navigationList = {
 	{
 		tag = "next",
 		enable = true,
-		noCache = true,
+		caching = false,
 		anchor = "CRB",
 		srcPos = "1277|705|0xC8E2FD-0x361C01,1192|683|0x0079fd,1187|727|0x0079fd,1091|705|0x0079fd",
 		dstArea = Rect(
@@ -467,7 +462,7 @@ local _navigationList = {
 	{
 		tag = "comfirm",
 		enable = true,
-		noCache = true,
+		caching = false,
 		anchor = "MTB",
 		--srcPos = "843|449|0xcaddf0,884|405|0xcaddf0,507|457|0xcaddf0,409|407|0xcaddf0,487|379|0xf5f5f5,804|491|0xf5f5f5,328|436|0xf5f5f5,1007|435|0xf5f5f5",
 		--兼容手机联赛界面的确定按钮过小的问题
@@ -483,7 +478,6 @@ local _navigationList = {
 	{
 		tag = "back",
 		enable = true,
-		noCache = true,
 		anchor = "CLB",
 		srcPos = "56|706|0xc8e2fd-0x361c01,72|707|0x0079fe,173|690|0x0079fe,218|719|0x0079fe",
 		dstArea = Rect(
@@ -506,7 +500,12 @@ local _navigationList = {
 		anchor = "MTB",
 		srcPos = "651|698|0x66abf9-0x673204,517|689|0xeeeef4,803|721|0xeeeef4,531|353|0x7391af-0x534130,564|230|0x7391af-0x534130",
 	},
-	
+	{
+		tag = "国际服教练签约-满足条件",	--不满足条件的，放在巡回赛界面点击续约处理
+		enable = true,
+		anchor = "MTB",
+		srcPos = "651|700|0x2f90fb-0x2f1702,659|682|0xeeeef4,658|666|0xe2e2e4,659|637|0xffffff,530|690|0xeeeef4,800|722|0xeeeef4,1002|700|0xe2e2e4,1035|699|0x5d5d5e",
+	},
 }
 
 --全局导航优先级
@@ -515,7 +514,8 @@ local _navigationPriorityList = {
 	"comfirm",
 	"next",
 	"notice",
-	"教练签约-满足条件"
+	"教练签约-满足条件",
+	"国际服教练签约-满足条件",
 }
 
 
@@ -545,14 +545,12 @@ local _commonWidgetList = {
 	{
 		tag = "球队异常",		--教练合约失效或球员红牌、伤病
 		enable = true,
-		noCache = true,
 		anchor = "LT",
 		srcPos = "429|81|0xffffff,428|72|0xff3b2f,422|81|0xff3b2f,438|82|0xff3b2f,397|101|0xffffff,462|63|0xe1e1e3,370|123|0xffffff",
 	},
 	{
 		tag = "教练合约失效",		--教练合约失效
 		enable = true,
-		noCache = true,
 		anchor = "CLT",
 		srcPos = "146|92|0xffffff,145|84|0xff8a82-0x004f54,134|95|0xff8a82-0x004f54,155|95|0xff8a82-0x004f54,145|111|0xff8a82-0x004f54",
 		dstArea = Rect(
@@ -565,16 +563,43 @@ local _commonWidgetList = {
 	{
 		tag = "教练续约",		--点击教练续约
 		enable = true,
-		noCache = true,
 		anchor = "A",
 		srcPos = "687|346|0x6db0f9-0x6e3804,711|242|0x6db0f9-0x6e3804,705|150|0x6db0f9-0x6e3804,683|444|0x6db0f9-0x6e3804",
 	},
 	{
 		tag = "罚点球员",
 		enable = true,
-		noCache = true,
+		caching = false,
 		anchor = "A",
 		srcPos = "934|331|0x00f8ff,930|325|0x00f8ff,938|325|0x00f8ff",
+	},
+	{
+		tag = "球队菜单",		--只在球队取了首点，后边的是点在替补席的球衣上，注意锚点
+		enable = true,
+		caching = false,
+		anchor = "LT",
+		srcPos = "52|329|0x1d3753-0x060605,106|422|0xfefefe,93|418|0x0079fe,107|408|0x0079fe,118|422|0x0079fe,113|452|0x0079fe,126|439|0xfefefe,63|440|0xfefefe",
+	},
+	{
+		tag = "保存",
+		enable = true,
+		caching = false,
+		anchor = "LB",
+		srcPos = "478|697|0xffffff,448|692|0xffffff,512|694|0xffffff,480|666|0xffffff,481|726|0xffffff,237|699|0x0079fe",
+	},
+	{
+		tag = "切换小队",
+		enable = true,
+		caching = false,
+		anchor = "T",
+		srcPos = "715|159|0x3694fb-0x361c02,694|185|0xf5f5f5,770|244|0x3694fb-0x361c02,765|278|0xf5f5f5,784|592|0xf5f5f5,798|626|0x3694fb-0x361c02",
+	},
+	{
+		tag = "设为主力阵容",
+		enable = true,
+		caching = false,
+		anchor = "TM",
+		srcPos = "651|211|0x3694fb-0x361c02,654|126|0xfa766e-0x033b3f,736|294|0x3694fb-0x361c02,672|39|0x3d3d3d-0x3e3e3e",
 	},
 }
 

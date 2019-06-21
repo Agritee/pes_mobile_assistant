@@ -248,7 +248,7 @@ end
 function screen.findColors(rect, color, globalFuzz, priority, limit)
 	if limit ~= nil and limit > 99 then	--超过99点，进行分区findColors再汇总
 		local split = 6		--分区阶数，将把rect分为split^2个区域分开扫描
-		if CFG.DST_RESOLUTION.width > 1080 then 		--，兼容ipx出现more than99点的问题
+		if CFG.DST_RESOLUTION.height > 1080 then 		--，兼容ipx出现more than99点的问题
 			split = 10
 		end
 		
@@ -435,3 +435,7 @@ function runtime.getForegroundApp()
 	return frontAppName()
 end
 
+-------------UserInfo--------------
+UserInfo = {}
+
+UserInfo.id = getScriptID()

@@ -62,6 +62,21 @@ function compareTb(srcTb, dstTb)
 	return true
 end
 
+--排序，按从上到下，从左到右的顺序，即优先取y较小值，y相同再取x较小值
+function sortPos(a, b)
+	if a.x == nil or a.y == nil or b.x == nil or b.y == nil then
+		return
+	end
+	
+	--if a.y == b.y then
+	--因不同状态下的首点取值位置不同，同一水平位置的y左边可能有微小区别，容错以6像素/短边750未基准
+	if math.abs(a.y - b.y) <= (CFG.EFFECTIVE_AREA[4] - CFG.EFFECTIVE_AREA[2]) / 750 * 5 then
+		return a.x < b.x
+	else
+		return a.y < b.y
+	end
+end
+
 function setValueByStrKey(keyStr, value)
 	local keysTb = {}
 	for keyStr, keyIndex in string.gmatch(keyStr, "([%a_]+)%[?(%d*)%]?%.?") do

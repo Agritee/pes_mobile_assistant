@@ -43,12 +43,6 @@ function M.run(taskName, repeatTimes)
 	local reTimes = repeatTimes or CFG.DEFAULT_REPEAT_TIMES
 	
 	if not M.isExistTask(taskName) then		--检查任务是否存在
-		for _, v in pairs(CFG.TO_DO_LIST) do
-			if v == taskName then
-				dialog("正在火急火燎的开发中\r\n请少侠稍后再来！")
-				xmod.exit()
-			end
-		end
 		catchError(ERR_PARAM, "have no task: "..taskName)
 	end
 	

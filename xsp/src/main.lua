@@ -7,6 +7,7 @@ require("config")
 require("global")
 require("func")
 require("init")
+require("zui/base_ui")
 require("scale")
 require("page")
 require("exec")
@@ -18,17 +19,13 @@ require("project/task/tourSim")
 require("project/task/tourManuel")
 require("project/task/championSim")
 require("project/task/sezonSim")
-require("ui")
-require("zui/base_ui")
 
 function main()
 	screen.keep(false)
-	dispUI()
+	--dispUI()
 	
-	if USER.DROP_CACHE then
-		page.dropPageCache()
-	end
-	CFG.CACHING_MODE = false
+
+	--CFG.CACHING_MODE = false
 
 	if PREV.restartedAPP then
 		if xmod.PROCESS_MODE == xmod.PROCESS_MODE_STANDALONE then	--通用模式的延时只能放在重启时
@@ -45,11 +42,12 @@ end
 main()
 
 screen.init(screen.LANDSCAPE_RIGHT)
-sleep(2000)
+--sleep(2000)
 
 
-page.checkCurrentPage()
-
+page.checkPage()
+page.checkNavigation()
+page.checkCommonWidget()
 
 
 --refreshUnmetCoach()

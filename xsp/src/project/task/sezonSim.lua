@@ -48,6 +48,11 @@ local fn = function()
 	
 	if page.isExsitCommonWidget("球队异常") and not isPlayerRedCard then
 		refreshUnmetCoach("国际服季节赛")
+		if isPlayerRedCard then
+			Log("有异常球员出现")
+			sleep(500)
+			swichTeam()
+		end
 	end
 end
 insertFunc("国际服季节赛", fn)

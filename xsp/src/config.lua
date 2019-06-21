@@ -6,12 +6,14 @@
 CFG = {}	--脚本配置表
 
 -----------------版本信息-----------------
+CFG.SCRIPT_NAME = "实况助手"
 CFG.VERSION = "v0.0.1"
 CFG.BIULD_TIME = "20190104"
 
 -----------------引擎属性-----------------
 CFG.COMPATIBLE = (string.sub(xmod.VERSION_NAME, 1, 3) == "1.9" and {true} or {false})[1]		--兼容(1.9引擎)模式
 CFG.CACHING_MODE = false				--缓存模式
+CFG.DROP_CACHE = false					--清除缓存
 
 -----------------调试参数-----------------
 CFG.LOG = true							--是否允许输出LOG信息
@@ -54,7 +56,7 @@ CFG.WAIT_RESTART = 15					--重启等待时间/s
 
 CFG.WAIT_CHECK_SKIP = 3					--进入skipCheck判定的等待时间/s
 CFG.WAIT_CHECK_SKIP_NEXT = 5
-CFG.WAIT_CHECK_NAVIGATION = 1 			--进入导航判定的等待时间/s
+CFG.WAIT_CHECK_NAVIGATION = 0 			--进入导航判定的等待时间/s
 
 -----------------touch参数-----------------
 CFG.TOUCH_MOVE_STEP = 50				--touchMoveTo的移动步长/pix
@@ -63,9 +65,31 @@ CFG.DEFAULT_LONG_TAP_TIME = 800			--默认longtap时间/ms
 
 CFG.DEFAULT_PAGE_CHECK_INTERVAL = 100	--默认page的检测间隔/s
 
-
-CFG.TO_DO_LIST = {						--ToDo功能列表，会提示未开放请稍后再来
-	"领取奖励",
+CFG.SCRIPT_FUNC = {						--脚本功能列表
+	funcList = {
+		"自动天梯",
+		"自动联赛",
+		"自动巡回",
+		"手动巡回",
+		"自动冠军赛",
+		"领取奖励",
+		"国际服季节赛SIM",
+	},
+	
+	whiteList = {						--功能限制列表，通过白名单形式限制个脚本的功能，用于同时维护多个脚本,func为空是代表全白名单
+		{scriptid = -1, prompt = "开发助手版", func = {}},
+		{scriptid = 16489, prompt = "叉叉助手/小精灵版", func = {}},
+		{scriptid = 23354, prompt = "叉叉助手免费版", func = {}},
+		{scriptid = 16498, prompt = "叉叉助手/小精灵测试版", func = {}},
+		{scriptid = 24090, prompt = "小精灵(国际服)版", func = {"国际服季节赛SIM"}},
+		{scriptid = 16947, prompt = "IPA精灵版", func = {}},
+		{scriptid = 23355, prompt = "IPA精灵免费版", func = {}},
+		{scriptid = 18134, prompt = "IPA精灵测试版", func = {}},
+	},
+	
+	todoList = {						--ToDo功能列表，会提示未开放请稍后再来
+		"领取奖励",
+	}
 }
 
 

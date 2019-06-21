@@ -389,7 +389,102 @@ function refreshUnmetCoach(taskPage)
 		end
 	else		--如果是球员状态异常，置isPlayerRedCard为true，以防止再次进入refreshUnmetCoach流程
 		isPlayerRedCard = true
+		page.tapNavigation("back")
 	end
 	
 	sleep(100)
 end
+
+
+--国际服不能一键换人，因此需要切换小队
+function swichTeam()
+	page.tapCommonWidget("球队异常", 7)		--点击第七个点才能点中
+	sleep(1500)
+	
+	page.tapCommonWidget("球队菜单")
+	sleep(1500)
+	page.tapCommonWidget("切换小队")
+	sleep(1000)
+	
+	local teamPos = {}
+	
+	local startTime = os.time()
+	while true do
+		--精神旗，小队
+		local posTb = screen.findColors(
+			scale.getAnchorArea("T"),
+			scale.scalePos("400|172|0xc8faff,364|113|0xc8faff,399|165|0x0028b4,371|109|0x0028b4,430|107|0x0028b4"),
+			CFG.DEFAULT_FUZZY
+		)
+		
+		if #posTb > 0 then
+			for _, v in pairs(posTb) do
+				local exsitFlag = false
+				for _, _v in pairs(teamPos) do
+					if math.abs(v.x - _v.x) < 50 * CFG.SCALING_RATIO and math.abs(v.y - _v.y) < 50 * CFG.SCALING_RATIO then
+						exsitFlag = true
+						break
+					end
+				end
+				
+				if exsitFlag == false then
+					table.insert(teamPos, v)
+					sleep(400)
+				end
+			end
+			table.sort(teamPos, sortPos)
+			break
+		end
+		
+		if os.time() - startTime > CFG.DEFAULT_TIMEOUT then
+			catchError(ERR_TIMEOUT, "time out in 检测小队")
+		end
+		
+		sleep(200)
+	end
+	
+	--勾，当前选中小队
+	local pot = screen.findColor(
+		scale.getAnchorArea("B"),
+		scale.scalePos("407|601|0x007aff,407|591|0xffffff,397|608|0xffffff,397|592|0x007aff,392|587|0xffffff,434|573|0x007aff,419|573|0xffffff"),
+		CFG.DEFAULT_FUZZY
+	)
+	prt(teamPos)
+	prt(pot)
+	if pot ~= Point.INVALID then
+		if math.abs(pot.x - teamPos[1].x) < 100 * CFG.SCALING_RATIO then	--当前选中的是teamPos[1]
+			tap(teamPos[2].x, teamPos[2].y)		--切换二队
+		elseif math.abs(pot.x - teamPos[2].x) < 100 * CFG.SCALING_RATIO then
+			tap(teamPos[1].x, teamPos[1].y)		--切换一队
+		else
+			Log("当前选中不在一队二队，将切换至一队")
+			dialog("当前选中不在一队二队，将切换至一队", 3)
+			tap(teamPos[1].x, teamPos[1].y)		--切换一队
+		end
+	else
+		Log("当前选中不在一队二队，将切换至一队")
+		dialog("当前选中不在一队二队，将切换至一队", 3)
+		tap(teamPos[1].x, teamPos[1].y)		--切换一队
+	end
+	sleep(1000)
+	
+	page.tapCommonWidget("设为主力阵容")
+	sleep(1000)
+	
+	page.tapNavigation("back")
+	local startTime = os.time()
+	while true do
+		if page.isExsitCommonWidget("球队菜单") then		--确保back成功
+			break
+		end
+		
+		if os.time() - startTime > CFG.DEFAULT_TIMEOUT then
+			catchError(ERR_TIMEOUT, "time out in swichTeam back")
+		end
+		sleep(200)
+	end
+	
+	page.tapNavigation("back")
+	sleep(200)
+end
+
