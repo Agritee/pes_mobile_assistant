@@ -6,19 +6,36 @@
 --在主界面4个子界面切换
 function switchMainPage(pageName)
 	Log("swich to "..pageName)
-	sleep(300)
-	if pageName == "比赛" then
-		ratioTap(179, 115)
-	elseif pageName == "俱乐部" then
-		ratioTap(490, 115)
-	elseif pageName == "合同" then
-		ratioTap(828, 115)
-	elseif pageName == "其他" then
-		ratioTap(1148, 115)
-	else
-		catchError(ERR_PARAM, "swich a wrong page")
+	local startTime = os.time()
+	while true do
+		local currentPage = page.getCurrentPage(true)
+		if currentPage == "比赛" or currentPage == "俱乐部" or currentPage == "其他" then
+			Log("stay mian page")
+			if currentPage ~= pageName then
+				if pageName == "比赛" then
+					ratioTap(179, 115)
+				elseif pageName == "俱乐部" then
+					ratioTap(490, 115)
+				elseif pageName == "合同" then
+					ratioTap(828, 115)
+				elseif pageName == "其他" then
+					ratioTap(1148, 115)
+				else
+					catchError(ERR_PARAM, "swich a wrong page")
+				end
+				sleep(500)	
+			end
+		end
+		
+		if page.matchPage(pageName) then
+			break
+		end
+		
+		if os.time() - startTime > CFG.DEFAULT_TIMEOUT then
+			catchError(ERR_TIMEOUT, "异常:切换主界界面失败!")
+		end
+		sleep(100)
 	end
-	sleep(1500)
 end
 
 --获取某个区域内某种状态的所有球员
@@ -314,21 +331,24 @@ function refreshContract()
 	end
 	
 	selectExpiredPlayer()
-	sleep(1000)
+	--[[sleep(1000)
 	page.tapCommonWidget("球员续约-点击签约")
 	sleep(1500)
 	page.tapCommonWidget("球员续约-续约")
 	sleep(1500)
 	page.tapCommonWidget("付款确认")
+	sleep(500)]]
+	
+	execCommonWidgetQueue({"球员续约-点击签约", "球员续约-续约", "付款确认"})
 	sleep(500)
 end
 
 --遇到稳定的(500ms处于checked状态)staticPage后退出，否则遇到comfirm进行点击跳过
 function skipComfirm(staticPage)
-	local lastCheckTime = os.time()
+	local startTime = os.time()
 	while true do
 		if page.isExsitNavigation("comfirm") then
-			lastCheckTime = os.time()
+			startTime = os.time()
 			page.tapNavigation("comfirm")
 			sleep(500)
 		end
@@ -342,7 +362,7 @@ function skipComfirm(staticPage)
 			end
 		end
 		
-		if os.time() - lastCheckTime > CFG.DEFAULT_TIMEOUT then
+		if os.time() - startTime > CFG.DEFAULT_TIMEOUT then
 			catchError(ERR_TIMEOUT, "time out in staticPage: "..staticPage)
 		end
 		
@@ -352,18 +372,35 @@ end
 
 --续约未满足条件的教练(满足条件的直接在比赛结束时处理了)
 function refreshUnmetCoach(taskPage)
-	skipComfirm(taskPage)	--可能先检测到异常，再弹出教练合约失效的提示
+	--[[skipComfirm(taskPage)	--可能先检测到异常，再弹出教练合约失效的提示
 	page.tapCommonWidget("球队异常", 7)		--点击第七个点才能点中
-	sleep(1500)
+	sleep(1500)]]
+	
+	execCommonWidgetQueue({"球队异常"})
+	
+	local startTime = os.time()
+	while true do
+		if page.isExsitCommonWidget("球队菜单") then
+			break
+		end
+		
+		if os.time() - startTime > CFG.DEFAULT_TIMEOUT then
+			catchError(ERR_TIMEOUT, "time out in wait 阵容展示")
+		end
+		sleep(200)	
+	end
+	
 	if page.isExsitCommonWidget("教练合约失效") then
-		page.tapCommonWidget("教练合约失效")
+		--[[page.tapCommonWidget("教练合约失效")
 		sleep(1500)
 		page.tapCommonWidget("教练续约")
 		sleep(1500)
 		page.tapCommonWidget("付款确认")
 		sleep(1000)
-		--多个确定
-		local lastCheckTime = os.time()
+		--多个确定]]
+		
+		execCommonWidgetQueue({"教练合约失效","教练续约","付款确认"})
+		--[[local startTime = os.time()
 		while true do
 			if page.isExsitNavigation("comfirm") then
 				page.tapNavigation("comfirm")
@@ -381,30 +418,35 @@ function refreshUnmetCoach(taskPage)
 				break		--出口
 			end
 			
-			if os.time() - lastCheckTime > CFG.DEFAULT_TIMEOUT then
+			if os.time() - startTime > CFG.DEFAULT_TIMEOUT then
 				catchError(ERR_TIMEOUT, "time out in 教练续约")
 			end
 			
 			sleep(200)
-		end
+		end]]
+		
+		execNavigationQueue({"comfirm", "notice", "back"})
 	else		--如果是球员状态异常，置isPlayerRedCard为true，以防止再次进入refreshUnmetCoach流程
 		isPlayerRedCard = true
 		page.tapNavigation("back")
 	end
 	
-	sleep(100)
+	sleep(500)
 end
 
 
 --国际服不能一键换人，因此需要切换小队
 function swichTeam()
+	--[[sleep(500)
 	page.tapCommonWidget("球队异常", 7)		--点击第七个点才能点中
 	sleep(1500)
 	
 	page.tapCommonWidget("球队菜单")
 	sleep(1500)
 	page.tapCommonWidget("切换小队")
-	sleep(1000)
+	sleep(1000)]]
+	
+	execCommonWidgetQueue({{"球队异常", 7}, "球队菜单", "切换小队"})
 	
 	local teamPos = {}
 	
@@ -429,7 +471,6 @@ function swichTeam()
 				
 				if exsitFlag == false then
 					table.insert(teamPos, v)
-					sleep(400)
 				end
 			end
 			table.sort(teamPos, sortPos)
@@ -449,8 +490,8 @@ function swichTeam()
 		scale.scalePos("407|601|0x007aff,407|591|0xffffff,397|608|0xffffff,397|592|0x007aff,392|587|0xffffff,434|573|0x007aff,419|573|0xffffff"),
 		CFG.DEFAULT_FUZZY
 	)
-	prt(teamPos)
-	prt(pot)
+	--prt(teamPos)
+	--prt(pot)
 	if pot ~= Point.INVALID then
 		if math.abs(pot.x - teamPos[1].x) < 100 * CFG.SCALING_RATIO then	--当前选中的是teamPos[1]
 			tap(teamPos[2].x, teamPos[2].y)		--切换二队
@@ -466,15 +507,18 @@ function swichTeam()
 		dialog("当前选中不在一队二队，将切换至一队", 3)
 		tap(teamPos[1].x, teamPos[1].y)		--切换一队
 	end
-	sleep(1000)
+	--sleep(1000)
 	
-	page.tapCommonWidget("设为主力阵容")
-	sleep(1000)
+	--page.tapCommonWidget("设为主力阵容")
+	--sleep(1000)
+	execCommonWidgetQueue({"设为主力阵容"})
 	
 	page.tapNavigation("back")
+	sleep(1000)
 	local startTime = os.time()
 	while true do
 		if page.isExsitCommonWidget("球队菜单") then		--确保back成功
+			sleep(200)
 			break
 		end
 		
@@ -485,6 +529,7 @@ function swichTeam()
 	end
 	
 	page.tapNavigation("back")
-	sleep(200)
+	sleep(500)
+	dialog("")
 end
 

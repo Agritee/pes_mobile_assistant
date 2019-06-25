@@ -52,7 +52,7 @@ end
 insertFunc("自动冠军赛", fn)
 
 local wfn = function()
-	if page.matchPage() then
+	if page.matchPage("冠军赛结束") then
 		Log("本轮冠军赛已结束")
 		dialog("本轮冠军赛已结束")
 		xmod.exit()
@@ -95,7 +95,7 @@ local wfn = function()
 
 	if os.time() - lastPlayingPageTime > CFG.DEFAULT_TIMEOUT + 10 then		--长时间为检测到比赛界面，判定为异常
 		catchError(ERR_TIMEOUT, "异常:未检测到比赛界面")
-	elseif os.time() - lastPlayingPageTime >= 3 then	--3秒内为检测到比赛界面，跳过过长动画
+	elseif os.time() - lastPlayingPageTime >= 3 and isAppInFront() then	--3秒内为检测到比赛界面，跳过过长动画
 		Log("try skip replay!")
 		ratioTap(900,70)
 		sleep(500)

@@ -215,12 +215,25 @@ function screen.matchColors(points, fuzzy)
 	
 	local isColor = function(x,y,c,s)
 		local fl,abs = math.floor,math.abs
-		s = fl(0xff*(100-s)*0.01)
 		local r,g,b = fl(c/0x10000),fl(c%0x10000/0x100),fl(c%0x100)
 		local rr,gg,bb = getColorRGB(x,y)
+		s = fl(0xff*(100-s)*0.01)
 		if abs(r-rr)<s and abs(g-gg)<s and abs(b-bb)<s then
 			return true
 		end
+		
+		return false
+	end
+	
+	local isColorDif = function(x,y,c,d)
+		local fl,abs = math.floor,math.abs
+		local r,g,b = fl(c/0x10000),fl(c%0x10000/0x100),fl(c%0x100)
+		local rr,gg,bb = getColorRGB(x,y)
+		local dr,dg,db = fl(d/0x10000),fl(d%0x10000/0x100),fl(d%0x100)
+		if abs(r-dr) <= rr and rr <= abs(r+dr) and abs(g-dg) <= gg and gg <= abs(g+dg) and abs(b-db) <= bb and bb <= abs(b+db) then
+			return true
+		end
+		
 		return false
 	end
 	
@@ -228,14 +241,18 @@ function screen.matchColors(points, fuzzy)
 	
 	local matchFlag = false
 	for k, v in pairs(posTb) do
-		matchFlag = true
-		if not isColor(v[1], v[2], v[3], fuzzy or CFG.DEFAULT_FUZZY) then
-			matchFlag = false
-			break
+		if v[4] ~= nil then
+			if not isColorDif(v[1], v[2], v[3], v[4]) then
+				return false
+			end
+		else
+			if not isColor(v[1], v[2], v[3], fuzzy or CFG.DEFAULT_FUZZY) then
+				return false
+			end
 		end
 	end
 	
-	return matchFlag
+	return true
 end
 
 function screen.findColor(rect, color, globalFuzz, priority)

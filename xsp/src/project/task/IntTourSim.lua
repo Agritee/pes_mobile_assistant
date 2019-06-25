@@ -1,17 +1,16 @@
 -- tourSim.lua
 -- Author: cndy1860
--- Date: 2018-12-28
--- Descrip: 自动刷巡回赛教练模式
+-- Date: 2019-06-25
+-- Descrip: 国际服自动刷巡回赛教练模式
 
 local _task = {
-	tag = "自动巡回",
+	tag = "国际服巡回赛SIM",
 	processes = {
-		{tag = "其他", mode = "firstRun"},
-		{tag = "比赛", nextTag = "活动模式", mode = "firstRun"},
-		{tag = "活动模式", nextTag = "自动比赛", mode = "firstRun"},
+		{tag = "俱乐部", mode = "firstRun"},
+		{tag = "比赛", mode = "firstRun"},
 		
-		{tag = "巡回模式", nextTag = "next"},
-		{tag = "阵容展示", nextTag = "next"},
+		{tag = "国际服巡回赛", nextTag = "next"},
+		--{tag = "阵容展示", nextTag = "next"}, 由于没有主客场球衣，直接跳过此处
 		{tag = "比赛中", timeout = 60},
 		{tag = "终场统计", nextTag = "next", timeout = 900, checkInterval = 1000},
 	},
@@ -39,7 +38,29 @@ end
 local fn = function()
 	switchMainPage("比赛")
 end
-insertFunc("其他", fn)
+insertFunc("俱乐部", fn)
+
+local fn = function()
+	page.tapWidget("比赛", "活动模式")
+	sleep(1000)
+	
+	local startTime = os.time()
+	while true do
+		if page.isExsitCommonWidget("国际服巡回赛自动比赛") then
+			sleep(1000)
+			page.tapCommonWidget("国际服巡回赛自动比赛")
+			break
+		end
+		
+		ratioSlide(950, 640, 250, 640)
+	
+		if os.time() - startTime > CFG.DEFAULT_TIMEOUT then
+			catchError(ERR_TIMEOUT, "异常:国际服巡回赛自动比赛!")
+		end
+		sleep(200)
+	end
+end
+insertFunc("比赛", fn)
 
 local fn = function()
 	sleep(200)
@@ -51,17 +72,6 @@ local fn = function()
 end
 insertFunc("巡回模式", fn)
 
-local fn = function()
-	if page.matchWidget("阵容展示", "身价溢出") then
-		dialog("身价溢出，精神低迷\r\n即将退出")
-		xmod.exit()
-	end
-	
-	if USER.ALLOW_SUBSTITUTE then
-		switchPlayer()
-	end
-end
-insertFunc("阵容展示", fn)
 
 local wfn = function()
 	if page.matchPage("比赛中") then

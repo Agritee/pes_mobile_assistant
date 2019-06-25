@@ -108,7 +108,7 @@ local function initEnv()
 	screen.keep(false)
 	
 	initAppID()
-	initPrevRestartStatus()
+	initPrevRestartStatus()		--如果有重启脚本的情况，会在此处重置为上一次的APP_ID
 	
 	initDstResolution()
 	initScalingRatio()

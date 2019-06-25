@@ -1,7 +1,7 @@
 -- func.lua
 -- Author: cndy1860
 -- Date: 2018-12-25
--- Descrip: 功能函数 
+-- Descrip: 功能函数
 
 --复制表
 function tbCopy(tb)
@@ -103,6 +103,7 @@ function processInitPage()
 		local currentPage = page.getCurrentPage(true)
 		if currentPage == "初始化界面" then
 			Log("catch init page")
+			ratioTap(30, 60)
 			local _startTime = os.time()
 			while true do
 				local _currentPage = page.getCurrentPage(true)
@@ -123,7 +124,7 @@ function processInitPage()
 				end
 				
 				sleep(500)
-			end			
+			end
 		end
 		
 		if os.time() - startTime > CFG.DEFAULT_TIMEOUT then
@@ -214,12 +215,13 @@ function dropLog()
 	local file = io.open(logFile, "w")
 	if file then
 		io.close(file)
-	end	
+	end
 end
 
---保存重启脚本状态
+--保存重启脚本状态，同时保存脚本重启前运行的应用ID
 function setRestartedScript()
 	setStringConfig("PREV_RESTARTED_SCRIPT", "TRUE")
+	setStringConfig("PREV_APP_ID", CFG.APP_ID)
 end
 
 --获取重启脚本状态
@@ -227,10 +229,11 @@ function getPrevRestartedScript()
 	if getStringConfig("PREV_RESTARTED_SCRIPT", "FALSE") == "TRUE" then
 		Log("脚本重启状态")
 		setStringConfig("PREV_RESTARTED_SCRIPT", "FALSE") 	--读取之后重置
+		CFG.APP_ID = getStringConfig("PREV_APP_ID", "")		--如果有重启脚本的情况，需要重置为上一次的APP_ID
 		return true
 	else
 		return false
-	end	
+	end
 end
 
 --保存重启应用状态
@@ -246,7 +249,7 @@ function getPrevRestartedAPP()
 		return true
 	else
 		return false
-	end	
+	end
 end
 
 --捕获捕获处理函数
@@ -310,20 +313,20 @@ function catchError(errType, errMsg, forceContinueFlag)
 		if USER.RESTART_SCRIPT or USER.RESTART_APP then	--允许重启
 			if USER.RESTART_APP then			--激进模式，APP和script同时重启
 				if PREV.restartedAPP then
-					Log("已重启过APP，未能解决，即将退出!")
-					dialog("已重启过APP，未能解决，即将退出!")
+					Log("重启阶段三：\n已重启过APP，未能解决，即将退出!")
+					dialog("重启阶段三：\n已重启过APP，未能解决，即将退出!")
 					xmod.exit()
 				end
 				if PREV.restartedScript then	--已单独重启过脚本
-					Log("已尝试过单独重启脚本，未能解决，即将重启应用和脚本")
-					dialog("已尝试过单独重启脚本，未能解决，即将重启应用和脚本", 3)
+					Log("重启阶段二：\n已尝试过单独重启脚本，未能解决，即将重启应用和脚本")
+					dialog("重启阶段二：\n已尝试过单独重启脚本，未能解决，即将重启应用和脚本", 3)
 					if xmod.PROCESS_MODE == xmod.PROCESS_MODE_STANDALONE then	--极客模式需要重启应用
 						LogError("close app: "..CFG.APP_ID)
 						runtime.killApp(CFG.APP_ID);
 						sleep(1000)
 						LogError("restart app: "..CFG.APP_ID)
 						runtime.launchApp(CFG.APP_ID)
-			
+						
 						--记录重启状态，重启之后会直接读取上一次保存的设置信息和相关变量，并不会弹出UI以实现自动续接任务
 						local startTime = os.time()
 						while true do
@@ -339,7 +342,6 @@ function catchError(errType, errMsg, forceContinueFlag)
 							end
 						end
 						setRestartedAPP()
-						setRestartedAPP()
 						setRestartedScript()
 						LogError("restart script")
 						xmod.restart()
@@ -348,17 +350,17 @@ function catchError(errType, errMsg, forceContinueFlag)
 						setRestartedAPP()
 						setRestartedScript()
 						runtime.killApp(CFG.APP_ID);	--沙盒模式下，killApp会强行结束掉脚本，因此不能在此后做任何操作，延时放到重启中
-					end					
+					end
 				else
-					Log("超时，将尝试重启脚本")
-					dialog("超时，将尝试重启脚本", 3)
+					Log("重启阶段一：\n即将重启脚本")
+					dialog("重启阶段一：\n即将重启脚本", 3)
 					setRestartedScript()
 					xmod.restart()
 				end
 			elseif USER.RESTART_SCRIPT	then	--安全模式，仅允许重启script
 				if PREV.restartedScript then	--已重启过脚本
-					LogError("已重启过脚本，仍未解决，即将退出!")
-					dialog("已重启过脚本，仍未解决，即将退出!")
+					LogError("重启阶段二：\n已重启过脚本，仍未解决，即将退出!")
+					dialog("重启阶段二：\n已重启过脚本，仍未解决，即将退出!")
 					xmod.exit()
 				end
 				
@@ -443,7 +445,7 @@ function slide(x1, y1, x2, y2)
 		touch.move(1, x2, y2)
 		sleep(50)
 		touch.up(1, x2, y2)
-	end	
+	end
 end
 
 function ratioSlide(x1, y1, x2, y2)
@@ -463,3 +465,98 @@ function resetPrevStatus()
 	PREV.restartedAPP = false
 	PREV.restartedScript = false
 end
+
+
+function execCommonWidgetQueue(list)
+	local startTime = os.time()
+	while true do
+		for k, v in pairs(list) do
+			if type(v) == "table" then
+				if page.isExsitCommonWidget(v[1]) then
+					page.tapCommonWidget(v[1], v[2])
+					sleep(200)
+					
+					if k == #list then
+						return true
+					end
+					break
+				end
+			else
+				if page.isExsitCommonWidget(v) then
+					page.tapCommonWidget(v)
+					sleep(200)
+					
+					if k == #list then
+						return true
+					end
+					break
+				end
+			end
+		end
+		
+		if page.isExsitNavigation("comfirm") then
+			page.tapNavigation("comfirm")
+			sleep(200)
+		end
+		
+		if os.time() - startTime > CFG.DEFAULT_TIMEOUT then
+			catchError(ERR_TIMEOUT, "time out in execCommonWidgetQueue:"..list[1])
+		end
+		
+		sleep(200)
+	end
+	
+	return false
+end
+
+function execPageWidgetQueue(list)
+	local startTime = os.time()
+	while true do
+		for k, v in pairs(list) do
+			if page.matchWidget(v[1], v[2]) then
+				page.tapWidget(v[1], v[2])
+				sleep(200)
+				
+				if k == #list then
+					return true
+				end
+				break
+			end
+		end
+		
+		if os.time() - startTime > CFG.DEFAULT_TIMEOUT then
+			catchError(ERR_TIMEOUT, "time out in execPageWidgetQueue:"..list[1][1]..list[1][2])
+		end
+		
+		sleep(200)
+	end
+	
+	return false
+end
+
+function execNavigationQueue(list)
+	local startTime = os.time()
+	while true do
+		for k, v in pairs(list) do
+			if page.isExsitNavigation(v) then
+				page.tapNavigation(v)
+				sleep(200)
+				
+				if k == #list then
+					return true
+				end
+				break
+			end
+		end
+		
+		if os.time() - startTime > CFG.DEFAULT_TIMEOUT then
+			catchError(ERR_TIMEOUT, "time out in execNavigationQueue:"..list[1])
+		end
+		
+		sleep(200)
+	end
+	
+	return false
+end
+
+

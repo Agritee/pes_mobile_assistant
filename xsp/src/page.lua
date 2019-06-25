@@ -70,106 +70,115 @@ function M.matchWidget(pageTag, widgetTag)
 	return false
 end
 
---匹配控件列表，缓存
-local function matchWidgets(pageTag, widgetList)
-	local matchFlag = false
-	local storeItems = {}
-	for k, v in pairs(widgetList) do
-		if v.enable then
-			--prt(v)
-			if not CFG.CACHING_MODE or v.matchPos == nil or not v.caching then		--不存在缓存过的matchPos，使用找色
-				local pot = screen.findColor(v.dstArea, v.dstPos, v.fuzzy or CFG.DEFAULT_FUZZY)
-				if pot == Point.INVALID then
-					--Log("cant find widget: "..v.tag)
-					return false
-				else
-					--Log("----find widget: "..v.tag.."on page: "..pageTag)
-					if CFG.CACHING_MODE and v.caching then		--先临时缓存，确定所有控件完全匹配后再缓存
-						table.insert(storeItems, {string.format("page-%s-%s", pageTag, v.tag), scale.offsetPos(v.dstPos, pot)})
-					end
-				end
-			else							--存在缓存过的matchPos，使用比色
-				if not screen.matchColors(v.matchPos, v.fuzzy or CFG.DEFAULT_FUZZY) then
-					--Log("cant match widget: "..v.tag)
-					return false
-				else
-					--Log("----match widget: "..v.tag)
-				end
+--检测当前界面匹配情况，不去重，主要用于测试界面，不缓存
+function M.checkPage()
+	for _, v in pairs(M.pageList) do
+		local checked = true
+		for _, _v in pairs(v.widgetList) do
+			local pot = screen.findColor(_v.dstArea, _v.dstPos, _v.fuzzy or CFG.DEFAULT_FUZZY)
+			if pot == Point.INVALID then
+				checked = false
+				break
 			end
+		end
+		
+		if checked then
+			Log("-------checked page: "..v.tag)
 		end
 	end
-	
-	--页面控件完全匹配，开始缓存
-	if #storeItems > 0 then
-		for k, v in pairs(storeItems) do
-			storage.put(v[1], v[2])
-			Log("ready storge "..v[1])
-		end
-		storage.commit()	--缓存
-		
-		for k, v in pairs(widgetList) do	--copy到对应的matchPos
-			if v.matchPos == nil and v.caching then
-				local key = string.format("page-%s-%s", pageTag, v.tag)
-				for _k, _v in pairs(storeItems) do
-					if _v[1] == key then
-						v.matchPos = _v[2]
-						Log("set new matchPos on: "..key)
-						break
+end
+
+--匹配当前界面是否为指定的page
+function M.matchPage(pageTag)
+	--Log("try match page : "..pageTag)
+	for _, v in pairs(M.pageList) do
+		if v.tag == pageTag then
+			for _, _v in pairs(v.widgetList) do
+				if _v.enable then
+					if not CFG.CACHING_MODE or _v.matchPos == nil or not _v.caching then		--不存在缓存过的matchPos，使用找色
+						local pot = screen.findColor(_v.dstArea, _v.dstPos, _v.fuzzy or CFG.DEFAULT_FUZZY)
+						if pot == Point.INVALID then
+							--Log("cant find widget: ".._v.tag)
+							return false
+						else
+							--Log("----find widget: ".._v.tag.."on page: "..v.tag)
+						end
+					else							--存在缓存过的matchPos，使用比色
+						if not screen.matchColors(_v.matchPos, _v.fuzzy or CFG.DEFAULT_FUZZY) then
+							--Log("cant match widget: ".._v.tag)
+							return false
+						else
+							--Log("----match widget: ".._v.tag)
+						end
 					end
 				end
 			end
+			
+			break
 		end
 	end
 	
 	return true
 end
 
---检测当前界面匹配情况，不去重，主要用于测试界面
-function M.checkPage()
-	local flag = false 
-	for _, v in pairs(M.pageList) do
-		if matchWidgets(v.tag, v.widgetList) then
-			Log("--------checked page: "..v.tag)
-			flag = true
-		end
-	end
-	
-	if not flag then
-		Log("--------this is a unknow page!!!")
-	end
-end
-
---匹配当前界面
-function M.matchPage(pageTag)
-	--Log("try match page : "..pageTag)
-	for _, v in pairs(M.pageList) do
-		if v.tag == pageTag then
-			if matchWidgets(v.tag, v.widgetList) then
-				--Log("--------matched page: "..pageTag)
-				return true
-			else
-				--Log("cant match page: "..pageTag)
-			end
-			break
-		end
-	end
-	
-	return false
-end
-
---获取当前界面
+--获取当前界面，缓存
 function M.getCurrentPage(forceGlobalPage)
-	if forceGlobalPage then
-		for k, v in pairs(M.pageList) do
-			if M.matchPage(v.tag) then
-				Log("get current page: "..v.tag)
-				return v.tag
+	for _, v in pairs(M.pageList) do
+		if v.enable or forceGlobalPage then
+			local matched = true
+			local storeItems = {}
+			
+			for _, _v in pairs(v.widgetList) do
+				if _v.enable then
+					if not CFG.CACHING_MODE or _v.matchPos == nil or not _v.caching then		--不存在缓存过的matchPos，使用找色
+						local pot = screen.findColor(_v.dstArea, _v.dstPos, _v.fuzzy or CFG.DEFAULT_FUZZY)
+						if pot == Point.INVALID then
+							--Log("cant find widget: ".._v.tag)
+							matched = false
+							break
+						else
+							Log("----find widget: ".._v.tag.."on page: "..v.tag)
+							if CFG.CACHING_MODE and _v.caching then		--先临时缓存，确定所有控件完全匹配后再缓存
+								--prt(pot)
+								--prt(scale.offsetPos(_v.dstPos, pot))
+								table.insert(storeItems, {string.format("page-%s-%s", v.tag, _v.tag), scale.offsetPos(_v.dstPos, pot)})
+							end
+						end
+					else							--存在缓存过的matchPos，使用比色
+						if not screen.matchColors(_v.matchPos, _v.fuzzy or CFG.DEFAULT_FUZZY) then
+							--Log("cant match widget: ".._v.tag)
+							matched = false
+							break
+						else
+							--Log("----match widget: ".._v.tag)
+						end
+					end
+				end
 			end
-		end
-	else
-		for k, v in pairs(M.pageList) do
-			if v.enable and M.matchPage(v.tag) then
-				--Log("get current page: "..v.tag)
+			
+			--页面控件完全匹配，开始缓存
+			if matched then
+				if #storeItems > 0 then
+					for k, v in pairs(storeItems) do
+						storage.put(v[1], v[2])
+						--Log("ready storge "..v[1])
+					end
+					storage.commit()	--缓存
+					
+					for _, _v in pairs(v.widgetList) do	--copy到对应的matchPos
+						if _v.matchPos == nil and _v.caching then
+							local key = string.format("page-%s-%s", v.tag, _v.tag)
+							for _, __v in pairs(storeItems) do
+								if __v[1] == key then
+									_v.matchPos = __v[2]
+									Log("set new matchPos on: "..key)
+									break
+								end
+							end
+						end
+					end
+				end
+				
 				return v.tag
 			end
 		end
@@ -267,7 +276,7 @@ end
 
 --检测导航控件，不去重，用于测试
 function M.checkNavigation()
-	local flag = false 
+	local flag = false
 	for _, v in pairs(M.navigationList) do
 		local pot = screen.findColor(v.dstArea, v.dstPos, CFG.DEFAULT_FUZZY)
 		if pot ~= Point.INVALID then
@@ -277,7 +286,7 @@ function M.checkNavigation()
 	end
 	
 	if not flag then
-		Log("--------this is a unknow navigation!!!")
+		Log("not checked any navigation")
 	end
 end
 
@@ -317,7 +326,8 @@ function M.tryNavigation()
 	for _, v in pairs(M.navigationPriorityList) do
 		for _, _v in pairs(M.navigationList) do
 			if v == _v.tag then
-				if not CFG.CACHING_MODE or _v.matchPos == nil or not _v.caching then
+				--if not CFG.CACHING_MODE or _v.matchPos == nil or not _v.caching then
+				if true then
 					local pot = screen.findColor(_v.dstArea, _v.dstPos, CFG.DEFAULT_FUZZY)
 					if pot ~= Point.INVALID then
 						Log("Exsit find Navigation [".._v.tag.."], try execute it!")
@@ -338,12 +348,12 @@ function M.tryNavigation()
 							tap(pot.x, pot.y)	--点击导航按钮
 						end
 						
-						if CFG.CACHING_MODE and _v.caching then
-							_v.matchPos = scale.offsetPos(_v.dstPos, pot)
-							storage.put(string.format("navigation-%s", _v.tag), _v.matchPos)
-							storage.commit()
-							Log("store "..string.format("navigation-%s", _v.tag))
-						end
+						--[[if CFG.CACHING_MODE and _v.caching then
+						_v.matchPos = scale.offsetPos(_v.dstPos, pot)
+						storage.put(string.format("navigation-%s", _v.tag), _v.matchPos)
+						storage.commit()
+						Log("store "..string.format("navigation-%s", _v.tag))
+						end]]
 						
 						sleep(CFG.NAVIGATION_DELAY)
 						return true
@@ -396,7 +406,7 @@ end
 
 --检测公共控件，不去重，用于测试
 function M.checkCommonWidget()
-	local flag = false 
+	local flag = false
 	for _, v in pairs(M.commonWidgetList) do
 		local pot = screen.findColor(v.dstArea, v.dstPos, CFG.DEFAULT_FUZZY)
 		if pot ~= Point.INVALID then
@@ -406,7 +416,7 @@ function M.checkCommonWidget()
 	end
 	
 	if not flag then
-		Log("--------this is a unknow commonWidget!!!")
+		Log("not checked any commonWidget")
 	end
 end
 
@@ -414,7 +424,6 @@ end
 function M.tapCommonWidget(commTag, potIndex)
 	for _, v in pairs(M.commonWidgetList) do
 		if v.tag == commTag then
-		prt(v.tag)
 			local startTime = os.time()
 			while true do
 				local pot = screen.findColor(v.dstArea, v.dstPos, CFG.DEFAULT_FUZZY)
@@ -531,14 +540,14 @@ local function initPages()
 				if _v.caching == nil then
 					_v.caching = true
 				end
-			
+				
 				if CFG.CACHING_MODE and _v.matchPos == nil and _v.caching then
 					local key = string.format("page-%s-%s", v.tag, _v.tag)
 					local value = storage.get(key, "NULL")
 					if value ~= "NULL" then
-						Log(key.." : "..value)
+						--Log(key.." : "..value)
 						_v.matchPos = value
-						Log("load page matchPos: "..v.tag.."-".._v.tag)
+						--Log("load page matchPos: "..v.tag.."-".._v.tag)
 					end
 				end
 			end
@@ -548,7 +557,7 @@ local function initPages()
 	Log("----initPages done!")
 end
 
---初始化导航控件，将srcPos缩放至dstPos，如下一步、确定、通知
+--初始化导航控件，将srcPos缩放至dstPos，如下一步、确定、通知(容易出错，禁止缓存)
 local function initNavigations()
 	for _, v in pairs(M.navigationList) do
 		if v.srcPos ~= nil and string.len(v.srcPos) > 0 then
@@ -558,18 +567,18 @@ local function initNavigations()
 			if v.dstArea == nil then
 				v.dstArea = scale.getAnchorArea(v.anchor)
 			end
-			if v.caching == nil then
-				v.caching = true
+			--[[if v.caching == nil then
+			v.caching = true
+		end
+		
+		if CFG.CACHING_MODE and v.matchPos == nil and v.caching then
+			local key = string.format("navigation-%s", v.tag)
+			local value = storage.get(key, "NULL")
+			if value ~= "NULL" then
+				v.matchPos = value
+				Log("load navigation matchPos: "..v.tag..":"..v.matchPos)
 			end
-			
-			if CFG.CACHING_MODE and v.matchPos == nil and v.caching then
-				local key = string.format("navigation-%s", v.tag)
-				local value = storage.get(key, "NULL")
-				if value ~= "NULL" then
-					v.matchPos = value
-					Log("load navigation matchPos: "..v.tag)
-				end
-			end
+			end]]
 		end
 	end
 	
@@ -589,16 +598,16 @@ local function initCommonWidgets()
 			end
 			if v.caching == nil then
 				v.caching = true
-			end 
-			
-			if CFG.CACHING_MODE and v.matchPos == nil and v.caching then
-				local key = string.format("commonWidget-%s", v.tag)
-				local value = storage.get(key, "NULL")
-				if value ~= "NULL" then
-					v.matchPos = value
-					Log("load commonWidget matchPos: "..v.tag)
-				end
 			end
+			
+			--[[if CFG.CACHING_MODE and v.matchPos == nil and v.caching then
+			local key = string.format("commonWidget-%s", v.tag)
+			local value = storage.get(key, "NULL")
+			if value ~= "NULL" then
+				v.matchPos = value
+				Log("load commonWidget matchPos: "..v.tag)
+			end
+			end]]
 		end
 	end
 	

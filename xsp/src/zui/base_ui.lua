@@ -4,7 +4,8 @@ if not CFG.COMPATIBLE then
 	return
 end
 
---对whiteList之外的任务添加“不支持”的后缀
+
+--功能字符串，--只允许whiteList的功能出现
 local funcStr = ""
 for _, v in pairs(CFG.SCRIPT_FUNC.funcList) do
 	local limit = false
@@ -20,9 +21,7 @@ for _, v in pairs(CFG.SCRIPT_FUNC.funcList) do
 			break
 		end
 	end
-	if limit then
-		funcStr = funcStr..v.."(不支持),"
-	else
+	if not limit then
 		funcStr = funcStr..v..","
 	end
 end
@@ -41,7 +40,7 @@ local pageBaseSet = Page:new(myui,{text = "基本设置", size = 24})
 local dispStr =  "欢迎使用"..CFG.SCRIPT_NAME
 for _, v in pairs(CFG.SCRIPT_FUNC.whiteList) do 
 	if v.scriptid == UserInfo.id then
-		dispStr = dispStr.."-"..v.prompt
+		dispStr = dispStr.."-"..v.distributions
 		break
 	end
 end
@@ -59,7 +58,7 @@ pageBaseSet:addCheckBoxGroup({id="checkBoxFunc", list = "开场换人,自动续�
 
 pageBaseSet:nextLine()
 pageBaseSet:addLabel({text="自动重启",size=30})
-pageBaseSet:addRadioGroup({id="radioRestart",list="禁止重启,安全重启,激进重启",select=0,w=80,h=12,size=30})
+pageBaseSet:addRadioGroup({id="radioRestart",list="开启,关闭",select=0,w=80,h=12,size=30})
 
 pageBaseSet:nextLine()
 pageBaseSet:addLabel({text="任务次数",size=30})
@@ -93,13 +92,13 @@ pageSubstituteSet:addLabel({text="替补4 ->",size=32})
 pageSubstituteSet:addComboBox({id="comboBoxBench4",list=feildPositionStr,select=0,w=17,h=10, size = 18})
 pageSubstituteSet:addLabel({text=" ",size=24})
 pageSubstituteSet:addComboBox({id="comboBoxBenchCondition4",list=feildPositionSubstituteCondition,select=0,w=24,h=10, size = 18})
-pageSubstituteSet:addLabel({text="        格按照从上到下（请参考编号",size=20})
+pageSubstituteSet:addLabel({text="        格按照从左到右（请参考编号",size=20})
 pageSubstituteSet:nextLine()
 pageSubstituteSet:addLabel({text="替补5 ->",size=32})
 pageSubstituteSet:addComboBox({id="comboBoxBench5",list=feildPositionStr,select=0,w=17,h=10, size = 18})
 pageSubstituteSet:addLabel({text=" ",size=24})
 pageSubstituteSet:addComboBox({id="comboBoxBenchCondition5",list=feildPositionSubstituteCondition,select=0,w=24,h=10, size = 18})
-pageSubstituteSet:addLabel({text="        图示），从左到右的顺序编为",size=20})
+pageSubstituteSet:addLabel({text="        图示），从上到下的顺序编为",size=20})
 pageSubstituteSet:nextLine()
 pageSubstituteSet:addLabel({text="替补6 ->",size=32})
 pageSubstituteSet:addComboBox({id="comboBoxBench6",list=feildPositionStr,select=0,w=17,h=10, size = 18})
@@ -133,14 +132,17 @@ pageProSet:addLabel({text="果依然不能解决，请关闭缓存模式",size=2
 pageProSet:nextLine()
 pageProSet:nextLine()
 
+pageProSet:addLabel({text="安全重启",size=30})
+pageProSet:addRadioGroup({id="radioSafeRestart",list="关闭,开启",select=0,w=25,h=12})
+pageProSet:nextLine()
 pageProSet:addLabel({text="缓存模式",size=30})
-pageProSet:addRadioGroup({id="radioCachingMode",list="关闭,开启",select=1,w=25,h=12})
+pageProSet:addRadioGroup({id="radioCachingMode",list="关闭,开启",select=0,w=25,h=12})
 pageProSet:nextLine()
 pageProSet:addLabel({text="清空缓存",size=30})
-pageProSet:addRadioGroup({id="radioDropCache",list="关闭,开启",select=1,w=25,h=12})
+pageProSet:addRadioGroup({id="radioDropCache",list="关闭,开启",select=0,w=25,h=12})
 pageProSet:nextLine()
 pageProSet:addLabel({text="记录日志",size=30})
-pageProSet:addRadioGroup({id="radioWriteLog",list="关闭,开启",select=1,w=25,h=12})
+pageProSet:addRadioGroup({id="radioWriteLog",list="关闭,开启",select=0,w=25,h=12})
 
 local pageBuyCDKEY = Page:new(myui,{text = "脚本购买",size = 24})
 pageBuyCDKEY:nextLine()
@@ -179,7 +181,11 @@ pageTestting:addLabel({text="    6.脚本操作的过程中，尽量不要手动
 pageTestting:nextLine()
 pageTestting:addLabel({text="    7.按照稳定性，优先使用手机，模拟器长时间运行可能会导致游戏崩溃(闪退)等状况。",size=20, align="left"})
 pageTestting:nextLine()
-pageTestting:addLabel({text="    8.脚本自动重启(续接任务)功能仅安卓有效。",size=20, align="left"})
+pageTestting:addLabel({text="    8.脚本自动重启是指在脚本或者游戏卡死的情况下将进行重启来继续任务，默认情况下，脚本提示超时后，会首",size=20, align="left"})
+pageTestting:nextLine()
+pageTestting:addLabel({text="      先重启脚本自身尝试解决问题，如果重启后依然超时，便会同时重启游戏和脚本(高级设置中的安全重启将限制",size=20, align="left"})
+pageTestting:nextLine()
+pageTestting:addLabel({text="      只重启脚本而不重启游戏)。重启功能仅安卓有效。",size=20, align="left"})
 pageTestting:nextLine()
 pageTestting:nextLine()
 pageTestting:addLabel({text="------------------------脚本功能说明------------------------",size=20, align="center"})
@@ -194,7 +200,7 @@ pageTestting:addLabel({text="    4.需要下半场换人体力的不足时换人
 pageTestting:nextLine()
 pageTestting:addLabel({text="    5.建议所有模式下都关闭自动铲球防止红黄牌。",size=20, align="left"})
 pageTestting:nextLine()
-pageTestting:addLabel({text="    6.启动脚本前请先切换至游戏主界面-其他(或挂机流程中的任何一个界面)。",size=20, align="left"})
+pageTestting:addLabel({text="    6.启动脚本前请先切换至游戏主界面-比赛(或挂机流程中的任何一个界面)。",size=20, align="left"})
 pageTestting:nextLine()
 pageTestting:addLabel({text="    7.任务次数是指挂机场数。",size=20, align="left"})
 pageTestting:nextLine()
@@ -206,7 +212,7 @@ pageTestting:addLabel({text="    10.年卡和永久卡有专用的VIP微信群�
 pageTestting:nextLine()
 pageTestting:addLabel({text="    11.详细说明书请点击脚本教程。",size=20, align="left"})
 pageTestting:nextLine()
-pageTestting:addLabel({text="    12.有任何问题及建议请反馈给作者，Q群：574025168 ",size=20, align="left"})
+pageTestting:addLabel({text="    12.有任何问题及建议请反馈给作者，Q群：国服574025168，国际服696059906 ",size=20, align="left"})
 pageTestting:nextLine()
 pageTestting:nextLine()
 pageTestting:addLabel({text="------------------------问题反馈说明------------------------",size=20, align="center"})
@@ -288,68 +294,51 @@ local function getRadioKey(tb)
 end
 
 function dispUI()
+	for _, v in pairs(CFG.SCRIPT_FUNC.whiteList) do
+		if v.scriptid == UserInfo.id then
+			if v.tips ~= nil and v.tips ~= "" then
+				Log(v.tips)
+				dialog(v.tips, 5)
+			end
+			break
+		end
+	end
+
 	local uiRet = myui:show(3)
 	if uiRet._cancel then
 		xmod.exit()
 	end
 	--prt(uiRet)
 	
-	--恢复任务名，去掉“(不支持)”字样
-	local taskName = uiRet.comboBoxTask
-	for _, v in pairs(CFG.SCRIPT_FUNC.funcList) do
-		if string.find(taskName, v) ~= nil then
-			taskName = v
-			break
-		end
-	end
-	
 	--check Todo list
+	local taskName = uiRet.comboBoxTask
 	for _, v in pairs(CFG.SCRIPT_FUNC.todoList) do
 		if v == taskName then
 			dialog("正在火急火燎的开发中\r\n请少侠稍后再来！")
 			xmod.exit()
 		end
 	end
-	
-	--check whiteList
-	local limit = false 
-	if #CFG.SCRIPT_FUNC.whiteList > 0 then		
-		for _, v in pairs(CFG.SCRIPT_FUNC.whiteList) do
-			if v.scriptid == UserInfo.id and #v.func > 0 then
-				limit = true
-				for _, _v in pairs(v.func) do
-					if _v == taskName then
-						limit = false
-						break
-					end
-				end
-			end
-		end
-	end
-	
-	if limit then
-		dialog("当前脚本不支持此功能\n请选择对应版本的脚本使用!")
-		xmod.restart()
-	end
-	
 	USER.TASK_NAME = taskName
 	USER.REPEAT_TIMES = tonumber(uiRet.editerCircleTimes or CFG.DEFAULT_REPEAT_TIMES)
 	
 	USER.ALLOW_SUBSTITUTE = uiRet.checkBoxFunc.开场换人
 	
-	USER.RESTART_SCRIPT = uiRet.radioRestart.安全重启
-	USER.RESTART_APP = uiRet.radioRestart.激进重启
-	
-	if xmod.PLATFORM == xmod.PLATFORM_IOS then
-		USER.ALLOW_RESTART = false
+	--是否允许重启
+	USER.RESTART_SCRIPT = uiRet.radioRestart.开启
+	USER.RESTART_APP = uiRet.radioSafeRestart.关闭
+	if not USER.RESTART_SCRIPT then
+		USER.RESTART_APP = false
 	end
-	--prt(USER)
-	
-	
+	if xmod.PLATFORM == xmod.PLATFORM_IOS then
+		USER.RESTART_SCRIPT = false
+		USER.RESTART_APP = false
+	end
+	prt(USER.RESTART_SCRIPT)
+	prt(USER.RESTART_APP)
 	CFG.CACHING_MODE = uiRet.radioCachingMode.开启
 	CFG.DROP_CACHE = uiRet.radioDropCache.开启
 	CFG.WRITE_LOG = uiRet.radioWriteLog.开启
-	prt(CFG.CACHING_MODE)
+	--prt(CFG.CACHING_MODE)
 	
 	
 	for i = 1, 7, 1 do

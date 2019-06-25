@@ -54,6 +54,7 @@ local fn = function()
 			skipComfirm("联赛教练模式")
 		elseif page.matchWidget("联赛教练模式", "跳过余下比赛-未激活") then
 			Log("matched 跳过余下比赛-未激活")
+			sleep(200)
 			break
 		end
 		
@@ -89,7 +90,7 @@ local wfn = function()
 	
 	if os.time() - lastPlayingPageTime > CFG.DEFAULT_TIMEOUT + 10 then		--长时间为检测到比赛界面，判定为异常
 		catchError(ERR_TIMEOUT, "异常:未检测到比赛界面!")
-	elseif os.time() - lastPlayingPageTime >= 3 then	--3秒内为检测到比赛界面，跳过过长动画
+	elseif os.time() - lastPlayingPageTime >= 3 and isAppInFront() then	--3秒内为检测到比赛界面，跳过过长动画
 		Log("try skip replay!")
 		ratioTap(900,70)
 		sleep(500)

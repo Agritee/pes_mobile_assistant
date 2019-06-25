@@ -18,7 +18,8 @@ require("project/task/leagueSim")
 require("project/task/tourSim")
 require("project/task/tourManuel")
 require("project/task/championSim")
-require("project/task/sezonSim")
+require("project/task/IntSezonSim")
+require("project/task/IntTourSim")
 
 function main()
 	screen.keep(false)
@@ -42,13 +43,14 @@ end
 main()
 
 screen.init(screen.LANDSCAPE_RIGHT)
---sleep(2000)
+sleep(2000)
 
-
+prt(page.matchPage("阵容展示"))
 page.checkPage()
 page.checkNavigation()
 page.checkCommonWidget()
 
+--prt(screen.matchColors("60|151|0x0079fd,50|149|0xffffff,60|160|0xffffff,87|152|0x0079fd,86|160|0xffffff,119|156|0x12a42b"))
 
 --refreshUnmetCoach()
 
