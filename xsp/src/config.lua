@@ -13,7 +13,6 @@ CFG.BIULD_TIME = "20190104"
 -----------------引擎属性-----------------
 CFG.COMPATIBLE = (string.sub(xmod.VERSION_NAME, 1, 3) == "1.9" and {true} or {false})[1]		--兼容(1.9引擎)模式
 CFG.CACHING_MODE = false				--缓存模式
-CFG.DROP_CACHE = false					--清除缓存
 
 -----------------调试参数-----------------
 CFG.LOG = true							--是否允许输出LOG信息
@@ -43,7 +42,7 @@ CFG.DEFAULT_APP_ID = "com.netease.pes"	--缺省应用名
 CFG.DEFAULT_FUZZY = 95					--默认颜色模糊相似度
 
 -----------------文件-----------------
-CFG.LOG_FILE_NAME = "log.dat"			--Log文件名
+CFG.LOG_FILE_NAME = "log.txt"			--Log文件名
 
 -----------------任务参数-----------------
 CFG.DEFAULT_REPEAT_TIMES = 50
@@ -111,6 +110,10 @@ PREV = {}
 PREV.restarted = false					--是否发生过重启
 PREV.restartedScript = false			--是否发生过脚本重启
 PREV.restartedAPP = false				--是否发生过应用重启
+
+-----------------状态参数----------------
+PREV.writeLogStatus = false
+PREV.cacheStatus = false
 
 
 --用户配置表，主要由UI设置

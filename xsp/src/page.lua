@@ -72,6 +72,7 @@ end
 
 --检测当前界面匹配情况，不去重，主要用于测试界面，不缓存
 function M.checkPage()
+	local cnt = 0
 	for _, v in pairs(M.pageList) do
 		local checked = true
 		for _, _v in pairs(v.widgetList) do
@@ -84,7 +85,12 @@ function M.checkPage()
 		
 		if checked then
 			Log("-------checked page: "..v.tag)
+			cnt = cnt + 1
 		end
+	end
+	
+	if cnt == 0 then
+		Log("not checked any page!")	
 	end
 end
 
@@ -137,7 +143,7 @@ function M.getCurrentPage(forceGlobalPage)
 							matched = false
 							break
 						else
-							Log("----find widget: ".._v.tag.."on page: "..v.tag)
+							--Log("----find widget: ".._v.tag.."on page: "..v.tag)
 							if CFG.CACHING_MODE and _v.caching then		--先临时缓存，确定所有控件完全匹配后再缓存
 								--prt(pot)
 								--prt(scale.offsetPos(_v.dstPos, pot))
@@ -150,7 +156,7 @@ function M.getCurrentPage(forceGlobalPage)
 							matched = false
 							break
 						else
-							--Log("----match widget: ".._v.tag)
+							Log("----match widget: ".._v.tag)
 						end
 					end
 				end
@@ -161,7 +167,7 @@ function M.getCurrentPage(forceGlobalPage)
 				if #storeItems > 0 then
 					for k, v in pairs(storeItems) do
 						storage.put(v[1], v[2])
-						--Log("ready storge "..v[1])
+						Log("ready storge "..v[1])
 					end
 					storage.commit()	--缓存
 					
@@ -171,7 +177,7 @@ function M.getCurrentPage(forceGlobalPage)
 							for _, __v in pairs(storeItems) do
 								if __v[1] == key then
 									_v.matchPos = __v[2]
-									Log("set new matchPos on: "..key)
+									--Log("set new matchPos on: "..key)
 									break
 								end
 							end
@@ -286,7 +292,7 @@ function M.checkNavigation()
 	end
 	
 	if not flag then
-		Log("not checked any navigation")
+		Log("not checked any navigation!")
 	end
 end
 
@@ -331,9 +337,9 @@ function M.tryNavigation()
 					local pot = screen.findColor(_v.dstArea, _v.dstPos, CFG.DEFAULT_FUZZY)
 					if pot ~= Point.INVALID then
 						Log("Exsit find Navigation [".._v.tag.."], try execute it!")
-						
-						sleep(200)
+						dialog("test")
 						screen.keep(true)	--刷新画面，防止界面过渡时，先出现局部的导航（但getCurrentPage为nil）时直接判定为导航了
+						sleep(200)
 						local currentPage = page.getCurrentPage()
 						if currentPage then
 							Log('exsit navigation but need refresh page: '..currentPage)
@@ -416,7 +422,7 @@ function M.checkCommonWidget()
 	end
 	
 	if not flag then
-		Log("not checked any commonWidget")
+		Log("not checked any commonWidget!")
 	end
 end
 
@@ -541,13 +547,18 @@ local function initPages()
 					_v.caching = true
 				end
 				
+				--prt(CFG.CACHING_MODE)
+				--prt(CFG.matchPos)
+				--prt(_v.caching)
 				if CFG.CACHING_MODE and _v.matchPos == nil and _v.caching then
 					local key = string.format("page-%s-%s", v.tag, _v.tag)
 					local value = storage.get(key, "NULL")
+			
 					if value ~= "NULL" then
 						--Log(key.." : "..value)
 						_v.matchPos = value
-						--Log("load page matchPos: "..v.tag.."-".._v.tag)
+						Log("load page matchPos: "..v.tag.."-".._v.tag)
+						Log(_v.matchPos.."  total"..string.len(_v.matchPos))
 					end
 				end
 			end
@@ -614,6 +625,7 @@ local function initCommonWidgets()
 	Log("----initCommonWidgets done!")
 end
 
+--清空界面缓存
 function M.dropCache()
 	for k, v in pairs(M.pageList) do
 		for _k, _v in pairs(v.widgetList) do
@@ -647,10 +659,11 @@ function M.loadPagesData(pList, nList, npList, commList)
 	loadCommonWidgets(commList)
 	Log(" ")
 	
-	if CFG.DROP_CACHE then
-		M.dropCache()
-		dialog("已清空缓存，脚本即将重启!\n请在高级设置中关闭\"清空缓冲\"后继续!")
-		xmod.restart()		--清空后重启，防止用户始终选择为"清空缓存"
+	if CFG.CACHING_MODE ~= PREV.cacheStatus then
+		if not CFG.CACHING_MODE then
+			M.dropCache()		--一定要保证在ProjectPage加载了之后执行
+			Log("Drop cache yet!")
+		end		
 	end
 	
 	--导入数据后初始化界面

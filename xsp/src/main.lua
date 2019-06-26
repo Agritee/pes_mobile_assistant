@@ -21,12 +21,11 @@ require("project/task/championSim")
 require("project/task/IntSezonSim")
 require("project/task/IntTourSim")
 
+
 function main()
 	screen.keep(false)
-	--dispUI()
 	
-
-	--CFG.CACHING_MODE = false
+	--dispUI()
 
 	if PREV.restartedAPP then
 		if xmod.PROCESS_MODE == xmod.PROCESS_MODE_STANDALONE then	--通用模式的延时只能放在重启时
@@ -44,14 +43,14 @@ main()
 
 screen.init(screen.LANDSCAPE_RIGHT)
 sleep(2000)
-
-prt(page.matchPage("阵容展示"))
+prt(page.getCurrentPage(true))
 page.checkPage()
 page.checkNavigation()
 page.checkCommonWidget()
 
---prt(screen.matchColors("60|151|0x0079fd,50|149|0xffffff,60|160|0xffffff,87|152|0x0079fd,86|160|0xffffff,119|156|0x12a42b"))
-
+prt(screen.matchColors("491|316|0xc6ced3-0x21191d,500|316|0x5fabfe-0x603201,510|343|0x5fabfe-0x603201,523|314|0x5fabfe-0x603201,530|314|0xffffff,537|314|0x5fabfe-0x603201,529|320|0x5fabfe-0x603201"))
+prt(screen.matchColors("511|508|0xffffff,505|503|0x12a42b,529|539|0x12a42b,519|492|0xc6ced3-0x21191d,532|492|0x5fabfe-0x603201"))
+prt(screen.matchColors("944|320|0x36b24b-0x240e21,929|303|0x0079fe,956|306|0x0079fe,926|347|0x0079fe,959|347|0x0079fe,943|348|0xffffff,942|336|0x0079fe"))
 --refreshUnmetCoach()
 
 --page.matchPage("冠军杯分组")

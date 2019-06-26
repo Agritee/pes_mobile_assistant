@@ -243,10 +243,14 @@ function screen.matchColors(points, fuzzy)
 	for k, v in pairs(posTb) do
 		if v[4] ~= nil then
 			if not isColorDif(v[1], v[2], v[3], v[4]) then
+				Log("tst1")
+				prt(v)
 				return false
 			end
 		else
 			if not isColor(v[1], v[2], v[3], fuzzy or CFG.DEFAULT_FUZZY) then
+				Log("tst2")
+				prt(v)
 				return false
 			end
 		end

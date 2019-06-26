@@ -25,6 +25,9 @@ for _, v in pairs(CFG.SCRIPT_FUNC.funcList) do
 		funcStr = funcStr..v..","
 	end
 end
+if funcStr ~= "" then
+	funcStr = string.sub(funcStr, 1, -2)
+end
 
 local feildPositionStr = "不换,位置1,位置2,位置3,位置4,位置5,位置6,位置7,位置8,位置9,位置10,位置11"
 local feildPositionSubstituteCondition = "主力红才换,好一档就换,好两档才换"
@@ -137,9 +140,6 @@ pageProSet:addRadioGroup({id="radioSafeRestart",list="关闭,开启",select=0,w=
 pageProSet:nextLine()
 pageProSet:addLabel({text="缓存模式",size=30})
 pageProSet:addRadioGroup({id="radioCachingMode",list="关闭,开启",select=0,w=25,h=12})
-pageProSet:nextLine()
-pageProSet:addLabel({text="清空缓存",size=30})
-pageProSet:addRadioGroup({id="radioDropCache",list="关闭,开启",select=0,w=25,h=12})
 pageProSet:nextLine()
 pageProSet:addLabel({text="记录日志",size=30})
 pageProSet:addRadioGroup({id="radioWriteLog",list="关闭,开启",select=0,w=25,h=12})
@@ -333,14 +333,27 @@ function dispUI()
 		USER.RESTART_SCRIPT = false
 		USER.RESTART_APP = false
 	end
-	prt(USER.RESTART_SCRIPT)
-	prt(USER.RESTART_APP)
-	CFG.CACHING_MODE = uiRet.radioCachingMode.开启
-	CFG.DROP_CACHE = uiRet.radioDropCache.开启
+
 	CFG.WRITE_LOG = uiRet.radioWriteLog.开启
-	--prt(CFG.CACHING_MODE)
+	if CFG.WRITE_LOG ~= PREV.writeLogStatus then
+		setWriteLogStatus(CFG.WRITE_LOG)
+		if not CFG.WRITE_LOG then
+			dropLog()
+			Log("Drop writeLog yet!")
+		end
+	end
+	
+	CFG.CACHING_MODE = uiRet.radioCachingMode.开启
+	if CFG.CACHING_MODE ~= PREV.cacheStatus then
+		setCacheStatus(CFG.CACHING_MODE)
+		--if not CFG.CACHING_MODE then
+		--	dropCache()		--一定要保证在ProjectPage加载了之后执行
+		--	Log("Drop cache yet!")
+		--end		
+	end	
 	
 	
+
 	for i = 1, 7, 1 do
 		USER.SUBSTITUTE_INDEX_LIST[i].fieldIndex = _convertIndex(uiRet[string.format("comboBoxBench%d",i)])
 		USER.SUBSTITUTE_INDEX_LIST[i].substituteCondition = _convertCondition(uiRet[string.format("comboBoxBenchCondition%d",i)])

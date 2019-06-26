@@ -252,6 +252,46 @@ function getPrevRestartedAPP()
 	end
 end
 
+--保存当前log状态
+function setWriteLogStatus(status)
+	local tmp = "FALSE"
+	if status == true then
+		tmp = "TRUE"
+	end
+	
+	setStringConfig("PREV_WRITE_LOG_STATUS", tmp)
+end
+
+--获取上一次log状态
+function getPrevWriteLogStatus()
+	local status = getStringConfig("PREV_WRITE_LOG_STATUS", "FALSE")
+	if status == "TRUE" then
+		return true
+	end
+	
+	return false
+end
+
+--保存当前缓存状态
+function setCacheStatus(status)
+	local tmp = "FALSE"
+	if status == true then
+		tmp = "TRUE"
+	end
+	
+	setStringConfig("PREV_CACHE_STATUS", tmp)
+end
+
+--获取上一次缓存状态
+function getPrevCacheStatus()
+	local status = getStringConfig("PREV_CACHE_STATUS", "FALSE")
+	if status == "TRUE" then
+		return true
+	end
+	
+	return false
+end
+
 --捕获捕获处理函数
 function catchError(errType, errMsg, forceContinueFlag)
 	local etype = errType or ERR_UNKOWN
@@ -474,8 +514,7 @@ function execCommonWidgetQueue(list)
 			if type(v) == "table" then
 				if page.isExsitCommonWidget(v[1]) then
 					page.tapCommonWidget(v[1], v[2])
-					sleep(200)
-					
+					sleep(800)
 					if k == #list then
 						return true
 					end
@@ -484,8 +523,9 @@ function execCommonWidgetQueue(list)
 			else
 				if page.isExsitCommonWidget(v) then
 					page.tapCommonWidget(v)
-					sleep(200)
-					
+					sleep(800)
+					prt(k..#list)
+					prt(list)
 					if k == #list then
 						return true
 					end
@@ -494,16 +534,17 @@ function execCommonWidgetQueue(list)
 			end
 		end
 		
-		if page.isExsitNavigation("comfirm") then
+		--[[if page.isExsitNavigation("comfirm") then
 			page.tapNavigation("comfirm")
 			sleep(200)
-		end
+		end]]
 		
 		if os.time() - startTime > CFG.DEFAULT_TIMEOUT then
 			catchError(ERR_TIMEOUT, "time out in execCommonWidgetQueue:"..list[1])
 		end
 		
 		sleep(200)
+		
 	end
 	
 	return false
@@ -515,7 +556,7 @@ function execPageWidgetQueue(list)
 		for k, v in pairs(list) do
 			if page.matchWidget(v[1], v[2]) then
 				page.tapWidget(v[1], v[2])
-				sleep(200)
+				sleep(800)
 				
 				if k == #list then
 					return true
@@ -540,7 +581,7 @@ function execNavigationQueue(list)
 		for k, v in pairs(list) do
 			if page.isExsitNavigation(v) then
 				page.tapNavigation(v)
-				sleep(200)
+				sleep(800)
 				
 				if k == #list then
 					return true

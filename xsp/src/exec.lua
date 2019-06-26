@@ -46,15 +46,19 @@ function M.run(taskName, repeatTimes)
 		catchError(ERR_PARAM, "have no task: "..taskName)
 	end
 	
-	if M.getTaskProcesses(taskName) == nil then		--检查任务流程是否存在
+	local taskProcesses = M.getTaskProcesses(taskName)	--重新获取流程，如果发生了回溯流程片改变了taskProcesses，在此处恢复
+	if taskProcesses == nil then		--检查任务流程是否存在
 		catchError(ERR_PARAM, "task:"..taskName.." have no processes!")
 	end
 	
-	page.setPageEnable(M.getTaskProcesses(taskName))	--设置page.enable
+	page.setPageEnable(taskProcesses)	--设置page.enable，影响getCurrentPage()
 	
 	for i = 1, reTimes, 1 do
-		Log("-----------------------START RUN A ROUND OF TASK: "..taskName.."-----------------------")
-		local taskProcesses = M.getTaskProcesses(taskName)	--重新获取流程，如果发生了回溯流程片改变了taskProcesses，在此处恢复
+		Log("-----------------------START RUN "..i.."st ROUND OF TASK: "..taskName.."-----------------------")
+		local hid = createHUD()     --创建一个HUD
+		showHUD(hid,"实况助手: 第"..i.."场",60,"0xff0000ff","msgbox_click.png",1,0,0,600,80) 
+		sleep(1000)
+		hideHUD(hid)
 		
 		--设置默认需要不跳过所有流程片
 		for k, v in pairs(taskProcesses) do
@@ -107,7 +111,7 @@ function M.run(taskName, repeatTimes)
 				--界面变化，因此进行了刷新帧或者释放帧的操作（这两处在执行完后会返回监听的开始处，重新截取判定帧，所以不影响）
 				screen.keep(true)
 				local currentPage = page.getCurrentPage()
-				
+				--prt(currentPage)
 				--Log("try match process page: "..v.tag)
 				if currentPage == v.tag then
 					--actionFunc中，涉及到界面变化时(actionFunc和next)会放开screen.keep(false)进行界面判定，但是因为完成actionFunc和next后，

@@ -64,13 +64,18 @@ insertFunc("比赛", fn)
 
 local fn = function()
 	sleep(200)
-	skipComfirm("巡回模式")		--检测到界面后又弹出了确定提示按钮，如领取奖励，精神提升，点击所有的确定
+	skipComfirm("国际服巡回赛")		--检测到界面后又弹出了确定提示按钮，如领取奖励，精神提升，点击所有的确定
 	
 	if page.isExsitCommonWidget("球队异常") and not isPlayerRedCard then
-		refreshUnmetCoach("巡回模式")
+		refreshUnmetCoach("国际服巡回赛")
+		if isPlayerRedCard then
+			Log("有异常球员出现")
+			sleep(500)
+			swichTeam()
+		end
 	end
 end
-insertFunc("巡回模式", fn)
+insertFunc("国际服巡回赛", fn)
 
 
 local wfn = function()
@@ -87,9 +92,6 @@ local wfn = function()
 	elseif os.time() - lastPlayingPageTime >= 3 and isAppInFront() then	--3秒内为检测到比赛界面，跳过过长动画
 		Log("try skip replay!")
 		ratioTap(900,70)
-		sleep(500)
-		ratioTap(900,70)
-		sleep(500)
 	end
 	
 	Log("timeAfterLastPlayingPage = "..(os.time() - lastPlayingPageTime).."s yet")

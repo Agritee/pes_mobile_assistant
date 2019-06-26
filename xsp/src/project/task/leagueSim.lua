@@ -93,9 +93,6 @@ local wfn = function()
 	elseif os.time() - lastPlayingPageTime >= 3 and isAppInFront() then	--3秒内为检测到比赛界面，跳过过长动画
 		Log("try skip replay!")
 		ratioTap(900,70)
-		sleep(500)
-		ratioTap(900,70)
-		sleep(500)
 	end
 	
 	Log("timeAfterLastPlayingPage = "..(os.time() - lastPlayingPageTime).."s yet")

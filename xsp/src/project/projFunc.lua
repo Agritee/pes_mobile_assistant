@@ -27,6 +27,10 @@ function switchMainPage(pageName)
 			end
 		end
 		
+		if page.isExsitNavigation("notice") then
+			page.tapNavigation("notice")
+		end
+		
 		if page.matchPage(pageName) then
 			break
 		end
@@ -36,6 +40,7 @@ function switchMainPage(pageName)
 		end
 		sleep(100)
 	end
+	Log("end swich to "..pageName)
 end
 
 --获取某个区域内某种状态的所有球员
@@ -339,6 +344,7 @@ function refreshContract()
 	page.tapCommonWidget("付款确认")
 	sleep(500)]]
 	
+	sleep(500)
 	execCommonWidgetQueue({"球员续约-点击签约", "球员续约-续约", "付款确认"})
 	sleep(500)
 end
@@ -346,6 +352,7 @@ end
 --遇到稳定的(500ms处于checked状态)staticPage后退出，否则遇到comfirm进行点击跳过
 function skipComfirm(staticPage)
 	local startTime = os.time()
+	local lastStaticTime = 0
 	while true do
 		if page.isExsitNavigation("comfirm") then
 			startTime = os.time()
@@ -355,6 +362,7 @@ function skipComfirm(staticPage)
 		
 		if page.matchPage(staticPage) then
 			Log("checked staticPage 1st: "..staticPage)
+			lastCheckedTime = os.time()
 			sleep(500)
 			if page.matchPage(staticPage) then		--排除两个comfirm间过渡时出现checkedPage
 				Log("checked staticPage 2rd: "..staticPage)
@@ -366,7 +374,7 @@ function skipComfirm(staticPage)
 			catchError(ERR_TIMEOUT, "time out in staticPage: "..staticPage)
 		end
 		
-		sleep(200)
+		sleep(10)
 	end
 end
 
@@ -376,7 +384,7 @@ function refreshUnmetCoach(taskPage)
 	page.tapCommonWidget("球队异常", 7)		--点击第七个点才能点中
 	sleep(1500)]]
 	
-	execCommonWidgetQueue({"球队异常"})
+	execCommonWidgetQueue({{"球队异常", 7}})
 	
 	local startTime = os.time()
 	while true do
@@ -474,6 +482,12 @@ function swichTeam()
 				end
 			end
 			table.sort(teamPos, sortPos)
+			
+			if #teamPos < 2 then
+				Log("请确保至少有1，2两个小队")
+				dialog("请确保至少有1，2两个小队")
+				xmod.exit()
+			end
 			break
 		end
 		
@@ -530,6 +544,6 @@ function swichTeam()
 	
 	page.tapNavigation("back")
 	sleep(500)
-	dialog("")
+	--dialog("")
 end
 

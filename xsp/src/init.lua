@@ -91,7 +91,7 @@ local function initScalingRatio()
 end
 
 --初始化上一次运行状态
-local function initPrevRestartStatus()
+local function initPrevStatus()
 	PREV.restartedScript = getPrevRestartedScript()
 	PREV.restartedAPP = getPrevRestartedAPP()
 	
@@ -99,6 +99,11 @@ local function initPrevRestartStatus()
 		PREV.restarted = true
 	end
 	
+	PREV.writeLogStatus = getPrevWriteLogStatus()
+	PREV.cacheStatus = getPrevCacheStatus()
+	
+	prt(PREV.cacheStatus)
+	prt(PREV.writeLogStatus)
 	Log("----initPrevRestartStatus: "..tostring(PREV.restarted))
 end
 
@@ -108,7 +113,7 @@ local function initEnv()
 	screen.keep(false)
 	
 	initAppID()
-	initPrevRestartStatus()		--如果有重启脚本的情况，会在此处重置为上一次的APP_ID
+	initPrevStatus()		--如果有重启脚本的情况，会在此处重置为上一次的APP_ID
 	
 	initDstResolution()
 	initScalingRatio()
