@@ -275,7 +275,7 @@ function M.getRatioPoint(x, y)
 	return  x1, y1
 end
 
---根据实际的首点来整体便宜pos
+--根据实际的首点来整体偏移pos
 function M.offsetPos(pos, firstOffsetPot)
 	local posTb = M.toPointsTable(pos)
 	if #posTb < 1 then

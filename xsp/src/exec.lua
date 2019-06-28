@@ -41,6 +41,7 @@ end
 --执行任务，param:任务名称，任务重复次数
 function M.run(taskName, repeatTimes)
 	local reTimes = repeatTimes or CFG.DEFAULT_REPEAT_TIMES
+	local lastBeforSkipFlag = false
 	
 	if not M.isExistTask(taskName) then		--检查任务是否存在
 		catchError(ERR_PARAM, "have no task: "..taskName)
@@ -65,24 +66,29 @@ function M.run(taskName, repeatTimes)
 			v.skipStatus = false
 		end
 		--根据流程片的属性设置需要跳过的流程片
-		for k, v in pairs(taskProcesses) do
-			if PREV.restarted then		--发生断点
-				if i > 2 then
-					if v.mode == "firstRun" or v.mode == "restarted" then
+		if not lastBeforSkipFlag then	--如果上一次流程发生过befor skip则不允许跳过，避免设置后循环跳过所有任务的所有流程
+			for k, v in pairs(taskProcesses) do
+				if PREV.restarted then		--发生断点
+					if i > 2 then
+						if v.mode == "firstRun" or v.mode == "restarted" then
+							v.skipStatus = true
+						end
+					end
+				else
+					if v.mode == "restarted" then
 						v.skipStatus = true
 					end
-				end
-			else
-				if v.mode == "restarted" then
-					v.skipStatus = true
-				end
-				if i > 1 then
-					if v.mode == "firstRun" then
-						v.skipStatus = true
+					if i > 1 then
+						if v.mode == "firstRun" then
+							v.skipStatus = true
+						end
 					end
 				end
 			end
+		else						--全不跳过，且重置beforSkip 状态
+			lastBeforSkipFlag = false
 		end
+		
 		
 		local waitCheckSkipTime = 0
 		if i == 1 then		--第一次运行就快速检测是否可以跳过主界面
@@ -183,7 +189,7 @@ function M.run(taskName, repeatTimes)
 									end
 								end
 								break
-							elseif _k < k - 1 then		--当前界面为之前的某个流程片中界面，跳过其后的流程片（下一次循环会跳过其前的）
+							elseif _k < k - 1 then		--当前界面为之前的某个流程片中界面，跳过其后的流程片(下一个流程也会跳过这之前的流程片)
 								Log("set skip befor process")
 								for __k, __v  in pairs(taskProcesses) do
 									if __k >= k then
@@ -191,6 +197,7 @@ function M.run(taskName, repeatTimes)
 										__v.skipStatus = true
 									end
 								end
+								lastBeforSkipFlag = true	--如果这个流程片_k为firstRun属性且i>2时，下一流程会设置skipStatus=true无限跳过，需处理
 								break
 							elseif _k == k - 1 then		--正常等待matchPage，可能因为执行了next没有生效
 								if _v.nextTag ~= nil then

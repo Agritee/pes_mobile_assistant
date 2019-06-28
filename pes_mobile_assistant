@@ -390,7 +390,7 @@ caching	C:/Users/cndy1/Documents/xspworkspace/pes_mobile_assistant/xsp/src\proje
 cancelname	C:/Users/cndy1/Documents/xspworkspace/pes_mobile_assistant/xsp/src\zui\Z_ui.lua	378;"	e
 catchError	C:/Users/cndy1/Documents/xspworkspace/pes_mobile_assistant/xsp/src\func.lua	360;"	f
 checkCommonWidget()	C:/Users/cndy1/Documents/xspworkspace/pes_mobile_assistant/xsp/src\page.lua	414;"	f
-checkInterval	C:/Users/cndy1/Documents/xspworkspace/pes_mobile_assistant/xsp/src\exec.lua	95;"	e
+checkInterval	C:/Users/cndy1/Documents/xspworkspace/pes_mobile_assistant/xsp/src\exec.lua	101;"	e
 checkNavigation()	C:/Users/cndy1/Documents/xspworkspace/pes_mobile_assistant/xsp/src\page.lua	284;"	f
 checkPage()	C:/Users/cndy1/Documents/xspworkspace/pes_mobile_assistant/xsp/src\page.lua	74;"	f
 checked	C:/Users/cndy1/Documents/xspworkspace/pes_mobile_assistant/xsp/src\page.lua	77;"	e
@@ -598,7 +598,7 @@ count	C:/Users/cndy1/Documents/xspworkspace/pes_mobile_assistant/xsp/src\func.lu
 count	C:/Users/cndy1/Documents/xspworkspace/pes_mobile_assistant/xsp/src\func.lua	24;"	e
 countTime	C:/Users/cndy1/Documents/xspworkspace/pes_mobile_assistant/xsp/src\ui.lua	1440;"	e
 countdown	C:/Users/cndy1/Documents/xspworkspace/pes_mobile_assistant/xsp/src\zui\Z_ui.lua	380;"	e
-currentPage	C:/Users/cndy1/Documents/xspworkspace/pes_mobile_assistant/xsp/src\exec.lua	113;"	e
+currentPage	C:/Users/cndy1/Documents/xspworkspace/pes_mobile_assistant/xsp/src\exec.lua	119;"	e
 currentPage	C:/Users/cndy1/Documents/xspworkspace/pes_mobile_assistant/xsp/src\func.lua	103;"	e
 currentPage	C:/Users/cndy1/Documents/xspworkspace/pes_mobile_assistant/xsp/src\page.lua	343;"	e
 currentPage	C:/Users/cndy1/Documents/xspworkspace/pes_mobile_assistant/xsp/src\project\projFunc.lua	11;"	e
@@ -920,7 +920,7 @@ height	C:/Users/cndy1/Documents/xspworkspace/pes_mobile_assistant/xsp/src\zui\Z_
 height	C:/Users/cndy1/Documents/xspworkspace/pes_mobile_assistant/xsp/src\zui\Z_ui.lua	809;"	e
 height	C:/Users/cndy1/Documents/xspworkspace/pes_mobile_assistant/xsp/src\zui\Z_ui.lua	857;"	e
 height	C:/Users/cndy1/Documents/xspworkspace/pes_mobile_assistant/xsp/src\zui\Z_ui.lua	906;"	e
-hid	C:/Users/cndy1/Documents/xspworkspace/pes_mobile_assistant/xsp/src\exec.lua	58;"	e
+hid	C:/Users/cndy1/Documents/xspworkspace/pes_mobile_assistant/xsp/src\exec.lua	59;"	e
 icon	C:/Users/cndy1/Documents/xspworkspace/pes_mobile_assistant/xsp/src\ui.lua	129;"	e
 icon	C:/Users/cndy1/Documents/xspworkspace/pes_mobile_assistant/xsp/src\ui.lua	153;"	e
 icon	C:/Users/cndy1/Documents/xspworkspace/pes_mobile_assistant/xsp/src\ui.lua	187;"	e
@@ -1016,6 +1016,9 @@ killApp(appID)	C:/Users/cndy1/Documents/xspworkspace/pes_mobile_assistant/xsp/sr
 l	C:/Users/cndy1/Documents/xspworkspace/pes_mobile_assistant/xsp/src\zui\Z_ui.lua	239;"	e
 l	C:/Users/cndy1/Documents/xspworkspace/pes_mobile_assistant/xsp/src\zui\Z_ui.lua	277;"	e
 lang	C:/Users/cndy1/Documents/xspworkspace/pes_mobile_assistant/xsp/src\ocr.lua	18;"	e
+lastBeforSkipFlag	C:/Users/cndy1/Documents/xspworkspace/pes_mobile_assistant/xsp/src\exec.lua	200;"	e
+lastBeforSkipFlag	C:/Users/cndy1/Documents/xspworkspace/pes_mobile_assistant/xsp/src\exec.lua	44;"	e
+lastBeforSkipFlag	C:/Users/cndy1/Documents/xspworkspace/pes_mobile_assistant/xsp/src\exec.lua	89;"	e
 lastIndex	C:/Users/cndy1/Documents/xspworkspace/pes_mobile_assistant/xsp/src\dict.lua	484;"	e
 lastPenaltyPageTime	C:/Users/cndy1/Documents/xspworkspace/pes_mobile_assistant/xsp/src\func.lua	492;"	e
 lastPenaltyPageTime	C:/Users/cndy1/Documents/xspworkspace/pes_mobile_assistant/xsp/src\global.lua	18;"	e
@@ -1454,9 +1457,9 @@ srcPos	C:/Users/cndy1/Documents/xspworkspace/pes_mobile_assistant/xsp/src\projec
 srcPos	C:/Users/cndy1/Documents/xspworkspace/pes_mobile_assistant/xsp/src\scale.lua	211;"	e
 srcPos	C:/Users/cndy1/Documents/xspworkspace/pes_mobile_assistant/xsp/src\scale.lua	214;"	e
 srcPos	C:/Users/cndy1/Documents/xspworkspace/pes_mobile_assistant/xsp/src\scale.lua	216;"	e
-startTime	C:/Users/cndy1/Documents/xspworkspace/pes_mobile_assistant/xsp/src\exec.lua	129;"	e
-startTime	C:/Users/cndy1/Documents/xspworkspace/pes_mobile_assistant/xsp/src\exec.lua	216;"	e
-startTime	C:/Users/cndy1/Documents/xspworkspace/pes_mobile_assistant/xsp/src\exec.lua	99;"	e
+startTime	C:/Users/cndy1/Documents/xspworkspace/pes_mobile_assistant/xsp/src\exec.lua	105;"	e
+startTime	C:/Users/cndy1/Documents/xspworkspace/pes_mobile_assistant/xsp/src\exec.lua	135;"	e
+startTime	C:/Users/cndy1/Documents/xspworkspace/pes_mobile_assistant/xsp/src\exec.lua	223;"	e
 startTime	C:/Users/cndy1/Documents/xspworkspace/pes_mobile_assistant/xsp/src\func.lua	101;"	e
 startTime	C:/Users/cndy1/Documents/xspworkspace/pes_mobile_assistant/xsp/src\func.lua	313;"	e
 startTime	C:/Users/cndy1/Documents/xspworkspace/pes_mobile_assistant/xsp/src\func.lua	504;"	e
@@ -1752,7 +1755,7 @@ tapWidget(pageTag,	C:/Users/cndy1/Documents/xspworkspace/pes_mobile_assistant/xs
 task	C:/Users/cndy1/Documents/xspworkspace/pes_mobile_assistant/xsp/src\api.lua	471;"	e
 task.execTimer	C:/Users/cndy1/Documents/xspworkspace/pes_mobile_assistant/xsp/src\api.lua	473;"	f
 taskName	C:/Users/cndy1/Documents/xspworkspace/pes_mobile_assistant/xsp/src\zui\base_ui.lua	324;"	e
-taskProcesses	C:/Users/cndy1/Documents/xspworkspace/pes_mobile_assistant/xsp/src\exec.lua	49;"	e
+taskProcesses	C:/Users/cndy1/Documents/xspworkspace/pes_mobile_assistant/xsp/src\exec.lua	50;"	e
 tb	C:/Users/cndy1/Documents/xspworkspace/pes_mobile_assistant/xsp/src\init.lua	57;"	e
 tbCopy	C:/Users/cndy1/Documents/xspworkspace/pes_mobile_assistant/xsp/src\func.lua	7;"	f
 teamPos	C:/Users/cndy1/Documents/xspworkspace/pes_mobile_assistant/xsp/src\project\projFunc.lua	405;"	e
@@ -1770,7 +1773,7 @@ text	C:/Users/cndy1/Documents/xspworkspace/pes_mobile_assistant/xsp/src\zui\Z_ui
 text	C:/Users/cndy1/Documents/xspworkspace/pes_mobile_assistant/xsp/src\zui\Z_ui.lua	863;"	e
 textPaddingLeft	C:/Users/cndy1/Documents/xspworkspace/pes_mobile_assistant/xsp/src\ui.lua	1390;"	e
 textPaddingRight	C:/Users/cndy1/Documents/xspworkspace/pes_mobile_assistant/xsp/src\ui.lua	1391;"	e
-timeout	C:/Users/cndy1/Documents/xspworkspace/pes_mobile_assistant/xsp/src\exec.lua	96;"	e
+timeout	C:/Users/cndy1/Documents/xspworkspace/pes_mobile_assistant/xsp/src\exec.lua	102;"	e
 title	C:/Users/cndy1/Documents/xspworkspace/pes_mobile_assistant/xsp/src\ui.lua	1362;"	e
 title	C:/Users/cndy1/Documents/xspworkspace/pes_mobile_assistant/xsp/src\ui.lua	1365;"	e
 title	C:/Users/cndy1/Documents/xspworkspace/pes_mobile_assistant/xsp/src\ui.lua	1368;"	e
@@ -1943,10 +1946,10 @@ w	C:/Users/cndy1/Documents/xspworkspace/pes_mobile_assistant/xsp/src\zui\Z_ui.lu
 w	C:/Users/cndy1/Documents/xspworkspace/pes_mobile_assistant/xsp/src\zui\Z_ui.lua	149;"	e
 w	C:/Users/cndy1/Documents/xspworkspace/pes_mobile_assistant/xsp/src\zui\Z_ui.lua	163;"	e
 w	C:/Users/cndy1/Documents/xspworkspace/pes_mobile_assistant/xsp/src\zui\Z_ui.lua	351;"	e
-waitCheckSipTime	C:/Users/cndy1/Documents/xspworkspace/pes_mobile_assistant/xsp/src\exec.lua	89;"	e
-waitCheckSkipTime	C:/Users/cndy1/Documents/xspworkspace/pes_mobile_assistant/xsp/src\exec.lua	104;"	e
-waitCheckSkipTime	C:/Users/cndy1/Documents/xspworkspace/pes_mobile_assistant/xsp/src\exec.lua	87;"	e
-waitCheckSkipTime	C:/Users/cndy1/Documents/xspworkspace/pes_mobile_assistant/xsp/src\exec.lua	91;"	e
+waitCheckSipTime	C:/Users/cndy1/Documents/xspworkspace/pes_mobile_assistant/xsp/src\exec.lua	95;"	e
+waitCheckSkipTime	C:/Users/cndy1/Documents/xspworkspace/pes_mobile_assistant/xsp/src\exec.lua	110;"	e
+waitCheckSkipTime	C:/Users/cndy1/Documents/xspworkspace/pes_mobile_assistant/xsp/src\exec.lua	93;"	e
+waitCheckSkipTime	C:/Users/cndy1/Documents/xspworkspace/pes_mobile_assistant/xsp/src\exec.lua	97;"	e
 wfn	C:/Users/cndy1/Documents/xspworkspace/pes_mobile_assistant/xsp/src\project\task\IntSezonSim.lua	60;"	e
 wfn	C:/Users/cndy1/Documents/xspworkspace/pes_mobile_assistant/xsp/src\project\task\IntTourSim.lua	81;"	e
 wfn	C:/Users/cndy1/Documents/xspworkspace/pes_mobile_assistant/xsp/src\project\task\championSim.lua	54;"	e
