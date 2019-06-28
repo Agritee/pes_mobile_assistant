@@ -337,7 +337,7 @@ function M.tryNavigation()
 					local pot = screen.findColor(_v.dstArea, _v.dstPos, CFG.DEFAULT_FUZZY)
 					if pot ~= Point.INVALID then
 						Log("Exsit find Navigation [".._v.tag.."], try execute it!")
-						dialog("test")
+						--dialog("test")
 						screen.keep(true)	--刷新画面，防止界面过渡时，先出现局部的导航（但getCurrentPage为nil）时直接判定为导航了
 						sleep(200)
 						local currentPage = page.getCurrentPage()

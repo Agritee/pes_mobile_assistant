@@ -44,8 +44,8 @@ insertFunc("俱乐部", fn)
 local fn = function()
 	sleep(200)
 	skipComfirm("国际服季节赛")		--检测到界面后又弹出了确定提示按钮，如领取奖励，精神提升，点击所有的确定
-	prt(page.isExsitCommonWidget("球队异常"))
-	prt(isPlayerRedCard)
+	--prt(page.isExsitCommonWidget("球队异常"))
+	--prt(isPlayerRedCard)
 	if page.isExsitCommonWidget("球队异常") and not isPlayerRedCard then
 		refreshUnmetCoach("国际服季节赛")
 		if isPlayerRedCard then

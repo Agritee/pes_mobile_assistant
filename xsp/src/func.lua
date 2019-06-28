@@ -198,15 +198,13 @@ end
 
 --打印LOG信息至调试信息板，允许content = nil的情况，用于排错
 function Log(content)
-	if CFG.WRITE_LOG == true then
-		writeLog(content)
-	end
-	
-	if CFG.LOG ~= true then
+	if not CFG.LOG then
 		return
 	end
 	
 	log(content)
+	
+	writeLog(content)
 end
 
 --清除日志文件
@@ -292,128 +290,123 @@ function getPrevCacheStatus()
 	return false
 end
 
+--重启
+local function restart()
+	if USER.RESTART_APP or USER.RESTART_SCRIPT then	--允许重启
+		if USER.RESTART_APP then			--激进模式，APP和script同时重启
+			if PREV.restartedAPP then
+				Log("重启阶段三：\n已重启过APP，未能解决，即将退出!")
+				dialog("重启阶段三：\n已重启过APP，未能解决，即将退出!")
+				xmod.exit()
+			end
+			if PREV.restartedScript then	--已单独重启过脚本
+				Log("重启阶段二：\n已尝试过单独重启脚本，未能解决，即将重启应用和脚本")
+				dialog("重启阶段二：\n已尝试过单独重启脚本，未能解决，即将重启应用和脚本", 3)
+				if xmod.PROCESS_MODE == xmod.PROCESS_MODE_STANDALONE then	--极客模式需要重启应用
+					Log("close app: "..CFG.APP_ID)
+					runtime.killApp(CFG.APP_ID);
+					sleep(1000)
+					Log("restart app: "..CFG.APP_ID)
+					runtime.launchApp(CFG.APP_ID)
+					
+					--记录重启状态，重启之后会直接读取上一次保存的设置信息和相关变量，并不会弹出UI以实现自动续接任务
+					local startTime = os.time()
+					while true do
+						if runtime.getForegroundApp() == CFG.APP_ID then	--重启应用成功
+							Log("restart app success!")
+							sleep(CFG.WAIT_RESTART * 1000)
+							break
+						end
+						
+						if os.time() - startTime > CFG.DEFAULT_TIMEOUT then
+							dialog("重启失败，即将退出")
+							xmod.exit()
+						end
+					end
+					setRestartedAPP()
+					setRestartedScript()
+					Log("restart script")
+					xmod.restart()
+				else		--通用模式只需关闭应用，会自动重启应用和脚本
+					Log("restart app & script")
+					setRestartedAPP()
+					setRestartedScript()
+					runtime.killApp(CFG.APP_ID);	--沙盒模式下，killApp会强行结束掉脚本，因此不能在此后做任何操作，延时放到重启中
+				end
+			else
+				Log("重启阶段一：\n即将重启脚本")
+				dialog("重启阶段一：\n即将重启脚本", 3)
+				setRestartedScript()
+				xmod.restart()
+			end
+		elseif USER.RESTART_SCRIPT	then	--安全模式，仅允许重启script
+			if PREV.restartedScript then	--已重启过脚本
+				Log("重启阶段二：\n已重启过脚本，仍未解决，即将退出!")
+				dialog("重启阶段二：\n已重启过脚本，仍未解决，即将退出!")
+				xmod.exit()
+			end
+			
+			setRestartedScript()
+			xmod.restart()
+		end
+	else	--不允许重启直接退出
+		dialog(errMsg.."\r\n等待超时，即将退出")
+		Log("!!!not allow restart, script will exit later!!!")
+		xmod.exit()
+	end	
+end
+
 --捕获捕获处理函数
 function catchError(errType, errMsg, forceContinueFlag)
 	local etype = errType or ERR_UNKOWN
 	local emsg = errMsg or "some error"
-	local eflag = forceContinueFlag or false
-	
-	--catchError专用Log函数，不受CFG.LOG的影响
-	local LogError = function(content)
-		if CFG.WRITE_LOG == true then
-			writeLog(content)
-		end
-		
-		log(content)
-	end
 	
 	--打印错误类型和具体信息
 	if etype == ERR_MAIN or etype == ERR_TASK_ABORT then
-		LogError("CORE ERR------->> "..emsg)
+		Log("CORE ERR------->> "..emsg)
 	elseif etype == ERR_NORMAL then
-		LogError("NORMAL ERR------->> "..emsg)
+		Log("NORMAL ERR------->> "..emsg)
 	elseif etype == ERR_FILE then
-		LogError("FILE ERR------->> "..emsg)
+		Log("FILE ERR------->> "..emsg)
 	elseif etype == ERR_PARAM then
-		LogError("PARAM ERR------->> "..emsg)
+		Log("PARAM ERR------->> "..emsg)
 	elseif etype == ERR_TIMEOUT then
-		LogError("TIME OUT ERR------->> "..emsg)
+		Log("TIME OUT ERR------->> "..emsg)
 	elseif etype == ERR_WARNING then
-		LogError("WARNING ERR------->> "..emsg)
+		Log("WARNING ERR------->> "..emsg)
 	else
-		LogError("UNKOWN ERR------->> "..emsg)
+		Log("UNKOWN ERR------->> "..emsg)
 	end
 	
-	LogError("Interrupt time-------------->> "..os.date("%Y-%m-%d %H:%M:%S", os.time()))
+	Log("\n--------------interrupt at time-------------->> "..os.date("%Y-%m-%d %H:%M:%S", os.time()).."\n")
 	
 	--强制忽略错误处理
 	if forceContinueFlag then
-		LogError("WARNING:  ------!!!!!!!!!! FORCE CONTINUE !!!!!!!!!!------")
+		Log("WARNING:  ------!!!!!!!!!! FORCE CONTINUE !!!!!!!!!!------")
 		return
 	end
 	
 	--错误处理模块
 	if etype == ERR_MAIN or etype == ERR_TASK_ABORT then	--核心错误仅允许exit
 		dialog(errMsg.."\r\n即将退出")
-		LogError("!!!cant recover task, program will end now!!!")
+		Log("!!!cant recover task, program will end now!!!")
 		xmod.exit()
 	elseif etype == ERR_FILE or etype == ERR_PARAM then	--关键错误仅允许exit
 		dialog(errMsg.."\r\n即将退出")
-		LogError("!!!cant recover task, program will endlater!!!")
+		Log("!!!cant recover task, program will endlater!!!")
 		xmod.exit()
 	elseif etype == ERR_WARNING then		--警告任何时候只提示
-		LogError("!!!maybe some err in here, care it!!!")
+		Log("!!!maybe some err in here, care it!!!")
 	elseif etype == ERR_TIMEOUT then		--超时错误允许exit，restart
 		if runtime.getForegroundApp() == CFG.APP_ID then
-			LogError("TIME OUT BUT APP STILL RUNNING！")
+			Log("TIME OUT BUT APP STILL RUNNING！")
 		else
-			LogError("TIME OUT AND APP NOT RUNNING YET！")
+			Log("TIME OUT AND APP NOT RUNNING YET！")
 		end
 		
-		if USER.RESTART_SCRIPT or USER.RESTART_APP then	--允许重启
-			if USER.RESTART_APP then			--激进模式，APP和script同时重启
-				if PREV.restartedAPP then
-					Log("重启阶段三：\n已重启过APP，未能解决，即将退出!")
-					dialog("重启阶段三：\n已重启过APP，未能解决，即将退出!")
-					xmod.exit()
-				end
-				if PREV.restartedScript then	--已单独重启过脚本
-					Log("重启阶段二：\n已尝试过单独重启脚本，未能解决，即将重启应用和脚本")
-					dialog("重启阶段二：\n已尝试过单独重启脚本，未能解决，即将重启应用和脚本", 3)
-					if xmod.PROCESS_MODE == xmod.PROCESS_MODE_STANDALONE then	--极客模式需要重启应用
-						LogError("close app: "..CFG.APP_ID)
-						runtime.killApp(CFG.APP_ID);
-						sleep(1000)
-						LogError("restart app: "..CFG.APP_ID)
-						runtime.launchApp(CFG.APP_ID)
-						
-						--记录重启状态，重启之后会直接读取上一次保存的设置信息和相关变量，并不会弹出UI以实现自动续接任务
-						local startTime = os.time()
-						while true do
-							if runtime.getForegroundApp() == CFG.APP_ID then	--重启应用成功
-								LogError("restart app success!")
-								sleep(CFG.WAIT_RESTART * 1000)
-								break
-							end
-							
-							if os.time() - startTime > CFG.DEFAULT_TIMEOUT then
-								dialog("重启失败，即将退出")
-								xmod.exit()
-							end
-						end
-						setRestartedAPP()
-						setRestartedScript()
-						LogError("restart script")
-						xmod.restart()
-					else		--通用模式只需关闭应用，会自动重启应用和脚本
-						LogError("restart app & script")
-						setRestartedAPP()
-						setRestartedScript()
-						runtime.killApp(CFG.APP_ID);	--沙盒模式下，killApp会强行结束掉脚本，因此不能在此后做任何操作，延时放到重启中
-					end
-				else
-					Log("重启阶段一：\n即将重启脚本")
-					dialog("重启阶段一：\n即将重启脚本", 3)
-					setRestartedScript()
-					xmod.restart()
-				end
-			elseif USER.RESTART_SCRIPT	then	--安全模式，仅允许重启script
-				if PREV.restartedScript then	--已重启过脚本
-					LogError("重启阶段二：\n已重启过脚本，仍未解决，即将退出!")
-					dialog("重启阶段二：\n已重启过脚本，仍未解决，即将退出!")
-					xmod.exit()
-				end
-				
-				setRestartedScript()
-				xmod.restart()
-			end
-		else	--不允许重启直接退出
-			dialog(errMsg.."\r\n等待超时，即将退出")
-			LogError("!!!not allow restart, script will exit later!!!")
-			xmod.exit()
-		end
+		restart()
 	else
-		LogError("some err in task\r\n -----!!!program will exit later!!!-----")
+		Log("some err in task\r\n -----!!!program will exit later!!!-----")
 		xmod.exit()
 	end
 end
@@ -513,6 +506,7 @@ function execCommonWidgetQueue(list)
 		for k, v in pairs(list) do
 			if type(v) == "table" then
 				if page.isExsitCommonWidget(v[1]) then
+					Log("execCommonWidgetQueue: "..v[1])
 					page.tapCommonWidget(v[1], v[2])
 					sleep(800)
 					if k == #list then
@@ -522,6 +516,7 @@ function execCommonWidgetQueue(list)
 				end
 			else
 				if page.isExsitCommonWidget(v) then
+					Log("execCommonWidgetQueue: "..v)
 					page.tapCommonWidget(v)
 					sleep(800)
 					prt(k..#list)
@@ -555,6 +550,7 @@ function execPageWidgetQueue(list)
 	while true do
 		for k, v in pairs(list) do
 			if page.matchWidget(v[1], v[2]) then
+				Log("execPageWidgetQueue: "..v[1].."-"..v[2])
 				page.tapWidget(v[1], v[2])
 				sleep(800)
 				
@@ -580,8 +576,15 @@ function execNavigationQueue(list)
 	while true do
 		for k, v in pairs(list) do
 			if page.isExsitNavigation(v) then
+				Log("execNavigationQueue: "..v)
 				page.tapNavigation(v)
-				sleep(800)
+				
+				--兼容红手指教练续约时的判定，点击第一个确定后，直接识别到了过渡期间的notice
+				if xmod.PLATFORM == xmod.PLATFORM_ANDROID and xmod.PROCESS_MODE == xmod.PROCESS_MODE_STANDALONE then
+					sleep(1200)
+				else
+					sleep(800)
+				end
 				
 				if k == #list then
 					return true

@@ -195,62 +195,62 @@ function screen.snapshot(path, rect, quality)
 	snapshot(path, rect.x, rect.y, rect.x + rect.width, rect.y + rect.height, quality)
 end
 
+local toPointsTable = function(pos)
+	local posTb = {}
+	for x, y, c, dif in string.gmatch(pos, "(-?%d+)|(-?%d+)|(%w+)%-?(%w*)") do
+		if string.len(dif) > 0 then
+			posTb[#posTb + 1] = {tonumber(x), tonumber(y), c, dif}
+		else
+			posTb[#posTb + 1] = {tonumber(x), tonumber(y), c}
+		end
+	end
+	
+	return posTb
+end
+
+local isColor = function(x,y,c,s)
+	local fl,abs = math.floor,math.abs
+	local r,g,b = fl(c/0x10000),fl(c%0x10000/0x100),fl(c%0x100)
+	local rr,gg,bb = getColorRGB(x,y)
+	s = fl(0xff*(100-s)*0.01)
+	if abs(r-rr)<s and abs(g-gg)<s and abs(b-bb)<s then
+		return true
+	end
+	
+	return false
+end
+
+local isColorDif = function(x,y,c,d)
+	local fl,abs = math.floor,math.abs
+	local r,g,b = fl(c/0x10000),fl(c%0x10000/0x100),fl(c%0x100)
+	local rr,gg,bb = getColorRGB(x,y)
+	local dr,dg,db = fl(d/0x10000),fl(d%0x10000/0x100),fl(d%0x100)
+	if (r<dr and 0x000000 or r-dr) <= rr and rr <= (r+dr<0xffffff and r+dr or 0xffffff)
+		and (g<dg and 0x000000 or g-dg) <= gg and gg <= (g+dg<0xffffff and g+dg or 0xffffff)
+		and (b<db and 0x000000 or b-db) <= bb and bb <= (b+db<0xffffff and b+db or 0xffffff) then
+		return true
+	end
+	
+	return false
+end
+
 function screen.matchColors(points, fuzzy)
 	if points == nil or type(points) ~= "string" or string.len(points) == 0 then
 		catchError(ERR_PARAM, "wrong points in matchColors")
 	end
-	
-	local toPointsTable = function()
-		local posTb = {}
-		for x, y, c, dif in string.gmatch(points, "(-?%d+)|(-?%d+)|(%w+)%-?(%w*)") do
-			if string.len(dif) > 0 then
-				posTb[#posTb + 1] = {tonumber(x), tonumber(y), c, dif}
-			else
-				posTb[#posTb + 1] = {tonumber(x), tonumber(y), c}
-			end
-		end
 		
-		return posTb
-	end
-	
-	local isColor = function(x,y,c,s)
-		local fl,abs = math.floor,math.abs
-		local r,g,b = fl(c/0x10000),fl(c%0x10000/0x100),fl(c%0x100)
-		local rr,gg,bb = getColorRGB(x,y)
-		s = fl(0xff*(100-s)*0.01)
-		if abs(r-rr)<s and abs(g-gg)<s and abs(b-bb)<s then
-			return true
-		end
-		
-		return false
-	end
-	
-	local isColorDif = function(x,y,c,d)
-		local fl,abs = math.floor,math.abs
-		local r,g,b = fl(c/0x10000),fl(c%0x10000/0x100),fl(c%0x100)
-		local rr,gg,bb = getColorRGB(x,y)
-		local dr,dg,db = fl(d/0x10000),fl(d%0x10000/0x100),fl(d%0x100)
-		if abs(r-dr) <= rr and rr <= abs(r+dr) and abs(g-dg) <= gg and gg <= abs(g+dg) and abs(b-db) <= bb and bb <= abs(b+db) then
-			return true
-		end
-		
-		return false
-	end
-	
-	local posTb = toPointsTable()
+	local posTb = toPointsTable(points)
 	
 	local matchFlag = false
 	for k, v in pairs(posTb) do
 		if v[4] ~= nil then
 			if not isColorDif(v[1], v[2], v[3], v[4]) then
-				Log("tst1")
-				prt(v)
+				--prt(v)
 				return false
 			end
 		else
 			if not isColor(v[1], v[2], v[3], fuzzy or CFG.DEFAULT_FUZZY) then
-				Log("tst2")
-				prt(v)
+				--prt(v)
 				return false
 			end
 		end
@@ -265,8 +265,63 @@ function screen.findColor(rect, color, globalFuzz, priority)
 	return Point(x, y)
 end
 
-----丢掉不常用的priority,需要的话可自行分离，当limit>99时，分区进行查找，以解决1.9只能返回最多99点的问题
+--修复版的findColors函数,自定义返回值数量(limit参数,默认200),支持hdir,vdir,priority三个参数的全部八种搜索方式
+local function RepairFindColors(rect,color,degree,hdir,vdir,priority,limit)
+	local allresult={}
+	local oneresult
+	limit=limit or 200
+	oneresult=findColors(rect,color,degree,hdir,vdir,priority)
+	if #oneresult>0 then
+		for i=1,#oneresult do
+			table.insert(allresult,oneresult[i])
+			if i>= limit then break end
+		end
+	end
+	if #oneresult==99 then
+		local result99=oneresult[99]
+		if priority==0 and hdir==0 then
+			oneresult=RepairFindColors({result99.x+1,result99.y,rect[3],result99.y},color,degree,hdir,vdir,priority,limit-#allresult)
+		elseif priority==0 and hdir==1 then
+			oneresult=RepairFindColors({rect[1],result99.y,result99.x-1,result99.y},color,degree,hdir,vdir,priority,limit-#allresult)
+		elseif priority==1 and vdir==0 then
+			oneresult=RepairFindColors({result99.x,result99.y+1,result99.x,rect[4]},color,degree,hdir,vdir,priority,limit-#allresult)
+		elseif priority==1 and vdir==1 then
+			oneresult=RepairFindColors({result99.x,rect[2],result99.x,result99.y-1},color,degree,hdir,vdir,priority,limit-#allresult)
+		end
+		if #oneresult>0 then
+			for i=1,#oneresult do
+				if #allresult>= limit then break end
+				table.insert(allresult,oneresult[i])
+			end
+		end
+		if #allresult<limit then 
+			if priority==0 and vdir==0 and result99.y<rect[4] then
+				oneresult=RepairFindColors({rect[1],result99.y+1,rect[3],rect[4]},color,degree,hdir,vdir,priority,limit-#allresult)
+			elseif priority==0 and vdir==1 and result99.y>rect[2] then
+				oneresult=RepairFindColors({rect[1],rect[2],rect[3],result99.y-1},color,degree,hdir,vdir,priority,limit-#allresult)
+			elseif priority==1 and hdir==0 and result99.x<rect[3] then
+				oneresult=RepairFindColors({result99.x+1,rect[2],rect[3],rect[4]},color,degree,hdir,vdir,priority,limit-#allresult)
+			elseif priority==1 and hdir==1 and result99.x>rect[1] then
+				oneresult=RepairFindColors({rect[1],rect[2],result99.x-1,rect[4]},color,degree,hdir,vdir,priority,limit-#allresult)
+			else
+				return allresult
+			end
+			if #oneresult>0 then
+				for i=1,#oneresult do
+					if #allresult>= limit then break end
+					table.insert(allresult,oneresult[i])
+				end
+			end
+		end
+	end
+	return allresult
+end
+
 function screen.findColors(rect, color, globalFuzz, priority, limit)
+	return RepairFindColors({rect.x, rect.y, rect.x + rect.width, rect.y + rect.height},color,globalFuzz,0,0,0,limit)
+end
+----丢掉不常用的priority,需要的话可自行分离，当limit>99时，分区进行查找，以解决1.9只能返回最多99点的问题
+function screen.findColors0(rect, color, globalFuzz, priority, limit)
 	if limit ~= nil and limit > 99 then	--超过99点，进行分区findColors再汇总
 		local split = 6		--分区阶数，将把rect分为split^2个区域分开扫描
 		if CFG.DST_RESOLUTION.height > 1080 then 		--，兼容ipx出现more than99点的问题

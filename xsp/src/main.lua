@@ -42,8 +42,8 @@ end
 main()
 
 screen.init(screen.LANDSCAPE_RIGHT)
-sleep(2000)
-prt(page.getCurrentPage(true))
+--sleep(2000)
+execNavigationQueue({"comfirm", "notice", "back"})
 page.checkPage()
 page.checkNavigation()
 page.checkCommonWidget()

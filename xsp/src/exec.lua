@@ -56,7 +56,7 @@ function M.run(taskName, repeatTimes)
 	for i = 1, reTimes, 1 do
 		Log("-----------------------START RUN "..i.."st ROUND OF TASK: "..taskName.."-----------------------")
 		local hid = createHUD()     --创建一个HUD
-		showHUD(hid,"实况助手: 第"..i.."场",60,"0xff0000ff","msgbox_click.png",1,0,0,600,80) 
+		showHUD(hid,taskName..": 第"..i.."场",60,"0xff0000ff","msgbox_click.png",1,0,0,800,80) 
 		sleep(1000)
 		hideHUD(hid)
 		

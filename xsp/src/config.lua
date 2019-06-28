@@ -10,13 +10,15 @@ CFG.SCRIPT_NAME = "实况助手"
 CFG.VERSION = "v0.0.1"
 CFG.BIULD_TIME = "20190104"
 
+
 -----------------引擎属性-----------------
 CFG.COMPATIBLE = (string.sub(xmod.VERSION_NAME, 1, 3) == "1.9" and {true} or {false})[1]		--兼容(1.9引擎)模式
 CFG.CACHING_MODE = false				--缓存模式
 
+
 -----------------调试参数-----------------
-CFG.LOG = true							--是否允许输出LOG信息
-CFG.WRITE_LOG = false					--是否将LOG写入log.txt文件, 不受CFG.LOG影响
+CFG.LOG = true							--是否允许输出LOG信息并写入log.txt文件
+
 
 -----------------分辨率参数-----------------
 CFG.SUPPORT_RESOLUTION = {max = {width = 5040, height = 2160}, min = {width = 600, height = 450}}	--分辨率支持范围
@@ -77,21 +79,23 @@ CFG.SCRIPT_FUNC = {						--脚本功能列表
 	},
 	
 	whiteList = {						--功能限制列表，通过白名单形式限制个脚本的功能，用于同时维护多个脚本,func为空是代表全白名单
-		{scriptid = -1, distributions = "开发助手版", --tips = "免费版将于7月1日过期，请使用\n稳定版“【新引擎】实况助手”，可搜索脚本ID:16489，或进群574025168下载。",
+		{scriptid = -1, distributions = "开发助手版", 
 			func = {}},
 		{scriptid = 16489, distributions = "叉叉助手/小精灵版",
+			func = {"自动天梯","自动联赛","自动巡回","手动巡回","自动冠军赛"}},
+		{scriptid = 23354, distributions = "叉叉助手免费版", tips = "免费版将于7月2日过期，欢迎使用“【稳定版】实况助手”，可在叉叉助手搜索脚本ID:16489，或进群574025168下载。",
+			func = {"自动天梯","自动联赛","自动巡回","手动巡回","自动冠军赛"}},
+		{scriptid = 16498, distributions = "叉叉助手/小精灵测试版", tips = "测试版将于7月2日过期，欢迎使用“【稳定版】实况助手”，可在叉叉助手搜索脚本ID:16489，或进群574025168下载。",
 			func = {}},
-		{scriptid = 23354, distributions = "叉叉助手免费版", --tips = "免费版将于7月1日过期，欢迎使用\n稳定版“【新引擎】实况助手”，可搜索脚本ID:16489，或进群574025168下载。",
-			func = {}},
-		{scriptid = 16498, distributions = "叉叉助手/小精灵测试版",
-			func = {}},
+		{scriptid = 24391, distributions = "叉叉助手(国际服)版",
+			func = {"国际服季节赛SIM","国际服巡回赛SIM"}},
 		{scriptid = 24090, distributions = "小精灵(国际服)版",
 			func = {"国际服季节赛SIM","国际服巡回赛SIM"}},
 		{scriptid = 16947, distributions = "IPA版",
-			func = {}},
-		{scriptid = 23355, distributions = "IPA免费版", --tips = "免费版将于7月1日过期，欢迎使用\n稳定版“【新引擎】实况助手”，可搜索脚本ID:16947，或进群574025168下载。",
-			func = {}},
-		{scriptid = 18134, distributions = "IPA测试版",
+			func = {"自动天梯","自动联赛","自动巡回","手动巡回","自动冠军赛"}},
+		{scriptid = 23355, distributions = "IPA免费版", tips = "免费版将于7月2日过期，欢迎使用“【稳定版】实况助手”，可直接搜索脚本ID:16947",
+			func = {"自动天梯","自动联赛","自动巡回","手动巡回","自动冠军赛"}},
+		{scriptid = 18134, distributions = "IPA测试版", tips = "测试版将于7月2日过期，欢迎使用“【稳定版】实况助手”，可直接搜索脚本ID:16489。",
 			func = {}},
 		{scriptid = 24173, distributions = "IPA(国际服)版",
 			func = {"国际服季节赛SIM","国际服巡回赛SIM"}},

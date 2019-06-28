@@ -64,7 +64,7 @@ pageBaseSet:addLabel({text="自动重启",size=30})
 pageBaseSet:addRadioGroup({id="radioRestart",list="开启,关闭",select=0,w=80,h=12,size=30})
 
 pageBaseSet:nextLine()
-pageBaseSet:addLabel({text="任务次数",size=30})
+pageBaseSet:addLabel({text="循环场数",size=30})
 pageBaseSet:addEdit({id="editerCircleTimes",prompt="提示文本1",text=tostring(CFG.DEFAULT_REPEAT_TIMES),color="0,0,255",w=30,h=10,align="right",size=24})
 
 
@@ -123,15 +123,19 @@ pageSubstitutePic:addImage({src="substitute.jpg",w=70,h=100,xpos=0,align="center
 
 local pageProSet = Page:new(myui,{text = "高级设置",size = 24})
 pageProSet:nextLine()
-pageProSet:addLabel({text="    请缓存功能测试中，谨慎使用！",size=22})
+pageProSet:addLabel({text="    注：缓存模式测试中，请谨慎使用！",size=22})
 pageProSet:nextLine()
-pageProSet:addLabel({text="    本脚本提供了界面缓存的高级功能（默认关闭），即将所有匹配过的界面的数据缓存在本地，",size=22})
+pageProSet:addLabel({text="    本脚本提供了缓存模式的高级功能（默认关闭），即将所有匹配过的界面的数据缓存在本地，",size=22})
 pageProSet:nextLine()
-pageProSet:addLabel({text="用于提高页面匹配效率和脚本运行速度。",size=22})
+pageProSet:addLabel({text="用于提高页面匹配效率和脚本运行速度，同时能降低手机发热情况。如经常出现脚本停止或未知",size=22})
 pageProSet:nextLine()
-pageProSet:addLabel({text="    正常情况下不要清空缓存。仅当经常出现脚本超时时，可以先尝试运行一次清空缓存数据，如",size=22})
+pageProSet:addLabel({text="问题请关闭此功能。",size=22})
 pageProSet:nextLine()
-pageProSet:addLabel({text="果依然不能解决，请关闭缓存模式",size=22})
+pageProSet:addLabel({text="    安全重启是指在开启“自动重启”功能后，只会尝试重启脚本而不会重启游戏，国服天梯怕掉星的推",size=22})
+pageProSet:nextLine()
+pageProSet:addLabel({text="荐使用。",size=22})
+pageProSet:nextLine()
+pageProSet:addLabel({text="    日志功能只有当开发者需要调试错误时，主动让用户提供运行日志时才开启。",size=22})
 pageProSet:nextLine()
 pageProSet:nextLine()
 
@@ -142,9 +146,11 @@ pageProSet:addLabel({text="缓存模式",size=30})
 pageProSet:addRadioGroup({id="radioCachingMode",list="关闭,开启",select=0,w=25,h=12})
 pageProSet:nextLine()
 pageProSet:addLabel({text="记录日志",size=30})
-pageProSet:addRadioGroup({id="radioWriteLog",list="关闭,开启",select=0,w=25,h=12})
+pageProSet:addRadioGroup({id="radioLog",list="关闭,开启",select=0,w=25,h=12})
 
 local pageBuyCDKEY = Page:new(myui,{text = "脚本购买",size = 24})
+pageBuyCDKEY:nextLine()
+pageBuyCDKEY:addLabel({text="   收费标准:日卡(进群免费送)、月卡30、年卡120、永久卡200、国际服暂时免费",size=22, align="center"})
 pageBuyCDKEY:nextLine()
 pageBuyCDKEY:addLabel({text="   购买方式:",size=22, align="center"})
 pageBuyCDKEY:nextLine()
@@ -167,11 +173,11 @@ local pageTestting = Page:new(myui,{text = "脚本说明",size = 24})
 pageTestting:nextLine()
 pageTestting:addLabel({text="------------------------脚本特性说明------------------------",size=20, align="center"})
 pageTestting:nextLine()
-pageTestting:addLabel({text="    1.一定要原版背景才能使用，换了背景有些界面不能识别。",size=20, align="left"})
+pageTestting:addLabel({text="    1.一定要原版背景才能使用，换了背景或者打了补丁会导致有些界面不能识别。",size=20, align="left"})
 pageTestting:nextLine()
-pageTestting:addLabel({text="    2.只支持经典按键模式，不要选划屏模式。",size=20, align="left"})
+pageTestting:addLabel({text="    2.手动巡回赛只支持经典按键模式，不要选划屏模式。",size=20, align="left"})
 pageTestting:nextLine()
-pageTestting:addLabel({text="    3.开启脚本的小球请拖到右边中间部分，任何手机的游戏中心的小球也拖到右边中间部分避免干扰。",size=20, align="left"})
+pageTestting:addLabel({text="    3.开启脚本的小球请拖到【右边正中间】部分，避免干扰。任何手机的游戏中心的小球也同样操作。",size=20, align="left"})
 pageTestting:nextLine()
 pageTestting:addLabel({text="    4.刘海屏不要留黑边，不要有导航栏，让游戏铺满整个屏幕。",size=20, align="left"})
 pageTestting:nextLine()
@@ -179,20 +185,20 @@ pageTestting:addLabel({text="    5.HOME键(导航栏)放在右边，运行过程
 pageTestting:nextLine()
 pageTestting:addLabel({text="    6.脚本操作的过程中，尽量不要手动操作，或先使用音量键停止脚本运行后再行操作，操作完成后直接重开脚本。",size=20, align="left"})
 pageTestting:nextLine()
-pageTestting:addLabel({text="    7.按照稳定性，优先使用手机，模拟器长时间运行可能会导致游戏崩溃(闪退)等状况。",size=20, align="left"})
+pageTestting:addLabel({text="    7.按照稳定性，优先使用手机，云手机和模拟器长时间运行可能会导致游戏崩溃(闪退)等状况。",size=20, align="left"})
 pageTestting:nextLine()
 pageTestting:addLabel({text="    8.脚本自动重启是指在脚本或者游戏卡死的情况下将进行重启来继续任务，默认情况下，脚本提示超时后，会首",size=20, align="left"})
 pageTestting:nextLine()
 pageTestting:addLabel({text="      先重启脚本自身尝试解决问题，如果重启后依然超时，便会同时重启游戏和脚本(高级设置中的安全重启将限制",size=20, align="left"})
 pageTestting:nextLine()
-pageTestting:addLabel({text="      只重启脚本而不重启游戏)。重启功能仅安卓有效。",size=20, align="left"})
+pageTestting:addLabel({text="      为只重启脚本而不重启游戏，国服天梯推荐)。重启功能仅安卓有效。",size=20, align="left"})
 pageTestting:nextLine()
 pageTestting:nextLine()
 pageTestting:addLabel({text="------------------------脚本功能说明------------------------",size=20, align="center"})
 pageTestting:nextLine()
 pageTestting:addLabel({text="    1.脚本功能主要是模拟点击，实现教练模式自动循环挂机。脚本不是AI，不能手动天梯上分的。",size=20, align="left"})
 pageTestting:nextLine()
-pageTestting:addLabel({text="    2.目前可挂机的任务有：教练天梯赛、教练联赛、教练巡回赛、手动巡回赛(简单AI主要混失败奖励点数)。",size=20, align="left"})
+pageTestting:addLabel({text="    2.国服手动巡回赛(简单AI主要混失败奖励点数)。",size=20, align="left"})
 pageTestting:nextLine()
 pageTestting:addLabel({text="    3.需要开场自动按状态换人的，请在换人设置里设置好换人规则。",size=20, align="left"})
 pageTestting:nextLine()
@@ -200,19 +206,17 @@ pageTestting:addLabel({text="    4.需要下半场换人体力的不足时换人
 pageTestting:nextLine()
 pageTestting:addLabel({text="    5.建议所有模式下都关闭自动铲球防止红黄牌。",size=20, align="left"})
 pageTestting:nextLine()
-pageTestting:addLabel({text="    6.启动脚本前请先切换至游戏主界面-比赛(或挂机流程中的任何一个界面)。",size=20, align="left"})
+pageTestting:addLabel({text="    6.国服红牌是一键替换；国际服是1、2小队相互切换，请保证没有重复球员。",size=20, align="left"})
 pageTestting:nextLine()
-pageTestting:addLabel({text="    7.任务次数是指挂机场数。",size=20, align="left"})
+pageTestting:addLabel({text="    7.启动脚本前请先切换至游戏主界面-比赛(或挂机流程中的任何一个界面)。",size=20, align="left"})
 pageTestting:nextLine()
-pageTestting:addLabel({text="    8.安全重启意味着只会重启脚本，而激进重启先尝试重启脚本，如果不能解决将重启游戏",size=20, align="left"})
+pageTestting:addLabel({text="    8.不喜欢XX助手的安卓用户，可以进群下载本脚本专用小精灵应用。",size=20, align="left"})
 pageTestting:nextLine()
-pageTestting:addLabel({text="    9.另外不喜欢XX助手的用户，可以进群下载本脚本专用小精灵应用。",size=20, align="left"})
+pageTestting:addLabel({text="    9.国服年卡和永久卡有专用的VIP微信群，可进Q群让管理邀请加入。",size=20, align="left"})
 pageTestting:nextLine()
-pageTestting:addLabel({text="    10.年卡和永久卡有专用的VIP微信群，可进Q群让管理邀请加入。",size=20, align="left"})
+pageTestting:addLabel({text="    10.详细说明书请点击脚本教程。",size=20, align="left"})
 pageTestting:nextLine()
-pageTestting:addLabel({text="    11.详细说明书请点击脚本教程。",size=20, align="left"})
-pageTestting:nextLine()
-pageTestting:addLabel({text="    12.有任何问题及建议请反馈给作者，Q群：国服574025168，国际服696059906 ",size=20, align="left"})
+pageTestting:addLabel({text="    11.有任何问题及建议请反馈给作者，Q群(加群原因请回答:实况脚本)：国服574025168，国际服696059906 ",size=20, align="left"})
 pageTestting:nextLine()
 pageTestting:nextLine()
 pageTestting:addLabel({text="------------------------问题反馈说明------------------------",size=20, align="center"})
@@ -223,7 +227,13 @@ pageTestting:addLabel({text="    公告”中的BugList，意味着作者正在�
 pageTestting:nextLine()
 pageTestting:addLabel({text="        若依然不能解决请进群反馈，同时请一定提供以下信息:",size=20, align="left"})
 pageTestting:nextLine()
-pageTestting:addLabel({text="        a.手机系统和型号 b.正在运行的任务 c.脚本报错信息截图）",size=20, align="left"})
+pageTestting:addLabel({text="        a.手机系统、型号和分辨率：IOS/安卓/模拟器/云手机",size=20, align="left"})
+pageTestting:nextLine()
+pageTestting:addLabel({text="        b.服务器：国际服/国服/国服渠道服",size=20, align="left"})
+pageTestting:nextLine()
+pageTestting:addLabel({text="        c.运行出错的任务",size=20, align="left"})
+pageTestting:nextLine()
+pageTestting:addLabel({text="        d.脚本报错信息截图，关闭报错信息后的截图(点后报错信息的确认后的画面)",size=20, align="left"})
 pageTestting:nextLine()
 pageTestting:nextLine()
 pageTestting:addLabel({text="    ",size=20, align="left"})
@@ -321,33 +331,33 @@ function dispUI()
 	USER.TASK_NAME = taskName
 	USER.REPEAT_TIMES = tonumber(uiRet.editerCircleTimes or CFG.DEFAULT_REPEAT_TIMES)
 	
-	USER.ALLOW_SUBSTITUTE = uiRet.checkBoxFunc.开场换人
+	USER.ALLOW_SUBSTITUTE = not not uiRet.checkBoxFunc.开场换人
 	
 	--是否允许重启
-	USER.RESTART_SCRIPT = uiRet.radioRestart.开启
-	USER.RESTART_APP = uiRet.radioSafeRestart.关闭
+	USER.RESTART_SCRIPT = not not uiRet.radioRestart.开启
+	if xmod.PLATFORM == xmod.PLATFORM_ANDROID then		--仅安卓支持重启应用
+		USER.RESTART_APP = not not uiRet.radioSafeRestart.关闭
+	else
+		USER.RESTART_APP = false
+	end
 	if not USER.RESTART_SCRIPT then
 		USER.RESTART_APP = false
 	end
-	if xmod.PLATFORM == xmod.PLATFORM_IOS then
-		USER.RESTART_SCRIPT = false
-		USER.RESTART_APP = false
-	end
 
-	CFG.WRITE_LOG = uiRet.radioWriteLog.开启
-	if CFG.WRITE_LOG ~= PREV.writeLogStatus then
-		setWriteLogStatus(CFG.WRITE_LOG)
-		if not CFG.WRITE_LOG then
+	CFG.LOG = not not uiRet.radioLog.开启
+	if CFG.LOG ~= PREV.writeLogStatus then
+		setWriteLogStatus(CFG.LOG)
+		if not CFG.LOG then
 			dropLog()
-			Log("Drop writeLog yet!")
+			Log("Drop Log yet!")
 		end
 	end
 	
-	CFG.CACHING_MODE = uiRet.radioCachingMode.开启
+	CFG.CACHING_MODE = not not uiRet.radioCachingMode.开启
 	if CFG.CACHING_MODE ~= PREV.cacheStatus then
 		setCacheStatus(CFG.CACHING_MODE)
 		--if not CFG.CACHING_MODE then
-		--	dropCache()		--一定要保证在ProjectPage加载了之后执行
+		--	dropCache()		--一定要保证在ProjectPage加载了之后执行才有效
 		--	Log("Drop cache yet!")
 		--end		
 	end	

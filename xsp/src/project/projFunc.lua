@@ -263,7 +263,6 @@ local function selectExpiredPlayer()
 	
 	local posTb = screen.findColors(
 		scale.getAnchorArea("ABS"),
-		--"245|190|0xffffff,230|194|0xff3b2f,245|180|0xff3b2f,261|197|0xff3b2f,245|214|0xff3b2f,631|277|0xffffff,712|277|0xffffff",
 		scale.scalePos("78|242|0xffffff,89|254|0xffffff,245|190|0xffffff,245|182|0xff3b2f,233|196|0xff3b2f,258|195|0xff3b2f,245|214|0xff3b2f"),
 		CFG.DEFAULT_FUZZY,
 		screen.PRIORITY_DEFAULT,
@@ -299,7 +298,6 @@ local function selectExpiredPlayer()
 		sleep(1200)
 		local posTb = screen.findColors(
 			scale.getAnchorArea("ABS"),
-			--"245|190|0xffffff,230|194|0xff3b2f,245|180|0xff3b2f,261|197|0xff3b2f,245|214|0xff3b2f",
 			scale.scalePos("78|242|0xffffff,89|254|0xffffff,245|190|0xffffff,245|182|0xff3b2f,233|196|0xff3b2f,258|195|0xff3b2f,245|214|0xff3b2f"),
 			CFG.DEFAULT_FUZZY,
 			screen.PRIORITY_DEFAULT,
@@ -336,13 +334,6 @@ function refreshContract()
 	end
 	
 	selectExpiredPlayer()
-	--[[sleep(1000)
-	page.tapCommonWidget("球员续约-点击签约")
-	sleep(1500)
-	page.tapCommonWidget("球员续约-续约")
-	sleep(1500)
-	page.tapCommonWidget("付款确认")
-	sleep(500)]]
 	
 	sleep(500)
 	execCommonWidgetQueue({"球员续约-点击签约", "球员续约-续约", "付款确认"})
@@ -352,17 +343,16 @@ end
 --遇到稳定的(500ms处于checked状态)staticPage后退出，否则遇到comfirm进行点击跳过
 function skipComfirm(staticPage)
 	local startTime = os.time()
-	local lastStaticTime = 0
 	while true do
 		if page.isExsitNavigation("comfirm") then
-			startTime = os.time()
 			page.tapNavigation("comfirm")
 			sleep(500)
+			startTime = os.time()
 		end
 		
 		if page.matchPage(staticPage) then
 			Log("checked staticPage 1st: "..staticPage)
-			lastCheckedTime = os.time()
+
 			sleep(500)
 			if page.matchPage(staticPage) then		--排除两个comfirm间过渡时出现checkedPage
 				Log("checked staticPage 2rd: "..staticPage)
@@ -380,10 +370,6 @@ end
 
 --续约未满足条件的教练(满足条件的直接在比赛结束时处理了)
 function refreshUnmetCoach(taskPage)
-	--[[skipComfirm(taskPage)	--可能先检测到异常，再弹出教练合约失效的提示
-	page.tapCommonWidget("球队异常", 7)		--点击第七个点才能点中
-	sleep(1500)]]
-	
 	execCommonWidgetQueue({{"球队异常", 7}})
 	
 	local startTime = os.time()
@@ -393,46 +379,15 @@ function refreshUnmetCoach(taskPage)
 		end
 		
 		if os.time() - startTime > CFG.DEFAULT_TIMEOUT then
-			catchError(ERR_TIMEOUT, "time out in wait 阵容展示")
+			catchError(ERR_TIMEOUT, "time out in wait 球队菜单")
 		end
 		sleep(200)	
 	end
 	
 	if page.isExsitCommonWidget("教练合约失效") then
-		--[[page.tapCommonWidget("教练合约失效")
-		sleep(1500)
-		page.tapCommonWidget("教练续约")
-		sleep(1500)
-		page.tapCommonWidget("付款确认")
-		sleep(1000)
-		--多个确定]]
-		
 		execCommonWidgetQueue({"教练合约失效","教练续约","付款确认"})
-		--[[local startTime = os.time()
-		while true do
-			if page.isExsitNavigation("comfirm") then
-				page.tapNavigation("comfirm")
-				sleep(1000)
-			end
-			
-			if page.isExsitNavigation("notice") then		--关闭续约界面
-				page.tapNavigation("notice")
-				sleep(1000)
-			end
-			
-			if page.isExsitNavigation("back") then		--关闭续约界面
-				page.tapNavigation("back")
-				sleep(1000)
-				break		--出口
-			end
-			
-			if os.time() - startTime > CFG.DEFAULT_TIMEOUT then
-				catchError(ERR_TIMEOUT, "time out in 教练续约")
-			end
-			
-			sleep(200)
-		end]]
-		
+
+		sleep(1200)
 		execNavigationQueue({"comfirm", "notice", "back"})
 	else		--如果是球员状态异常，置isPlayerRedCard为true，以防止再次进入refreshUnmetCoach流程
 		isPlayerRedCard = true
@@ -445,15 +400,6 @@ end
 
 --国际服不能一键换人，因此需要切换小队
 function swichTeam()
-	--[[sleep(500)
-	page.tapCommonWidget("球队异常", 7)		--点击第七个点才能点中
-	sleep(1500)
-	
-	page.tapCommonWidget("球队菜单")
-	sleep(1500)
-	page.tapCommonWidget("切换小队")
-	sleep(1000)]]
-	
 	execCommonWidgetQueue({{"球队异常", 7}, "球队菜单", "切换小队"})
 	
 	local teamPos = {}
@@ -545,5 +491,6 @@ function swichTeam()
 	page.tapNavigation("back")
 	sleep(500)
 	--dialog("")
+	Log("swiched team")
 end
 
