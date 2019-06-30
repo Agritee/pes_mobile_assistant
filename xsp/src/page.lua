@@ -156,7 +156,7 @@ function M.getCurrentPage(forceGlobalPage)
 							matched = false
 							break
 						else
-							Log("----match widget: ".._v.tag)
+							--Log("----match widget: ".._v.tag)
 						end
 					end
 				end

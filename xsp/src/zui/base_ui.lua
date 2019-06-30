@@ -150,7 +150,7 @@ pageProSet:addRadioGroup({id="radioLog",list="关闭,开启",select=0,w=25,h=12}
 
 local pageBuyCDKEY = Page:new(myui,{text = "脚本购买",size = 24})
 pageBuyCDKEY:nextLine()
-pageBuyCDKEY:addLabel({text="   收费标准:日卡(进群免费送)、月卡30、年卡120、永久卡200、国际服暂时免费",size=22, align="center"})
+pageBuyCDKEY:addLabel({text="   收费标准:日卡(进群免费送)、月卡30、年卡120、永久卡200、国际服暂时免费",size=18, align="center"})
 pageBuyCDKEY:nextLine()
 pageBuyCDKEY:addLabel({text="   购买方式:",size=22, align="center"})
 pageBuyCDKEY:nextLine()
@@ -167,6 +167,8 @@ pageBuyCDKEY:addLabel({text="      4.在线购买激活码(安卓+IOS)",size=20,
 pageBuyCDKEY:nextLine()
 pageBuyCDKEY:nextLine()
 pageBuyCDKEY:addUrl({text="购买激活码",url="http://cndy1860.linso.pw"})
+pageBuyCDKEY:addLabel({text="  (链接 http://cndy1860.linso.pw)",size=20, align="left"})
+
 
 
 local pageTestting = Page:new(myui,{text = "脚本说明",size = 24})

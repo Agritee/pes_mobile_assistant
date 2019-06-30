@@ -291,7 +291,7 @@ function getPrevCacheStatus()
 end
 
 --重启
-local function restart()
+local function restart(errMsg)
 	if USER.RESTART_APP or USER.RESTART_SCRIPT then	--允许重启
 		if USER.RESTART_APP then			--激进模式，APP和script同时重启
 			if PREV.restartedAPP then
@@ -347,7 +347,7 @@ local function restart()
 			end
 			
 			setRestartedScript()
-			xmod.restart()
+			xmod.restart(errMsg)
 		end
 	else	--不允许重启直接退出
 		dialog(errMsg.."\r\n等待超时，即将退出")
@@ -388,11 +388,11 @@ function catchError(errType, errMsg, forceContinueFlag)
 	
 	--错误处理模块
 	if etype == ERR_MAIN or etype == ERR_TASK_ABORT then	--核心错误仅允许exit
-		dialog(errMsg.."\r\n即将退出")
+		dialog(emsg.."\r\n即将退出")
 		Log("!!!cant recover task, program will end now!!!")
 		xmod.exit()
 	elseif etype == ERR_FILE or etype == ERR_PARAM then	--关键错误仅允许exit
-		dialog(errMsg.."\r\n即将退出")
+		dialog(emsg.."\r\n即将退出")
 		Log("!!!cant recover task, program will endlater!!!")
 		xmod.exit()
 	elseif etype == ERR_WARNING then		--警告任何时候只提示
@@ -404,7 +404,7 @@ function catchError(errType, errMsg, forceContinueFlag)
 			Log("TIME OUT AND APP NOT RUNNING YET！")
 		end
 		
-		restart()
+		restart(emsg)
 	else
 		Log("some err in task\r\n -----!!!program will exit later!!!-----")
 		xmod.exit()
