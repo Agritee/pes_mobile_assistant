@@ -1,4 +1,4 @@
--- randSim.lua
+-- IntSezonSim.lua
 -- Author: cndy1860
 -- Date: 2018-06-19
 -- Descrip: 自动刷联赛赛教练模式

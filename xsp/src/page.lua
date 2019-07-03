@@ -1,4 +1,4 @@
--- config.lua
+-- page.lua
 -- Author: cndy1860
 -- Date: 2018-12-24
 -- Descrip: 界面特征判定相关
@@ -156,7 +156,7 @@ function M.getCurrentPage(forceGlobalPage)
 							matched = false
 							break
 						else
-							--Log("----match widget: ".._v.tag)
+							--Log("----matched widget: ".._v.tag)
 						end
 					end
 				end
@@ -332,8 +332,7 @@ function M.tryNavigation()
 	for _, v in pairs(M.navigationPriorityList) do
 		for _, _v in pairs(M.navigationList) do
 			if v == _v.tag then
-				--if not CFG.CACHING_MODE or _v.matchPos == nil or not _v.caching then
-				if true then
+				if not CFG.CACHING_MODE or _v.matchPos == nil or not _v.caching then
 					local pot = screen.findColor(_v.dstArea, _v.dstPos, CFG.DEFAULT_FUZZY)
 					if pot ~= Point.INVALID then
 						Log("Exsit find Navigation [".._v.tag.."], try execute it!")
@@ -354,12 +353,12 @@ function M.tryNavigation()
 							tap(pot.x, pot.y)	--点击导航按钮
 						end
 						
-						--[[if CFG.CACHING_MODE and _v.caching then
+						if CFG.CACHING_MODE and _v.caching then
 						_v.matchPos = scale.offsetPos(_v.dstPos, pot)
 						storage.put(string.format("navigation-%s", _v.tag), _v.matchPos)
 						storage.commit()
 						Log("store "..string.format("navigation-%s", _v.tag))
-						end]]
+						end
 						
 						sleep(CFG.NAVIGATION_DELAY)
 						return true
@@ -369,14 +368,21 @@ function M.tryNavigation()
 				else
 					if screen.matchColors(_v.matchPos, CFG.DEFAULT_FUZZY) then
 						Log("Exsit match Navigation [".._v.tag.."], execute it!")
+						screen.keep(true)	--刷新画面，防止界面过渡时，先出现局部的导航（但getCurrentPage为nil）时直接判定为导航了
+						sleep(200)
+						local currentPage = page.getCurrentPage()
+						if currentPage then
+							Log('exsit navigation but need refresh page: '..currentPage)
+							return false
+						end
 						
 						if _v.actionFunc ~= nil then	--执行导航actionFunc
 							screen.keep(false)		--执行execNavigation.actionFunc可能涉及到界面变化
 							_v.actionFunc()
 							--screen.keep(true)
 						else
-							local tmpTb = scale.toPointsTable(_v.matchPos)
-							tap(tmpTb[1][1], tmpTb[1][2])	--点击导航按钮
+							local x, y = scale.getFirstPot(_v.matchPos)
+							tap(x, y)	--点击导航按钮
 						end
 						
 						sleep(CFG.NAVIGATION_DELAY)

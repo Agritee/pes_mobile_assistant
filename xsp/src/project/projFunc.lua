@@ -460,17 +460,16 @@ function swichTeam()
 		else
 			Log("当前选中不在一队二队，将切换至一队")
 			dialog("当前选中不在一队二队，将切换至一队", 3)
+			sleep(800)
 			tap(teamPos[1].x, teamPos[1].y)		--切换一队
 		end
 	else
-		Log("当前选中不在一队二队，将切换至一队")
 		dialog("当前选中不在一队二队，将切换至一队", 3)
+		sleep(800)
+		Log("当前选中不在一队二队，将切换至一队")
 		tap(teamPos[1].x, teamPos[1].y)		--切换一队
 	end
-	--sleep(1000)
-	
-	--page.tapCommonWidget("设为主力阵容")
-	--sleep(1000)
+
 	execCommonWidgetQueue({"设为主力阵容"})
 	
 	page.tapNavigation("back")
@@ -486,6 +485,16 @@ function swichTeam()
 			catchError(ERR_TIMEOUT, "time out in swichTeam back")
 		end
 		sleep(200)
+	end
+	
+	local pot = screen.findColor(
+		scale.getAnchorArea("A"),
+		scale.scalePos("791|463|0xffffff,778|468|0xff3b2f,790|455|0xff3b2f,803|469|0xff3b2f,791|482|0xff3b2f"),
+		CFG.DEFAULT_FUZZY
+	)
+	if pot ~= Point.INVALID then
+		dialog("切换后的小队也有禁赛的队员，终止比赛！")
+		xmod.exit()
 	end
 	
 	page.tapNavigation("back")

@@ -1,19 +1,16 @@
--- tourManuel.lua
+-- InttourManuel.lua
 -- Author: cndy1860
--- Date: 2019-01-24
--- Descrip: 自动刷巡回手动模式
+-- Date: 2019-07-01
+-- Descrip: 国际服自动刷巡回手动模式
 
 local _task = {
-	tag = "手动巡回",
+	tag = "国际服巡回赛手动",
 	processes = {
-		{tag = "其他", mode = "firstRun"},
-		{tag = "比赛", nextTag = "活动模式", mode = "firstRun"},
-		{tag = "活动模式", nextTag = "控制球员", mode = "firstRun"},
+		{tag = "俱乐部", mode = "firstRun"},
+		{tag = "比赛", mode = "firstRun"},
 		
-		{tag = "巡回模式", nextTag = "next"},
+		{tag = "国际服巡回赛", nextTag = "next"},
 		{tag = "选择电脑级别", nextTag = "超巨"},
-		{tag = "阵容展示", nextTag = "next"},
-		--{tag = "主场开球", },
 		{tag = "比赛中", timeout = 60},
 		{tag = "终场统计", nextTag = "next", timeout = 900, checkInterval = 1000},
 	},
@@ -41,17 +38,44 @@ end
 local fn = function()
 	switchMainPage("比赛")
 end
-insertFunc("其他", fn)
+insertFunc("俱乐部", fn)
+
+local fn = function()
+	page.tapWidget("比赛", "活动模式")
+	sleep(1000)
+	
+	local startTime = os.time()
+	while true do
+		if page.isExsitCommonWidget("国际服巡回赛手动比赛") then
+			sleep(1000)
+			page.tapCommonWidget("国际服巡回赛手动比赛")
+			break
+		end
+		
+		ratioSlide(950, 640, 250, 640)
+	
+		if os.time() - startTime > CFG.DEFAULT_TIMEOUT then
+			catchError(ERR_TIMEOUT, "异常:国际服巡回赛自动比赛!")
+		end
+		sleep(200)
+	end
+end
+insertFunc("比赛", fn)
 
 local fn = function()
 	sleep(200)
-	skipComfirm("巡回模式")		--检测到界面后又弹出了确定提示按钮，如领取奖励，精神提升，点击所有的确定
+	skipComfirm("国际服巡回赛")		--检测到界面后又弹出了确定提示按钮，如领取奖励，精神提升，点击所有的确定
 	
 	if page.isExsitCommonWidget("球队异常") and not isPlayerRedCard then
-		refreshUnmetCoach("巡回模式")
+		refreshUnmetCoach("国际服巡回赛")
+		if isPlayerRedCard then
+			Log("有异常球员出现")
+			sleep(500)
+			swichTeam()
+		end
 	end
 end
-insertFunc("巡回模式", fn)
+insertFunc("国际服巡回赛", fn)
 
 local fn = function()
 	if page.matchWidget("阵容展示", "身价溢出") then
@@ -65,7 +89,7 @@ local fn = function()
 end
 insertFunc("阵容展示", fn)
 
-local wfn = function(taskIndex)		--主场开球，先发球后才能进入“比赛中”界面
+local wfn = function()		--主场开球，先发球后才能进入“比赛中”界面
 	sleep(200)
 	local posTb = screen.findColors(scale.getAnchorArea("RB"),
 		scale.scalePos("1059|440|0xd0e2cf-0x2f1d30,987|434|0x335a26-0x232117,1123|475|0x335a26-0x232117,1016|500|0x335a26-0x232117,1098|379|0x335a26-0x232117"),
@@ -105,6 +129,7 @@ local wfn = function(taskIndex)		--主场开球，先发球后才能进入“比
 		--prt(buttonPot)
 		
 		if #buttonPot > 0 then
+			Log("主场开球--------------------")
 			tap(buttonPot[#buttonPot].x, buttonPot[#buttonPot].y)		--开球
 			sleep(500)
 		else
@@ -163,6 +188,7 @@ local wfn = function()
 	end		
 
 	local posTb = screen.findColors(scale.getAnchorArea("RB"),
+		--scale.scalePos("1059|440|0xfafcfa,987|434|0x335a26-0x232117,1123|475|0x335a26-0x232117,1016|500|0x335a26-0x232117,1098|379|0x335a26-0x232117"),
 		scale.scalePos("1059|440|0xd0e2cf-0x2f1d30,987|434|0x335a26-0x232117,1123|475|0x335a26-0x232117,1016|500|0x335a26-0x232117,1098|379|0x335a26-0x232117"),
 		95)
 	if #posTb ~= 0 then	

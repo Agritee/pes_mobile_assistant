@@ -1,4 +1,4 @@
--- tourSim.lua
+-- championSim.lua
 -- Author: cndy1860
 -- Date: 2019-06-17
 -- Descrip: 自动刷冠军赛教练模式

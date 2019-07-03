@@ -127,7 +127,7 @@ pageProSet:addLabel({text="    注：缓存模式测试中，请谨慎使用！"
 pageProSet:nextLine()
 pageProSet:addLabel({text="    本脚本提供了缓存模式的高级功能（默认关闭），即将所有匹配过的界面的数据缓存在本地，",size=22})
 pageProSet:nextLine()
-pageProSet:addLabel({text="用于提高页面匹配效率和脚本运行速度，同时能降低手机发热情况。如经常出现脚本停止或未知",size=22})
+pageProSet:addLabel({text="用于提高页面匹配效率，能显著提升脚本运行速度，同时降低手机发热。如经常出现脚本停止或未知",size=22})
 pageProSet:nextLine()
 pageProSet:addLabel({text="问题请关闭此功能。",size=22})
 pageProSet:nextLine()
@@ -150,19 +150,19 @@ pageProSet:addRadioGroup({id="radioLog",list="关闭,开启",select=0,w=25,h=12}
 
 local pageBuyCDKEY = Page:new(myui,{text = "脚本购买",size = 24})
 pageBuyCDKEY:nextLine()
-pageBuyCDKEY:addLabel({text="   收费标准:日卡(进群免费送)、月卡30、年卡120、永久卡200、国际服暂时免费",size=18, align="center"})
+pageBuyCDKEY:addLabel({text="   收费标准(国服/国际服):日卡(进群免费送)、月卡30/15、年卡120/100、永久卡200/180",size=18, align="center"})
 pageBuyCDKEY:nextLine()
 pageBuyCDKEY:addLabel({text="   购买方式:",size=22, align="center"})
 pageBuyCDKEY:nextLine()
 pageBuyCDKEY:addLabel({text="      群内经常有优惠和折扣",size=20, align="left"})
 pageBuyCDKEY:nextLine()
-pageBuyCDKEY:addLabel({text="      1.叉叉助手直接购买(安卓)",size=20, align="left"})
+pageBuyCDKEY:addLabel({text="      1.叉叉助手直接购买授权(安卓)",size=20, align="left"})
 pageBuyCDKEY:nextLine()
-pageBuyCDKEY:addLabel({text="      2.叉叉小精灵直接购买(安卓)",size=20, align="left"})
+pageBuyCDKEY:addLabel({text="      2.叉叉小精灵直接购买授权(安卓)，点击小精灵右上角的“激活码”",size=20, align="left"})
 pageBuyCDKEY:nextLine()
-pageBuyCDKEY:addLabel({text="      3.IPA精灵直接购买(IOS)",size=20, align="left"})
+pageBuyCDKEY:addLabel({text="      3.IPA精灵直接购买授权(IOS)",size=20, align="left"})
 pageBuyCDKEY:nextLine()
-pageBuyCDKEY:addLabel({text="      4.在线购买激活码(安卓+IOS)",size=20, align="left"})
+pageBuyCDKEY:addLabel({text="      4.在线购买激活码(安卓+IOS)，购买后需输入激活码激活，链接在下边",size=20, align="left"})
 
 pageBuyCDKEY:nextLine()
 pageBuyCDKEY:nextLine()
@@ -306,14 +306,21 @@ local function getRadioKey(tb)
 end
 
 function dispUI()
+	local isInWhiteList = false
 	for _, v in pairs(CFG.SCRIPT_FUNC.whiteList) do
 		if v.scriptid == UserInfo.id then
+			isInWhiteList = true
 			if v.tips ~= nil and v.tips ~= "" then
 				Log(v.tips)
 				dialog(v.tips, 5)
 			end
 			break
 		end
+	end
+	
+	if not isInWhiteList then
+		dialog("非法上线脚本，请退出！")
+		xmod.exit()
 	end
 
 	local uiRet = myui:show(3)

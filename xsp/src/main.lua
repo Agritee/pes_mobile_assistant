@@ -20,6 +20,7 @@ require("project/task/tourManuel")
 require("project/task/championSim")
 require("project/task/IntSezonSim")
 require("project/task/IntTourSim")
+require("project/task/InttourManuel")
 
 
 function main()
@@ -42,18 +43,18 @@ end
 main()
 
 screen.init(screen.LANDSCAPE_RIGHT)
---sleep(2000)
-execNavigationQueue({"comfirm", "notice", "back"})
-page.checkPage()
-page.checkNavigation()
-page.checkCommonWidget()
+sleep(2000)
 
-prt(screen.matchColors("491|316|0xc6ced3-0x21191d,500|316|0x5fabfe-0x603201,510|343|0x5fabfe-0x603201,523|314|0x5fabfe-0x603201,530|314|0xffffff,537|314|0x5fabfe-0x603201,529|320|0x5fabfe-0x603201"))
-prt(screen.matchColors("511|508|0xffffff,505|503|0x12a42b,529|539|0x12a42b,519|492|0xc6ced3-0x21191d,532|492|0x5fabfe-0x603201"))
-prt(screen.matchColors("944|320|0x36b24b-0x240e21,929|303|0x0079fe,956|306|0x0079fe,926|347|0x0079fe,959|347|0x0079fe,943|348|0xffffff,942|336|0x0079fe"))
+--refreshContract()
+--execNavigationQueue({"comfirm", "notice", "back"})
+page.checkPage()
+--page.checkNavigation()
+--page.checkCommonWidget()
+page.tapWidget("比赛", "活动模式")
+
 --refreshUnmetCoach()
 
---page.matchPage("冠军杯分组")
+page.matchPage("俱乐部")
 --page.tapWidget("阵容展示", "切换状态")
 
 

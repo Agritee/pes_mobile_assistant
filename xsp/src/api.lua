@@ -208,6 +208,12 @@ local toPointsTable = function(pos)
 	return posTb
 end
 
+local getFirstPot = function(pos)
+	for x, y, c, dif in string.gmatch(pos, "(-?%d+)|(-?%d+)|(%w+)%-?(%w*)") do
+		return tonumber(x), tonumber(y)
+	end
+end
+
 local isColor = function(x,y,c,s)
 	local fl,abs = math.floor,math.abs
 	local r,g,b = fl(c/0x10000),fl(c%0x10000/0x100),fl(c%0x100)
@@ -234,7 +240,7 @@ local isColorDif = function(x,y,c,d)
 	return false
 end
 
-function screen.matchColors(points, fuzzy)
+function screen.matchColors0(points, fuzzy)
 	if points == nil or type(points) ~= "string" or string.len(points) == 0 then
 		catchError(ERR_PARAM, "wrong points in matchColors")
 	end
@@ -254,6 +260,22 @@ function screen.matchColors(points, fuzzy)
 				return false
 			end
 		end
+	end
+	
+	return true
+end
+
+function screen.matchColors(points, fuzzy)
+	if points == nil or type(points) ~= "string" or string.len(points) == 0 then
+		catchError(ERR_PARAM, "wrong points in matchColors")
+	end
+		
+	local x, y = getFirstPot(points)
+	
+	local x1, y2 = findColor({x, y, x + 1, y + 1,}, points, fuzzy)
+	
+	if x1 == -1 then
+		return false
 	end
 	
 	return true
@@ -319,59 +341,6 @@ end
 
 function screen.findColors(rect, color, globalFuzz, priority, limit)
 	return RepairFindColors({rect.x, rect.y, rect.x + rect.width, rect.y + rect.height},color,globalFuzz,0,0,0,limit)
-end
-----丢掉不常用的priority,需要的话可自行分离，当limit>99时，分区进行查找，以解决1.9只能返回最多99点的问题
-function screen.findColors0(rect, color, globalFuzz, priority, limit)
-	if limit ~= nil and limit > 99 then	--超过99点，进行分区findColors再汇总
-		local split = 6		--分区阶数，将把rect分为split^2个区域分开扫描
-		if CFG.DST_RESOLUTION.height > 1080 then 		--，兼容ipx出现more than99点的问题
-			split = 10
-		end
-		
-		local x0, y0 = rect.x, rect.y
-		local stepX, stepY = rect.width / split, rect.height / split
-		
-		--findColors结果汇总表
-		local totalTb = {}
-		
-		for i = 1, split, 1 do
-			for j = 1, split, 1 do
-				local tmpArea = {
-					math.floor(x0 + stepX * (j - 1)),
-					math.floor(y0 + stepY * (i - 1)),
-					math.floor(x0 + stepX * j),
-					math.floor(y0 + stepY * i)
-				}
-				local tmpTb = findColors(tmpArea, color, globalFuzz or CFG.DEFAULT_FUZZY)
-				if #tmpTb >= 99 then
-					Log("get more then 99 point, please increase split !")
-					return nil
-				end
-				for _, v in pairs(tmpTb) do
-					table.insert(totalTb, v)
-				end
-				--Log(j.." x "..i.." insert "..#tmpTb)
-			end
-		end
-		
-		--Log("findColorsEx get total points: "..#posTb)
-		
-		--格式化为Point
-		local pointsTb = {}
-		for k, v in pairs(totalTb) do
-			table.insert(pointsTb, Point(v.x, v.y))
-		end
-		
-		return pointsTb
-	else		--正常findColors
-		local tmpTb = findColors({rect.x, rect.y, rect.x + rect.width, rect.y + rect.height}, color, globalFuzz or CFG.DEFAULT_FUZZY)
-		local pointsTb = {}
-		for k, v in pairs(tmpTb) do
-			table.insert(pointsTb, Point(v.x, v.y))
-		end
-		
-		return pointsTb
-	end
 end
 
 

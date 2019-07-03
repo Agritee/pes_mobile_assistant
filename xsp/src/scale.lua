@@ -38,6 +38,13 @@ function M.toPointsTable(pointString)
 	return posTb
 end
 
+--获取第一个点的x,y坐标
+function M.getFirstPot(pos)
+	for x, y, c, dif in string.gmatch(pos, "(-?%d+)|(-?%d+)|(%w+)%-?(%w*)") do
+		return tonumber(x), tonumber(y)
+	end
+end
+
 --线性二次插值取色，传入的为缩放后的原始坐标
 --开启会增加运算量，酌情使用
 function bilinearPot(point)
