@@ -65,13 +65,13 @@ local fn = function()
 end
 insertFunc("阵容展示", fn)
 
+local bottonStiacPos = {}
 local wfn = function(taskIndex)		--主场开球，先发球后才能进入“比赛中”界面
 	sleep(200)
-	local posTb = screen.findColors(scale.getAnchorArea("RB"),
+	local posTb = screen.findColors(scale.getAnchorArea("R/4B/2"),
 		scale.scalePos("1059|440|0xd0e2cf-0x2f1d30,987|434|0x335a26-0x232117,1123|475|0x335a26-0x232117,1016|500|0x335a26-0x232117,1098|379|0x335a26-0x232117"),
 		95)
 	if #posTb ~= 0 then
-		Log("--------------------")
 		local buttonPot = {}
 		--同样位置会有多个点，x、y坐标同时小于offset时判定为同位置的坐标，以20像素/短边750为基准
 		local offset = (CFG.EFFECTIVE_AREA[4] - CFG.EFFECTIVE_AREA[2]) / 750 * 20
@@ -105,8 +105,35 @@ local wfn = function(taskIndex)		--主场开球，先发球后才能进入“比
 		--prt(buttonPot)
 		
 		if #buttonPot > 0 then
-			tap(buttonPot[#buttonPot].x, buttonPot[#buttonPot].y)		--开球
-			sleep(500)
+			Log("主场开球--------------------")
+			if #buttonPot == 1 then
+				tap(buttonPot[1].x, buttonPot[1].y)
+			elseif #buttonPot == 2 or #buttonPot == 3 then
+				local rnd = os.time() % 2
+				if rnd == 0 then
+					tap(buttonPot[#buttonPot - 1].x, buttonPot[#buttonPot - 1].y)	--直塞
+				else
+					tap(buttonPot[#buttonPot].x, buttonPot[#buttonPot].y)			--传球
+				end
+			else			--大于三个按钮，有干扰点
+				Log("有干扰点")
+				if #bottonStiacPos > 0 then		--有缓存点,点击缓存点
+					local rnd = os.time() % 2
+					if rnd == 0 then
+						tap(bottonStiacPos[#bottonStiacPos - 1].x, bottonStiacPos[#bottonStiacPos - 1].y)	--直塞
+					else
+						tap(bottonStiacPos[#bottonStiacPos].x, bottonStiacPos[#bottonStiacPos].y)			--传球
+					end					
+				else		--无缓存点，依次点击buttonPot首中尾点
+					Log("无缓存点")
+					tap(buttonPot[1].x, buttonPot[1].y)
+					sleep(500)
+					tap(buttonPot[math.floor(#buttonPot/2)].x, buttonPot[math.floor(#buttonPot/2)].y)
+					sleep(500)
+					tap(buttonPot[#buttonPot].x, buttonPot[#buttonPot].y)
+				end
+			end
+			sleep(500)		--限制频率
 		else
 			catchError(ERR_NORMAL, "未检测到传球按钮")
 		end
@@ -198,18 +225,41 @@ local wfn = function()
 		sortMethod(buttonPot)
 		--prt(buttonPot)
 		
+		if #buttonPot == 3 and #bottonStiacPos == 0 then	--缓存按钮
+			for _, v in pairs(buttonPot) do
+				table.insert(bottonStiacPos, v)
+			end
+		end
+		
 		if #buttonPot > 0 then
 			if #buttonPot == 1 then
 				tap(buttonPot[1].x, buttonPot[1].y)
-			else
-				local rnd = os.time() % 10
-				if rnd == 0 or rnd == 1 or rnd == 3 or rnd == 5 or rnd == 7 or rnd == 8 then
+			elseif #buttonPot == 2 or #buttonPot == 3 then
+				local rnd = os.time() % 2
+				if rnd == 0 then
 					tap(buttonPot[#buttonPot - 1].x, buttonPot[#buttonPot - 1].y)	--直塞
 				else
 					tap(buttonPot[#buttonPot].x, buttonPot[#buttonPot].y)			--传球
 				end
+			else			--大于三个按钮，有干扰点
+				Log("有干扰点")
+				if #bottonStiacPos > 0 then		--有缓存点,点击缓存点
+					local rnd = os.time() % 2
+					if rnd == 0 then
+						tap(bottonStiacPos[#bottonStiacPos - 1].x, bottonStiacPos[#bottonStiacPos - 1].y)	--直塞
+					else
+						tap(bottonStiacPos[#bottonStiacPos].x, bottonStiacPos[#bottonStiacPos].y)			--传球
+					end					
+				else		--无缓存点，依次点击buttonPot首中尾点
+					Log("无缓存点")
+					tap(buttonPot[1].x, buttonPot[1].y)
+					sleep(500)
+					tap(buttonPot[math.floor(#buttonPot/2)].x, buttonPot[math.floor(#buttonPot/2)].y)
+					sleep(500)
+					tap(buttonPot[#buttonPot].x, buttonPot[#buttonPot].y)
+				end
 			end
-			sleep(500)		--限制频率
+			sleep(100)		--限制频率
 		end
 	end
 	

@@ -85,6 +85,8 @@ CFG.SCRIPT_FUNC = {						--脚本功能列表
 			func = {}},
 		{scriptid = 24520, distributions = "自测",
 			func = {}},
+		{scriptid = 24634, distributions = "内部测试",
+			func = {}},
 		{scriptid = 16489, distributions = "安卓-叉叉助手/小精灵版",
 			func = {"自动天梯","自动联赛","自动巡回","手动巡回","自动冠军赛"}},
 		{scriptid = 16498, distributions = "安卓-叉叉助手/小精灵测试版", 

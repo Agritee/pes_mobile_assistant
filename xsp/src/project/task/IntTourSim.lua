@@ -1,4 +1,4 @@
--- InttourSim.lua
+-- IntTourSim.lua
 -- Author: cndy1860
 -- Date: 2019-06-25
 -- Descrip: 国际服自动刷巡回赛教练模式
