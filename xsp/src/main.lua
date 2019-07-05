@@ -42,6 +42,7 @@ end
 
 main()
 
+
 screen.init(screen.LANDSCAPE_RIGHT)
 sleep(2000)
 --CFG.SCALING_RATIO = 720/750

@@ -398,8 +398,13 @@ function catchError(errType, errMsg, forceContinueFlag)
 	elseif etype == ERR_WARNING then		--警告任何时候只提示
 		Log("!!!maybe some err in here, care it!!!")
 	elseif etype == ERR_TIMEOUT then		--超时错误允许exit，restart
-		if runtime.getForegroundApp() == CFG.APP_ID then
+		if runtime.isAppRunning(CFG.APP_ID) then
 			Log("TIME OUT BUT APP STILL RUNNING！")
+			if runtime.getForegroundApp() == CFG.APP_ID then
+				Log("STILL Foreground")
+			else
+				Log("NOT Foreground yet")
+			end
 		else
 			Log("TIME OUT AND APP NOT RUNNING YET！")
 		end
@@ -603,4 +608,34 @@ function execNavigationQueue(list)
 	return false
 end
 
+function parseBulletin(content)
+	local i, j, index = string.find(content, "-index%-(%d+)%-")
+	if i == nil or j == nil or index == nil then	--未找到Idnex
+		Log("cant find index")
+		return nil, nil, false
+	end
+	
+	local m, n = string.find(content, "%-exclude%-[%d%-]*"..CFG.ScriptInfo.id.."%-")
+	if m ~= nil and n ~= nil then					--当前脚本位于排除队列
+		Log("exclude current script: "..string.sub(content, m, n))
+		return nil, nil, false
+	end
+	
+	local m, n = string.find(content, "%-exclude%-[%d%-]*%-")
+	if m == nil or n == nil then					--清理正文
+		n = j
+	end
+	
+	local body = string.sub(content, n + 1, -1)
+	
+	Log("parseBulletin: index-"..index.."  body-"..body)
+	return index, body, true
+end
 
+function saveBulletinIndex(title)
+	setStringConfig("BULLETIN_INDEX", title)
+end
+
+function getLastBulletinIndex()
+	return getStringConfig("BULLETIN_INDEX", "NULL")
+end

@@ -1,6 +1,6 @@
 -- IntSezonSim.lua
 -- Author: cndy1860
--- Date: 2018-06-19
+-- Date: 2019-06-19
 -- Descrip: 自动刷联赛赛教练模式
 --1.联赛教练模式中，替换红牌伤病球员，是通过"联赛教练模式"中的actionFunc，检测设置上的异常红点后点击自动设置实现。（异常对应两种状态：可能是
 --教练合约到期或者球员红牌伤病，因此不使用一键替换功能）
@@ -66,11 +66,10 @@ local wfn = function()
 		return
 	end
 	
-	if os.time() - lastPlayingPageTime > CFG.DEFAULT_TIMEOUT + 10 then		--长时间为检测到比赛界面，判定为异常
-		catchError(ERR_TIMEOUT, "异常:未检测到比赛界面!")
-	elseif os.time() - lastPlayingPageTime >= 3 and isAppInFront() then	--3秒内为检测到比赛界面，跳过过长动画
-		Log("try skip replay!")
-		ratioTap(900,70)
+	if os.time() - lastPlayingPageTime > CFG.DEFAULT_TIMEOUT + 10 then		--长时间未检测到比赛界面，判定为异常
+		catchError(ERR_TIMEOUT, "异常:未检测到比赛界面！")
+	elseif os.time() - lastPlayingPageTime >= 3 and isAppInFront() then		--3秒内未检测到比赛界面，尝试跳过回放
+		skipReplay()
 	end
 	
 	Log("timeAfterLastPlayingPage = "..(os.time() - lastPlayingPageTime).."s yet")

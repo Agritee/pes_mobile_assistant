@@ -76,11 +76,10 @@ local wfn = function()
 		return	--发生了点球大战，始终不继续比赛中的检测流程
 	end		
 
-	if os.time() - lastPlayingPageTime > CFG.DEFAULT_TIMEOUT + 10 then		--长时间为检测到比赛界面，判定为异常
-		catchError(ERR_TIMEOUT, "异常:未检测到比赛界面")
-	elseif os.time() - lastPlayingPageTime >= 3 and isAppInFront() then	--3秒内为检测到比赛界面，跳过过长动画
-		Log("try skip replay!")
-		ratioTap(900,70)
+	if os.time() - lastPlayingPageTime > CFG.DEFAULT_TIMEOUT + 10 then		--长时间未检测到比赛界面，判定为异常
+		catchError(ERR_TIMEOUT, "异常:未检测到比赛界面！")
+	elseif os.time() - lastPlayingPageTime >= 3 and isAppInFront() then		--3秒内未检测到比赛界面，尝试跳过回放
+		skipReplay()
 	end
 	
 	--Log("timeAfterLastPlayingPage = "..(os.time() - lastPlayingPageTime).."s yet")

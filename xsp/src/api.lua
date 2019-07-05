@@ -265,6 +265,7 @@ function screen.matchColors0(points, fuzzy)
 	return true
 end
 
+--直接在Lua层对比颜色效率较低，采用findColor找一个点范围来实现在C层的比较
 function screen.matchColors(points, fuzzy)
 	if points == nil or type(points) ~= "string" or string.len(points) == 0 then
 		catchError(ERR_PARAM, "wrong points in matchColors")
@@ -272,9 +273,9 @@ function screen.matchColors(points, fuzzy)
 		
 	local x, y = getFirstPot(points)
 	
-	local x1, y2 = findColor({x, y, x + 1, y + 1,}, points, fuzzy)
+	local x1, y1 = findColor({x, y, x + 1, y + 1}, points, fuzzy)
 	
-	if x1 == -1 then
+	if x1 == -1 or y1 == -1 then
 		return false
 	end
 	
@@ -473,14 +474,46 @@ function runtime.killApp(appID)
 end
 
 function runtime.isAppRunning(appID)
-	return appIsRunning(appID)
+	if appIsRunning(appID) == 1 then
+		return true
+	end
+	
+	return false
 end
 
 function runtime.getForegroundApp()
 	return frontAppName()
 end
 
--------------UserInfo--------------
-UserInfo = {}
 
-UserInfo.id = getScriptID()
+-------------script--------------
+script = {}
+
+function script.getUserInfo()
+	local userInfo = {}
+	userInfo.id = ""
+	userInfo.membership = 0
+	userInfo.expiredTime = 0
+	
+	local buyState, validTime, res = getUserCredit()
+	if res == 0 then
+		userInfo.id = getUserID()
+		userInfo.membership = buyState
+		userInfo.expiredTime = validTime
+	end
+	
+	return userInfo
+end
+
+function script.getScriptInfo()
+	local scriptInfo = {}
+	scriptInfo.id = getScriptID()
+	
+	return scriptInfo
+end
+
+function script.getBulletinBoard(key, token)
+	local content, err = getCloudContent(key, token, "获取公告信息失败")
+	return content, err
+end
+ 

@@ -493,7 +493,8 @@ function swichTeam()
 		CFG.DEFAULT_FUZZY
 	)
 	if pot ~= Point.INVALID then
-		dialog("切换后的小队也有禁赛的队员，终止比赛！")
+		Log("切换小队成功，但切换后的小队也有禁赛的队员或者合同不足的队员，终止比赛！")
+		dialog("切换小队成功，但切换后的小队也有禁赛的队员或者合同不足的队员，终止比赛！")
 		xmod.exit()
 	end
 	
@@ -503,3 +504,9 @@ function swichTeam()
 	Log("swiched team")
 end
 
+function skipReplay()
+	local x = CFG.DST_RESOLUTION.width - 150 * CFG.SCALING_RATIO
+	local y = 150 * CFG.SCALING_RATIO
+	Log("try skip replay!")
+	tap(x, y)
+end

@@ -562,6 +562,12 @@ local _navigationList = {
 		srcPos = "651|700|0x2f90fb-0x2f1702,659|682|0xeeeef4,658|666|0xe2e2e4,659|637|0xffffff,530|690|0xeeeef4,800|722|0xeeeef4,1002|700|0xe2e2e4,1035|699|0x5d5d5e",
 		--srcPos = "651|700|0x2f90fb-0x2f1702,659|682|0xf6f6f9-0x090906,658|666|0xebebed-0x0a090a,659|637|0xffffff,530|690|0xf6f6f9-0x090906,800|722|0xf6f6f9-0x090906,1002|700|0xebebed-0x0a090a,1035|699|0x5b5b5c-0x020202",
 	},
+	{
+		tag = "登录奖励",
+		enable = true,
+		anchor = "R",
+		srcPos = "936|364|0x2bb544,924|365|0xffffff,937|373|0xffffff,950|364|0xffffff,936|353|0xffffff,934|344|0x2bb544,936|335|0xffffff,925|355|0xffffff,914|353|0x2bb544",
+	},
 }
 
 --全局导航优先级
@@ -572,6 +578,7 @@ local _navigationPriorityList = {
 	"notice",
 	"教练签约-满足条件",
 	"国际服教练签约-满足条件",
+	"登录奖励",
 }
 
 

@@ -10,7 +10,7 @@ local funcStr = ""
 for _, v in pairs(CFG.SCRIPT_FUNC.funcList) do
 	local limit = false
 	for _, _v in pairs(CFG.SCRIPT_FUNC.whiteList) do
-		if _v.scriptid == UserInfo.id and #_v.func > 0 then
+		if _v.scriptid == CFG.ScriptInfo.id and #_v.func > 0 then
 			limit = true
 			for _, __v in pairs(_v.func) do
 				if __v == v then
@@ -42,7 +42,7 @@ local myui=ZUI:new(DevScreen,{align="left",w=90,h=90,size=40,cancelname="取消"
 local pageBaseSet = Page:new(myui,{text = "基本设置", size = 24})
 local dispStr =  "欢迎使用"..CFG.SCRIPT_NAME
 for _, v in pairs(CFG.SCRIPT_FUNC.whiteList) do 
-	if v.scriptid == UserInfo.id then
+	if v.scriptid == CFG.ScriptInfo.id then
 		dispStr = dispStr.."-"..v.distributions
 		break
 	end
@@ -308,12 +308,8 @@ end
 function dispUI()
 	local isInWhiteList = false
 	for _, v in pairs(CFG.SCRIPT_FUNC.whiteList) do
-		if v.scriptid == UserInfo.id then
+		if v.scriptid == CFG.ScriptInfo.id then
 			isInWhiteList = true
-			if v.tips ~= nil and v.tips ~= "" then
-				Log(v.tips)
-				dialog(v.tips, 5)
-			end
 			break
 		end
 	end
@@ -393,4 +389,28 @@ function dispUI()
 	--prt(USER)
 end
 
+local function showBulletin()
+	--local content, err = script.getBulletinBoard(CFG.BULLETIN_KEY, CFG.BULLETIN_TOKEN)
+	local content, err = getCloudContent(CFG.BULLETIN_KEY, CFG.BULLETIN_TOKEN, "fdf")
+	if err ~= 0 then
+		return
+	end
+	
+	local index, body, res = parseBulletin(content)
+	if not res then		--获取失败
+		Log("parseBulletinIndex failed")
+		return
+	end
+
+	if index == getLastBulletinIndex() then	--此条公告已经播报过
+		Log("showed bulletin")
+		return
+	end
+	
+	dialog("公告\n\n"..body, 5)
+	saveBulletinIndex(index)
+end
+
+
+showBulletin()
 dispUI()		--先设置参数，后page init
