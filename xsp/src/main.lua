@@ -13,6 +13,7 @@ require("page")
 require("exec")
 require("project/projFunc")
 require("project/projPage")
+require("project/task/soldScout")
 require("project/task/rankSim")
 require("project/task/leagueSim")
 require("project/task/tourSim")
@@ -43,8 +44,10 @@ end
 main()
 
 
-screen.init(screen.LANDSCAPE_RIGHT)
-sleep(2000)
+prt(CFG)
+
+
+--sleep(2000)
 --CFG.SCALING_RATIO = 720/750
 --prt(scale.scalePos("1059|440|0xd0e2cf-0x2f1d30,987|434|0x335a26-0x232117,1123|475|0x335a26-0x232117,1016|500|0x335a26-0x232117,1098|379|0x335a26-0x232117"))
 --refreshContract()

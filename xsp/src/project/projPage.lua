@@ -496,6 +496,30 @@ local _pageList = {
 			},
 		}
 	},
+	{
+		tag = "球探名单",
+		widgetList = {
+			{
+				tag = "球探",
+				enable = true,
+				anchor = "L",
+				--srcPos = "191|198|0xfecb00,186|205|0x648799,199|204|0x648799,177|238|0x648799,273|241|0x648799,181|502|0xffffff,149|549|0xffffff",
+				srcPos = "192|198|0xfecb00,186|204|0x638698,199|203|0x638698,179|174|0xffffff,176|234|0x638698,275|233|0x638698"
+			},
+			{
+				tag = "解约",
+				enable = false,
+				anchor = "LB",
+				srcPos = "488|706|0xfd3b30,350|690|0xeeeef4,632|720|0xeeeef4,324|704|0xdfdfe1,296|707|0x0079fe",
+			},
+			{
+				tag = "解约确认",
+				enable = false,
+				anchor = "A",
+				srcPos = "821|463|0xfd3c31,689|434|0xdfdfdf,961|480|0xdfdfdf,668|455|0xf5f5f5,367|484|0xcbdef1,635|433|0xcbdef1",
+			},
+		}
+	},	
 }
 
 --公共导航控件，如下一步、返回、确认、取消、通知

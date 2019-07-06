@@ -121,6 +121,22 @@ pageSubstitutePic:addLabel({text="        ",size=20})
 pageSubstitutePic:addImage({src="substitute.jpg",w=70,h=100,xpos=0,align="center"})
 
 
+local pageScout = Page:new(myui,{text = "筛选球探",size = 24})
+pageScout:nextLine()
+pageScout:nextLine()
+pageScout:addLabel({text="        说明：一键卖球探请先选择“一键卖球探”任务，再根据自己的需要，选择售卖球员的组合",size=24})
+pageScout:nextLine()
+pageScout:addLabel({text="条件。为防止出错，建议每次只售卖一种星级的球探。",size=24})
+pageScout:nextLine()
+pageScout:nextLine()
+pageScout:addLabel({text="球探星级  ",size=26})
+pageScout:addCheckBoxGroup({id="checkBoxScoutStar", list = "一星,二星,三星,四星",select="0",w=80,h=12,size=20})
+pageScout:nextLine()
+pageScout:addLabel({text="球探特征  ",size=26})
+pageScout:addCheckBoxGroup({id="checkBoxScoutFeature", list = "联赛,区域,位置,优异能力,擅长战术,年龄,身高,惯用脚",select="4",w=90,h=12,size=20})
+
+
+
 local pageProSet = Page:new(myui,{text = "高级设置",size = 24})
 pageProSet:nextLine()
 pageProSet:addLabel({text="    注：缓存模式测试中，请谨慎使用！",size=22})
@@ -241,8 +257,8 @@ pageTestting:nextLine()
 pageTestting:addLabel({text="    ",size=20, align="left"})
 
 
-local pageNotice = Page:new(myui,{text = "最新公告",size = 24})
-pageNotice:addWeb({id="noticeWebView", url="http://www.zybuluo.com/cndy1860/note/1497294", xpos = 0, ypos = 0, w = 100, h = 100})
+--local pageNotice = Page:new(myui,{text = "最新公告",size = 24})
+--pageNotice:addWeb({id="noticeWebView", url="http://www.zybuluo.com/cndy1860/note/1497294", xpos = 0, ypos = 0, w = 100, h = 100})
 
 
 --将位置*转换成对应的数字
@@ -385,6 +401,24 @@ function dispUI()
 			end
 		end
 	end
+	
+	
+	USER.SCOUT_STAR_LIST[1] = not not uiRet.checkBoxScoutStar.一星
+	USER.SCOUT_STAR_LIST[2] = not not uiRet.checkBoxScoutStar.二星
+	USER.SCOUT_STAR_LIST[3] = not not uiRet.checkBoxScoutStar.三星
+	USER.SCOUT_STAR_LIST[4] = not not uiRet.checkBoxScoutStar.四星
+	
+	USER.SCOUT_FEATURE_LIST[1] = not not uiRet.checkBoxScoutFeature.联赛
+	USER.SCOUT_FEATURE_LIST[2] = not not uiRet.checkBoxScoutFeature.区域
+	USER.SCOUT_FEATURE_LIST[3] = not not uiRet.checkBoxScoutFeature.位置
+	USER.SCOUT_FEATURE_LIST[4] = not not uiRet.checkBoxScoutFeature.优异能力
+	USER.SCOUT_FEATURE_LIST[5] = not not uiRet.checkBoxScoutFeature.擅长战术
+	USER.SCOUT_FEATURE_LIST[6] = not not uiRet.checkBoxScoutFeature.年龄
+	USER.SCOUT_FEATURE_LIST[7] = not not uiRet.checkBoxScoutFeature.身高
+	USER.SCOUT_FEATURE_LIST[8] = not not uiRet.checkBoxScoutFeature.惯用脚
+	
+	--prt(USER.SCOUT_STAR_LIST)
+	--prt(USER.SCOUT_FEATURE_LIST)
 	
 	--prt(USER)
 end

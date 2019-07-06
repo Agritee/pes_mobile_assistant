@@ -286,7 +286,7 @@ local function selectExpiredPlayer()
 		
 		if exsitFlag == false then
 			table.insert(expiredPlayerFirstHalf, v)
-			tap(v.x, v.y)
+			tap(v.x, v.y, 100)
 			sleep(400)
 		end
 	end
@@ -509,4 +509,80 @@ function skipReplay()
 	local y = 150 * CFG.SCALING_RATIO
 	Log("try skip replay!")
 	tap(x, y)
+end
+
+function genAssignScoutStr(star, feature)
+	local first = "0xffffff"
+
+	local starSelected = "0xfecb00"
+	local starDeselect = "0xb1b1b1"
+	
+	local fColors = {}
+	fColors.league = "0xf55600"
+	fColors.area = "0xff9600"
+	fColors.position = "0x718500"
+	fColors.abilities = "0x007003"
+	fColors.tactics = "0x00926a"
+	fColors.age = "0x008efb"
+	fColors.height = "0x4b00c6"
+	fColors.foot = "0x004eff"
+	
+	if fColors[feature] == nil then
+		return nil
+	end
+	
+	local pos = {{116,226}, {116,244}, {105,232}, {192,197}, {208,187}, {227,183}, {246,187}, {261,197}, {311,198}, {335,224}}
+	local concatColors = function(color, index)
+		if index > #pos then
+			return nil
+		end
+		
+		local tmp = ""
+		for k, v in pairs(pos) do
+			if index == k then
+				tmp = string.format("%s|%s|%s,", v[1], v[2], color)
+				break
+			end
+		end
+
+		return tmp
+	end
+	
+	local colors = ""
+	for i = 1, 5, 1 do
+		if i <= star then
+			colors = colors..concatColors(starSelected, 3 + i)
+		else
+			colors = colors..concatColors(starDeselect, 3 + i)
+		end
+	end
+	
+	colors = colors..concatColors(first, 1)..concatColors(first, 2)..concatColors(first, 3)
+	colors = colors..concatColors(fColors[feature], 9)..concatColors(fColors[feature], 10)
+	colors = string.sub(colors, 1, -2)
+	
+	--Log(colors)
+	return colors
+end
+
+function convertScoutFeature(index)
+	if index == 1 then
+		return "league"
+	elseif index == 2 then
+		return "area"
+	elseif index == 3 then
+		return "position"
+	elseif index == 4 then
+		return "abilities"
+	elseif index == 5 then
+		return "tactics"
+	elseif index == 6 then
+		return "age"
+	elseif index == 7 then
+		return "height"
+	elseif index == 8 then
+		return "foot"
+	else
+		catchError(ERR_PARAM, "wrong index in convertFeature")
+	end
 end

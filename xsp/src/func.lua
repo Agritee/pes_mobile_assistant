@@ -115,19 +115,19 @@ function processInitPage()
 					end
 				end
 				
-				if os.time() - _startTime > CFG.DEFAULT_TIMEOUT then
+				if os.time() - _startTime > CFG.DEFAULT_TIMEOUT * 2 then
 					catchError(ERR_TIMEOUT, "cant catch init next page!")
 				end
 				
 				if (os.time() - _startTime) % 2 == 0 then
-					ratioTap(30, 60)
+					ratioTap(800, 150, 100)
 				end
 				
 				sleep(500)
 			end
 		end
 		
-		if os.time() - startTime > CFG.DEFAULT_TIMEOUT then
+		if os.time() - startTime > CFG.DEFAULT_TIMEOUT * 3 then
 			catchError(ERR_TIMEOUT, "cant catch init page!")
 		end
 		
@@ -156,13 +156,13 @@ function prt(...)
 		if(type(value)=="table")then
 			--打印输出table,请注意不要传入对象,会无限循环卡死
 			printTbl = function(tbl)
-				local function prt(tbl,tabnum)
+				local function pr(tbl,tabnum)
 					tabnum=tabnum or 0
 					if not tbl then return end
 					for k,v in pairs(tbl)do
 						if type(v)=="table" then
 							print(string.format("%s[%s](%s) = {",string.rep("\t",tabnum),tostring(k),"table"))
-							prt(v,tabnum+1)
+							pr(v,tabnum+1)
 							print(string.format("%s}",string.rep("\t",tabnum)))
 						else
 							print(string.format("%s[%s](%s) = %s",string.rep("\t",tabnum),tostring(k),type(v),tostring(v)))
@@ -170,7 +170,7 @@ function prt(...)
 					end
 				end
 				print("Print Table = {")
-				prt(tbl,1)
+				pr(tbl,1)
 				print("}")
 			end
 			printTbl(value)
@@ -300,8 +300,10 @@ local function restart(errMsg)
 				xmod.exit()
 			end
 			if PREV.restartedScript then	--已单独重启过脚本
-				Log("重启阶段二：\n已尝试过单独重启脚本，未能解决，即将重启应用和脚本")
-				dialog("重启阶段二：\n已尝试过单独重启脚本，未能解决，即将重启应用和脚本", 3)
+				local snapshotTime = os.date("%Y_%m_%d_%H_%M_%S", os.time())
+				screen.snapshot(xmod.getPublicPath().."/"..snapshotTime..".jpg")
+				Log("重启阶段二：\n已尝试过单独重启脚本，未能解决，即将重启应用和脚本！\n日志截图:"..snapshotTime..".jpg")
+				dialog("重启阶段二：\n已尝试过单独重启脚本，未能解决，即将重启应用和脚本！", 3)
 				if xmod.PROCESS_MODE == xmod.PROCESS_MODE_STANDALONE then	--极客模式需要重启应用
 					Log("close app: "..CFG.APP_ID)
 					runtime.killApp(CFG.APP_ID);
@@ -456,10 +458,12 @@ function ratioTap(x, y, delay)
 end
 
 --滑动，从(x1, y1)到(x2, y2)
-function slide(x1, y1, x2, y2)
+function slide(x1, y1, x2, y2, moveStep, moveInterval)
+	local step = moveStep or CFG.TOUCH_MOVE_STEP
+	local interval = moveInterval or 50
 	if x1 ~= x2 then	--非竖直滑动
 		--将x,y移动距离按移动步长CFG.TOUCH_MOVE_STEP分解为步数
-		local stepX = x2 > x1 and CFG.TOUCH_MOVE_STEP or -CFG.TOUCH_MOVE_STEP
+		local stepX = x2 > x1 and step or -step
 		local stepY = (y2 - y1) / math.abs((x2 - x1) / stepX)
 		--Log("x1="..x1.." y1="..y1.." x2="..x2.." y2="..y2)
 		
@@ -467,7 +471,7 @@ function slide(x1, y1, x2, y2)
 		sleep(200)
 		for i = 1, math.abs((x2 - x1) / stepX), 1 do
 			touch.move(1, x1 + i * stepX, y1 + i * stepY)
-			sleep(50)
+			sleep(interval)
 		end
 		touch.move(1, x2, y2)
 		sleep(50)
@@ -478,7 +482,7 @@ function slide(x1, y1, x2, y2)
 		local stepY = y2 > y1 and CFG.TOUCH_MOVE_STEP or -CFG.TOUCH_MOVE_STEP
 		for i = 1, math.abs((y2 - y1) / stepY), 1 do
 			touch.move(1, x2, y1 + i * stepY)
-			sleep(50)
+			sleep(interval)
 		end
 		touch.move(1, x2, y2)
 		sleep(50)
@@ -486,10 +490,10 @@ function slide(x1, y1, x2, y2)
 	end
 end
 
-function ratioSlide(x1, y1, x2, y2)
+function ratioSlide(x1, y1, x2, y2, moveStep, moveInterval)
 	srcX, srcY = scale.getRatioPoint(x1, y1)
 	dstX, dstY = scale.getRatioPoint(x2, y2)
-	slide(srcX, srcY, dstX, dstY)
+	slide(srcX, srcY, dstX, dstY, moveStep, moveInterval)
 end
 
 function resetTaskData()
@@ -621,7 +625,7 @@ function parseBulletin(content)
 		return nil, nil, false
 	end
 	
-	local m, n = string.find(content, "%-exclude%-[%d%-]*%-")
+	local m, n = string.find(content, "%-exclude[%d%-]*%-")
 	if m == nil or n == nil then					--清理正文
 		n = j
 	end

@@ -82,6 +82,7 @@ CFG.SCRIPT_FUNC = {						--脚本功能列表
 		"国际服季节赛SIM",
 		"国际服巡回赛SIM",
 		"国际服巡回赛手动",
+		"一键卖球探",
 	},
 	
 	whiteList = {						--功能限制列表，通过白名单形式限制个脚本的功能，用于同时维护多个脚本,func为空是代表全白名单
@@ -93,20 +94,20 @@ CFG.SCRIPT_FUNC = {						--脚本功能列表
 		{scriptid = 24634, distributions = "内部测试",
 			func = {}},
 		{scriptid = 16489, distributions = "安卓-叉叉助手/小精灵版",
-			func = {"自动天梯","自动联赛","自动巡回","手动巡回","自动冠军赛"}},
+			func = {"自动天梯","自动联赛","自动巡回","手动巡回","自动冠军赛","一键卖球探"}},
 		{scriptid = 16498, distributions = "安卓-叉叉助手/小精灵测试版", 
 			func = {}},
 		{scriptid = 24391, distributions = "安卓-叉叉助手(国际服)版",
-			func = {"国际服季节赛SIM","国际服巡回赛SIM","国际服巡回赛手动"}},
+			func = {"国际服季节赛SIM","国际服巡回赛SIM","国际服巡回赛手动","一键卖球探"}},
 		{scriptid = 17912, distributions = "安卓-小精灵(国际服)版", 
-			func = {"国际服季节赛SIM","国际服巡回赛SIM","国际服巡回赛手动"}},
+			func = {"国际服季节赛SIM","国际服巡回赛SIM","国际服巡回赛手动","一键卖球探"}},
 		--------------IOS--------------
 		{scriptid = 16947, distributions = "IOS-IPA版",
-			func = {"自动天梯","自动联赛","自动巡回","手动巡回","自动冠军赛"}},
-		--{scriptid = 18134, distributions = "IOS-IPA测试版", 
-		--	func = {}},
+			func = {"自动天梯","自动联赛","自动巡回","手动巡回","自动冠军赛","一键卖球探"}},
+		{scriptid = 18134, distributions = "IOS-IPA测试版", 
+			func = {}},
 		{scriptid = 24173, distributions = "IOS-IPA(国际服)版",
-			func = {"国际服季节赛SIM","国际服巡回赛SIM","国际服巡回赛手动"}},
+			func = {"国际服季节赛SIM","国际服巡回赛SIM","国际服巡回赛手动","一键卖球探"}},
 	},
 	
 	todoList = {						--ToDo功能列表，会提示未开放请稍后再来
@@ -152,5 +153,7 @@ USER.SUBSTITUTE_INDEX_LIST = {			--替补席对应关系表
 	{fieldIndex = 10, substituteCondition = 1},
 }
 
+USER.SCOUT_STAR_LIST = {}				--售卖球探的星级
+USER.SCOUT_FEATURE_LIST = {}			--售卖球探的特征
 
 

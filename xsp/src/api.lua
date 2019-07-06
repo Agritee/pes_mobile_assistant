@@ -192,7 +192,9 @@ function screen.keep(value)
 end
 
 function screen.snapshot(path, rect, quality)
-	snapshot(path, rect.x, rect.y, rect.x + rect.width, rect.y + rect.height, quality)
+	local height, width = getScreenSize()
+	local rct = rect or Rect(0, 0, width, height)
+	snapshot(path, rct.x, rct.y, rct.x + rct.width, rct.y + rct.height, quality or 1)
 end
 
 local toPointsTable = function(pos)
@@ -273,7 +275,7 @@ function screen.matchColors(points, fuzzy)
 		
 	local x, y = getFirstPot(points)
 	
-	local x1, y1 = findColor({x, y, x + 1, y + 1}, points, fuzzy)
+	local x1, y1 = findColor({x, y, x + 1, y + 1}, points, fuzzy or CFG.DEFAULT_FUZZY)
 	
 	if x1 == -1 or y1 == -1 then
 		return false
@@ -284,7 +286,7 @@ end
 
 function screen.findColor(rect, color, globalFuzz, priority)
 	--丢掉不常用的priority
-	local x, y = findColor({rect.x, rect.y, rect.x + rect.width, rect.y + rect.height}, color, globalFuzz)
+	local x, y = findColor({rect.x, rect.y, rect.x + rect.width, rect.y + rect.height}, color, globalFuzz or CFG.DEFAULT_FUZZY)
 	return Point(x, y)
 end
 
@@ -341,7 +343,7 @@ local function RepairFindColors(rect,color,degree,hdir,vdir,priority,limit)
 end
 
 function screen.findColors(rect, color, globalFuzz, priority, limit)
-	return RepairFindColors({rect.x, rect.y, rect.x + rect.width, rect.y + rect.height},color,globalFuzz,0,0,0,limit)
+	return RepairFindColors({rect.x, rect.y, rect.x + rect.width, rect.y + rect.height},color,globalFuzz or CFG.DEFAULT_FUZZY,0,0,0,limit)
 end
 
 
