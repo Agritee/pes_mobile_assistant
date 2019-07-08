@@ -224,7 +224,7 @@ function switchPlayer()
 		catchError(ERR_WARNING, "CFG.SUBSTITUTE_INDEX_LIST is nil")
 		return
 	end
-	prt(benchPlayers)
+	--prt(benchPlayers)
 	
 	for k, v in pairs(benchPlayers) do		--换人
 		local substituteFlag = false	--是否换过人标志
@@ -290,7 +290,7 @@ local function selectExpiredPlayer()
 			sleep(400)
 		end
 	end
-	prt(expiredPlayerFirstHalf)
+	--prt(expiredPlayerFirstHalf)
 	
 	if #expiredPlayerFirstHalf == 3 or #expiredPlayerFirstHalf == 6 then
 		ratioSlide(20, 620, 20, 120) --滑动替补至下半部分
@@ -321,7 +321,7 @@ local function selectExpiredPlayer()
 				sleep(400)
 			end
 		end
-		prt(expiredPlayerLatterHalf)
+		--prt(expiredPlayerLatterHalf)
 	end
 	Log("selected all players")
 end
@@ -338,6 +338,28 @@ function refreshContract()
 	sleep(500)
 	execCommonWidgetQueue({"球员续约-点击签约", "球员续约-续约", "付款确认"})
 	sleep(500)
+	
+	local startTime = os.time()
+	while true do
+		if page.isExsitNavigation("comfirm") then
+			page.tapNavigation("comfirm")
+		end
+		
+		if page.isExsitNavigation("back") then	--在比赛开始界面续约，需要返回
+			page.tapNavigation("back")
+			break
+		end
+		
+		if page.isExsitNavigation("next") then	--在比赛结束后续约
+			break
+		end
+		
+		if os.time() - startTime > CFG.DEFAULT_TIMEOUT then
+			catchError(ERR_TIMEOUT, "time out in end refreshContract")
+		end
+		
+		sleep(200)
+	end
 end
 
 --遇到稳定的(500ms处于checked状态)staticPage后退出，否则遇到comfirm进行点击跳过
@@ -493,9 +515,33 @@ function swichTeam()
 		CFG.DEFAULT_FUZZY
 	)
 	if pot ~= Point.INVALID then
-		Log("切换小队成功，但切换后的小队也有禁赛的队员或者合同不足的队员，终止比赛！")
-		dialog("切换小队成功，但切换后的小队也有禁赛的队员或者合同不足的队员，终止比赛！")
-		xmod.exit()
+		Log("切换小队成功，但切换后的小队也有禁赛的队员或者合同不足的队员，二次续约！")
+		
+		local prevPot = Point.INVALID
+		while true do
+			local pot = screen.findColor(
+				scale.getAnchorArea("A"),
+				scale.scalePos("791|463|0xffffff,778|468|0xff3b2f,790|455|0xff3b2f,803|469|0xff3b2f,791|482|0xff3b2f"),
+				CFG.DEFAULT_FUZZY
+			)
+			if prevPot ~= Point.INVALID and pot == prevPot then
+				dialog("切换小队成功，但切换后的小队仍然有禁赛，终止必死啊！\n请检查是否有重复球员!")
+				xmod.exit()
+			end
+			
+			if pot ~= Point.INVALID then
+				tap(pot.x, pot.y)
+				prevPot = pot
+				sleep(200)
+				execCommonWidgetQueue({"开始前续约","付款确认"})
+				sleep(200)
+				execNavigationQueue({"comfirm","notice"})
+			else
+				break
+			end
+			
+			sleep(200)
+		end
 	end
 	
 	page.tapNavigation("back")

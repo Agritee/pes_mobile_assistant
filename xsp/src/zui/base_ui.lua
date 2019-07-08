@@ -228,13 +228,15 @@ pageTestting:addLabel({text="    6.国服红牌是一键替换；国际服是1�
 pageTestting:nextLine()
 pageTestting:addLabel({text="    7.启动脚本前请先切换至游戏主界面-比赛(或挂机流程中的任何一个界面)。",size=20, align="left"})
 pageTestting:nextLine()
-pageTestting:addLabel({text="    8.不喜欢XX助手的安卓用户，可以进群下载本脚本专用小精灵应用。",size=20, align="left"})
+pageTestting:addLabel({text="    8.新手直接进群下载本脚本应用即可，本来就是XX助手的安卓用户可以在叉叉助手搜索本脚本",size=20, align="left"})
 pageTestting:nextLine()
-pageTestting:addLabel({text="    9.国服年卡和永久卡有专用的VIP微信群，可进Q群让管理邀请加入。",size=20, align="left"})
+pageTestting:addLabel({text="    9.国服永久卡有VIP微信群，可进Q群让管理邀请加入。",size=20, align="left"})
 pageTestting:nextLine()
 pageTestting:addLabel({text="    10.详细说明书请点击脚本教程。",size=20, align="left"})
 pageTestting:nextLine()
-pageTestting:addLabel({text="    11.有任何问题及建议请反馈给作者，Q群(加群原因请回答:实况脚本)：国服574025168，国际服696059906 ",size=20, align="left"})
+pageTestting:addLabel({text="    11.脚本只是模拟点击，无任何修改数据，理论上不可能封号，截至目前用了一年多没任何问题，但风险自担。",size=20, align="left"})
+pageTestting:nextLine()
+pageTestting:addLabel({text="    12.有任何问题及建议请反馈给作者，Q群(加群原因请回答:实况脚本)：国服574025168，国际服696059906 ",size=20, align="left"})
 pageTestting:nextLine()
 pageTestting:nextLine()
 pageTestting:addLabel({text="------------------------问题反馈说明------------------------",size=20, align="center"})
@@ -441,7 +443,7 @@ local function showBulletin()
 		return
 	end
 	
-	dialog("公告\n\n"..body, 5)
+	dialog("公告\n"..body, 10)
 	saveBulletinIndex(index)
 end
 

@@ -44,7 +44,8 @@ end
 main()
 
 
-prt(CFG)
+Log(scale.scalePos("624|672|0x1885fc-0x190c01,521|663|0xeeeef4,744|696|0xeeeef4,390|667|0xe2e2e4,54|676|0xe2e2e4,876|677|0xe2e2e4,1022|658|0x5d5d5e,1068|693|0x5d5d5e"))
+
 
 
 --sleep(2000)

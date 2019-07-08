@@ -196,6 +196,10 @@ function M.getAnchorArea(anchorTag)
 		rect.x, rect.y = x0 + math.floor(w*15/16), y0 + math.floor(h/4)
 		rect.width = math.floor(w/16)
 		rect.height = math.floor(h/4)
+	elseif anchorTag == "B/4" then
+		rect.x, rect.y = x0, y0 + math.floor(h*3/4)
+		rect.width = w
+		rect.height = math.floor(h/4)
 	else	--其他anchorTag按整个区域取
 		rect.x, rect.y = x0, y0
 		rect.width = w

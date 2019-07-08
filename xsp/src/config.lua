@@ -66,7 +66,7 @@ CFG.WAIT_CHECK_NAVIGATION = 0 			--进入导航判定的等待时间/s
 
 -----------------touch参数-----------------
 CFG.TOUCH_MOVE_STEP = 50				--touchMoveTo的移动步长/pix
-CFG.DEFAULT_TAP_TIME = 50				--默认tap延时/ms
+CFG.DEFAULT_TAP_TIME = 80				--默认tap延时/ms
 CFG.DEFAULT_LONG_TAP_TIME = 800			--默认longtap时间/ms
 
 CFG.DEFAULT_PAGE_CHECK_INTERVAL = 100	--默认page的检测间隔/s

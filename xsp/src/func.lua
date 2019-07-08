@@ -115,6 +115,11 @@ function processInitPage()
 					end
 				end
 				
+				if page.isExsitNavigation("comfirm") then		--网络连接有问题弹出重连
+					page.tapNavigation("comfirm")
+					sleep(500)
+				end
+				
 				if os.time() - _startTime > CFG.DEFAULT_TIMEOUT * 2 then
 					catchError(ERR_TIMEOUT, "cant catch init next page!")
 				end
