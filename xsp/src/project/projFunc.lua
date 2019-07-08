@@ -197,9 +197,13 @@ function switchPlayer()
 	--获取场上球员状态
 	local fieldPlayers = getPlayerStatusInfo("field")
 	if #fieldPlayers ~= 11 then
-		catchError(ERR_PARAM, "cant get 11 players in field, abort switchPlayer!")
-		dialog("cant get 11 players in field, abort switchPlayer!", 5)
-		return
+		sleep(500)
+		fieldPlayers = getPlayerStatusInfo("field")		--弹出“状态”提示未完全消失，兼容一下
+		if #fieldPlayers ~= 11 then
+			catchError(ERR_PARAM, "cant get 11 players in field, abort switchPlayer!")
+			dialog("cant get 11 players in field, abort switchPlayer!", 5)
+			return
+		end
 	end
 	
 	page.tapWidget("阵容展示", "替补席")
