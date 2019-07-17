@@ -101,13 +101,15 @@ local _pageList = {
 			{
 				tag = "自动比赛",
 				enable = true,
-				anchor = "MTB",
-				srcPos = "668|346|0x007aff,661|372|0x007aff,676|370|0x007aff,668|356|0xf8f9fb,673|408|0x007aff,523|140|0xE74C75-0x0F1C13,608|140|0xE74C75-0x0F1C13,655|391|0xf8f9fb",
+				--anchor = "MTB",
+				--srcPos = "668|346|0x007aff,661|372|0x007aff,676|370|0x007aff,668|356|0xf8f9fb,673|408|0x007aff,523|140|0xE74C75-0x0F1C13,608|140|0xE74C75-0x0F1C13,655|391|0xf8f9fb",
+				anchor = "M",
+				srcPos = "293|346|0x007aff,297|408|0x007aff,285|371|0x007aff,300|371|0x007aff,292|357|0xf8f9fb,277|390|0xf8f9fb,308|389|0xf8f9fb",
 			},
 			{
 				tag = "在线比赛",
 				enable = true,
-				anchor = "RM",
+				anchor = "MLR",
 				srcPos = "1039|343|0xf8f9fb,1038|357|0x007bfd,1018|374|0x007bfd,1010|375|0xf8f9fb,1063|392|0x007bfd,1068|399|0xf8f9fb,1035|377|0x007bfd,1051|375|0x007bfd",
 			},
 		},
@@ -340,14 +342,8 @@ local _pageList = {
 		},
 	},
 	{
-		tag = "初始化界面",
+		tag = "初始化界面INT",
 		widgetList = {
-			--[[{
-				tag = "综合特征",
-				enable = true,
-				anchor = "A",
-				srcPos = "134|302|0xdc0014,182|352|0xdc0014,311|337|0xdc0014,413|329|0xdc0014,555|312|0xdc0014,553|345|0xdc0014,353|445|0xffffff",
-			},]]
 			{
 				tag = "unreal",
 				enable = true,
@@ -359,6 +355,23 @@ local _pageList = {
 				enable = true,
 				anchor = "A",
 				srcPos = "700|346|0xfdfd9f,766|404|0xbbcbc7,865|376|0xdde6e4,715|352|0x6b292f,726|352|0x2d325a",
+			},
+		},
+	},
+	{
+		tag = "初始化界面",
+		widgetList = {
+			{
+				tag = "unreal",
+				enable = true,
+				anchor = "RT",
+				srcPos = "860|48|0xffffff,887|54|0x939295-0x060506,867|34|0x939295-0x060506,869|82|0x939295-0x060506,869|57|0x939295-0x060506,862|69|0xffffff,877|64|0xffffff",
+			},
+			{
+				tag = "实况足球",
+				enable = true,
+				anchor = "M",
+				srcPos = "468|367|0xdc0014,632|363|0xdc0014,726|362|0xdc0014,853|370|0xdc0014,467|128|0x959397,853|303|0x959396",
 			},
 		},
 	},
@@ -383,12 +396,12 @@ local _pageList = {
 				anchor = "RM",
 				srcPos = "979|341|0x007aff,999|341|0x007aff,969|334|0xffffff,1008|333|0xffffff,983|350|0xffffff,996|350|0xffffff,965|356|0x007aff,1006|355|0x007aff",
 			},
-			{
+			--[[{
 				tag = "主教练",
 				enable = true,
 				anchor = "RB",
 				srcPos = "990|603|0xffffff,982|607|0x007aff,973|605|0x007aff,966|597|0xffffff,966|616|0x007aff,966|625|0xffffff,980|616|0x007aff,989|616|0xffffff,1014|615|0x007aff",
-			},
+			},]]
 		},
 	},
 	{
@@ -402,8 +415,31 @@ local _pageList = {
 			},
 		},
 	},
-	{
+	--[[{
 		tag = "冠军赛",
+		widgetList = {
+			{
+				tag = "球队管理",
+				enable = true,
+				anchor = "LT",
+				srcPos = "65|171|0x0079fd,55|169|0xffffff,65|180|0xffffff,92|172|0x0079fd,91|180|0xffffff,124|176|0x12a42b",
+			},
+			{
+				tag = "比赛历史",
+				enable = true,
+				anchor = "LM",
+				srcPos = "77|303|0xc0c7c7-0x141214,72|328|0x55bd74-0x441a4a,61|329|0x0079fe,93|328|0x0079fe,110|329|0x55bd74-0x441a4a,124|327|0x0079fe",
+			},
+			{	--20190625 和国际服巡回赛重复，需要处理
+				tag = "信息框",
+				enable = true,
+				anchor = "RT",
+				srcPos = "1281|207|0x323232,487|210|0x323232,489|603|0x323232,1275|605|0x323232",
+			},
+		}
+	},]]
+	{
+		tag = "通用比赛界面",
 		widgetList = {
 			{
 				tag = "球队管理",

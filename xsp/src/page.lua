@@ -74,12 +74,16 @@ end
 function M.checkPage()
 	local cnt = 0
 	for _, v in pairs(M.pageList) do
-		local checked = true
+		local checked = false
 		for _, _v in pairs(v.widgetList) do
-			local pot = screen.findColor(_v.dstArea, _v.dstPos, _v.fuzzy or CFG.DEFAULT_FUZZY)
-			if pot == Point.INVALID then
-				checked = false
-				break
+			if _v.enable == true then
+				local pot = screen.findColor(_v.dstArea, _v.dstPos, _v.fuzzy or CFG.DEFAULT_FUZZY)
+				if pot == Point.INVALID then
+					checked = false
+					break
+				else
+					checked = true
+				end
 			end
 		end
 		

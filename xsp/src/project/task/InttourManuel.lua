@@ -47,7 +47,10 @@ local fn = function()
 	local startTime = os.time()
 	while true do
 		if page.isExsitCommonWidget("国际服巡回赛手动比赛") then
+			ratioTap(686, 66, 1000)
+			ratioTap(686, 66, 200)
 			sleep(1000)
+			
 			page.tapCommonWidget("国际服巡回赛手动比赛")
 			break
 		end

@@ -6,12 +6,12 @@
 local _task = {
 	tag = "自动冠军赛",
 	processes = {
-		{tag = "其他", mode = "firstRun"},
+		{tag = "合同", mode = "firstRun"},
 		{tag = "比赛", nextTag = "活动模式", mode = "firstRun"},
 		{tag = "活动模式", nextTag = "自动比赛", mode = "firstRun"},
 		{tag = "决战32强", nextTag = "报名", mode = "firstRun"},
 		
-		{tag = "冠军赛", nextTag = "next"},
+		{tag = "通用比赛界面", nextTag = "next"},
 		{tag = "阵容展示", nextTag = "next"},
 		{tag = "比赛中", timeout = 60},
 		{tag = "终场统计", nextTag = "next", timeout = 900, checkInterval = 1000},
@@ -40,16 +40,16 @@ end
 local fn = function()
 	switchMainPage("比赛")
 end
-insertFunc("其他", fn)
+insertFunc("合同", fn)
 
 local fn = function()
 	sleep(200)
 	
 	if page.isExsitCommonWidget("球队异常") and not isPlayerRedCard then
-		refreshUnmetCoach("自动冠军赛")
+		refreshUnmetCoach("通用比赛界面")
 	end
 end
-insertFunc("自动冠军赛", fn)
+insertFunc("通用比赛界面", fn)
 
 local wfn = function()
 	if page.matchPage("冠军赛结束") then

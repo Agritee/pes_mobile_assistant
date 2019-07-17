@@ -98,18 +98,23 @@ end
 
 --处理初始化界面，主要用于自动重启后，跳过初始化界面的相关流程
 function processInitPage()
+	local pageInit = "初始化界面"
+	if CFG.APP_ID == "jp.konami.pesam" then
+		pageInit = "初始化界面INT"
+	end
+
 	local startTime = os.time()
 	while true do
 		local currentPage = page.getCurrentPage(true)
-		if currentPage == "初始化界面" then
+		if currentPage == pageInit then
 			Log("catch init page")
 			ratioTap(30, 60)
 			local _startTime = os.time()
 			while true do
 				local _currentPage = page.getCurrentPage(true)
-				if _currentPage ~= "初始化界面" then
+				if _currentPage ~= pageInit then
 					sleep(2000)
-					if page.getCurrentPage(true) ~= "初始化界面" then
+					if page.getCurrentPage(true) ~= pageInit then
 						Log("skiped init page")
 						return
 					end
@@ -131,6 +136,11 @@ function processInitPage()
 				sleep(500)
 			end
 		end
+		
+		if page.isExsitNavigation("comfirm") then		--网络连接有问题弹出重连
+			page.tapNavigation("comfirm")
+			sleep(500)
+		end	
 		
 		if os.time() - startTime > CFG.DEFAULT_TIMEOUT * 3 then
 			catchError(ERR_TIMEOUT, "cant catch init page!")
@@ -306,7 +316,9 @@ local function restart(errMsg)
 			end
 			if PREV.restartedScript then	--已单独重启过脚本
 				local snapshotTime = os.date("%Y_%m_%d_%H_%M_%S", os.time())
-				screen.snapshot(xmod.getPublicPath().."/"..snapshotTime..".jpg")
+				if CFG.LOG then
+					screen.snapshot(xmod.getPublicPath().."/"..snapshotTime..".jpg")
+				end
 				Log("重启阶段二：\n已尝试过单独重启脚本，未能解决，即将重启应用和脚本！\n日志截图:"..snapshotTime..".jpg")
 				dialog("重启阶段二：\n已尝试过单独重启脚本，未能解决，即将重启应用和脚本！", 3)
 				if xmod.PROCESS_MODE == xmod.PROCESS_MODE_STANDALONE then	--极客模式需要重启应用
@@ -543,17 +555,12 @@ function execCommonWidgetQueue(list)
 			end
 		end
 		
-		--[[if page.isExsitNavigation("comfirm") then
-			page.tapNavigation("comfirm")
-			sleep(200)
-		end]]
-		
 		if os.time() - startTime > CFG.DEFAULT_TIMEOUT then
-			catchError(ERR_TIMEOUT, "time out in execCommonWidgetQueue:"..list[1])
+			catchError(ERR_TIMEOUT, 
+				"time out in execCommonWidgetQueue:"..(type(list[1]) == "string" and list[1] or list[1][1]))
 		end
 		
 		sleep(200)
-		
 	end
 	
 	return false

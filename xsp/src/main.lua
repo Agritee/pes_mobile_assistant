@@ -43,17 +43,14 @@ end
 
 main()
 
-
-Log(scale.scalePos("624|672|0x1885fc-0x190c01,521|663|0xeeeef4,744|696|0xeeeef4,390|667|0xe2e2e4,54|676|0xe2e2e4,876|677|0xe2e2e4,1022|658|0x5d5d5e,1068|693|0x5d5d5e"))
-
-
+page.checkPage()
 
 --sleep(2000)
 --CFG.SCALING_RATIO = 720/750
 --prt(scale.scalePos("1059|440|0xd0e2cf-0x2f1d30,987|434|0x335a26-0x232117,1123|475|0x335a26-0x232117,1016|500|0x335a26-0x232117,1098|379|0x335a26-0x232117"))
 --refreshContract()
 --execNavigationQueue({"comfirm", "notice", "back"})
-page.checkPage()
+
 --page.checkNavigation()
 --page.checkCommonWidget()
 --page.tapWidget("比赛", "活动模式")

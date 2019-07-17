@@ -6,7 +6,7 @@
 local _task = {
 	tag = "自动巡回",
 	processes = {
-		{tag = "其他", mode = "firstRun"},
+		{tag = "合同", mode = "firstRun"},
 		{tag = "比赛", nextTag = "活动模式", mode = "firstRun"},
 		{tag = "活动模式", nextTag = "自动比赛", mode = "firstRun"},
 		
@@ -39,7 +39,7 @@ end
 local fn = function()
 	switchMainPage("比赛")
 end
-insertFunc("其他", fn)
+insertFunc("合同", fn)
 
 local fn = function()
 	sleep(200)

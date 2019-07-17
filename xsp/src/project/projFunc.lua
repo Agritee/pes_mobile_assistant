@@ -9,7 +9,7 @@ function switchMainPage(pageName)
 	local startTime = os.time()
 	while true do
 		local currentPage = page.getCurrentPage(true)
-		if currentPage == "比赛" or currentPage == "俱乐部" or currentPage == "其他" then
+		if currentPage == "比赛" or currentPage == "俱乐部" or currentPage == "其他" or currentPage == "合同" then
 			Log("stay mian page")
 			if currentPage ~= pageName then
 				if pageName == "比赛" then

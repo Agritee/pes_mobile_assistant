@@ -564,5 +564,13 @@ function M.getPreSuffixWord(preSrt, suffStr)
 	return nil
 end
 
+--获取一个不超过limit长度的随机单词
+function M.getLimitLenWord(limit)
+	local tmp = M.getRandomWord()
+	if string.len(tmp) > limit then
+		return string.sub(tmp, 1, limit)
+	end
+	
+	return tmp
+end
 
-return M
