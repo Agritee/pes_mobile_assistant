@@ -104,13 +104,19 @@ local _pageList = {
 				--anchor = "MTB",
 				--srcPos = "668|346|0x007aff,661|372|0x007aff,676|370|0x007aff,668|356|0xf8f9fb,673|408|0x007aff,523|140|0xE74C75-0x0F1C13,608|140|0xE74C75-0x0F1C13,655|391|0xf8f9fb",
 				anchor = "M",
-				srcPos = "293|346|0x007aff,297|408|0x007aff,285|371|0x007aff,300|371|0x007aff,292|357|0xf8f9fb,277|390|0xf8f9fb,308|389|0xf8f9fb",
+				srcPos = "670|340|0x007aff,670|351|0xf8f9fb,660|340|0xf8f9fb,680|340|0xf8f9fb,663|366|0x007aff,655|384|0xf8f9fb,641|391|0x0079ff,548|128|0xc8457a-0x181010,589|128|0xc8457a-0x181010",
 			},
-			{
+			--[[{		--被绿茵赛替代
 				tag = "在线比赛",
 				enable = true,
-				anchor = "MLR",
+				anchor = "RM",
 				srcPos = "1039|343|0xf8f9fb,1038|357|0x007bfd,1018|374|0x007bfd,1010|375|0xf8f9fb,1063|392|0x007bfd,1068|399|0xf8f9fb,1035|377|0x007bfd,1051|375|0x007bfd",
+			},]]
+			{
+				tag = "绿茵赛",
+				enable = true,
+				anchor = "RM",
+				srcPos = "293|346|0x007aff,297|408|0x007aff,285|371|0x007aff,300|371|0x007aff,292|357|0xf8f9fb,277|390|0xf8f9fb,308|389|0xf8f9fb",
 			},
 		},
 	},
@@ -128,6 +134,12 @@ local _pageList = {
 				enable = true,
 				anchor = "R",
 				srcPos = "447|345|0xf8f9fb,459|346|0x444444,482|335|0x444444,494|345|0xf8f8fa,498|333|0xf8f9fb,485|325|0xf8f9fb,491|357|0xf9f9fb,470|358|0x444444",
+			},
+			{
+				tag = "自动比赛2",		--加入了共色点判定
+				enable = false,
+				anchor = "R",
+				srcPos = "855|332|0x444444,856|346|0x444444,869|333|0x444444,847|355|0xf8f9fb,874|320|0xf8f9fb,539|106|0xe53e72-0x030403,569|107|0xe53e72-0x030403",
 			},
 		},
 	},
@@ -555,7 +567,30 @@ local _pageList = {
 				srcPos = "821|463|0xfd3c31,689|434|0xdfdfdf,961|480|0xdfdfdf,668|455|0xf5f5f5,367|484|0xcbdef1,635|433|0xcbdef1",
 			},
 		}
-	},	
+	},
+	{
+		tag = "挑战赛完成",
+		widgetList = {
+			{
+				tag = "球队管理",
+				enable = true,
+				anchor = "LT",
+				srcPos = "65|171|0x0079fd,55|169|0xffffff,65|180|0xffffff,92|172|0x0079fd,91|180|0xffffff,124|176|0x12a42b",
+			},
+			{
+				tag = "比赛历史",
+				enable = true,
+				anchor = "LM",
+				srcPos = "77|303|0xc0c7c7-0x141214,72|328|0x55bd74-0x441a4a,61|329|0x0079fe,93|328|0x0079fe,110|329|0x55bd74-0x441a4a,124|327|0x0079fe",
+			},
+			{
+				tag = "挑战赛完成提示框",
+				enable = true,
+				anchor = "RT",
+				srcPos = "941|255|0x00bd20,941|275|0xffffff,953|283|0x00bd20,493|103|0x2a2a2a,503|586|0x323232,1157|106|0x2a2a2a,1190|588|0x323233",
+			},
+		}
+	},
 }
 
 --公共导航控件，如下一步、返回、确认、取消、通知

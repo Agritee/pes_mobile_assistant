@@ -624,34 +624,42 @@ function execNavigationQueue(list)
 	return false
 end
 
+local function saveBulletinIndex(title)
+	setStringConfig("BULLETIN_INDEX", title)
+end
+
+local function getLastBulletinIndex()
+	return getStringConfig("BULLETIN_INDEX", "NULL")
+end
+
+--解析公告，每个Index的公告只展示一次，由getLastBulletinIndex控制
 function parseBulletin(content)
 	local i, j, index = string.find(content, "-index%-(%d+)%-")
 	if i == nil or j == nil or index == nil then	--未找到Idnex
-		Log("cant find index")
+		Log("cant find index!")
 		return nil, nil, false
 	end
 	
-	local m, n = string.find(content, "%-exclude%-[%d%-]*"..CFG.ScriptInfo.id.."%-")
-	if m ~= nil and n ~= nil then					--当前脚本位于排除队列
-		Log("exclude current script: "..string.sub(content, m, n))
+	if index == getLastBulletinIndex() then	--此条公告已经播报过
+		Log("showed bulletin yet!")
+		return
+	end
+	
+	local m, n = string.find(content, "%-include%-[%d%-]*"..CFG.ScriptInfo.id.."%-")
+	if m == nil and n == nil then					--当前脚本不在公告列表
+		Log("not include current script!")
 		return nil, nil, false
 	end
 	
-	local m, n = string.find(content, "%-exclude[%d%-]*%-")
+	local m, n = string.find(content, "%-include[%d%-]*%-")
 	if m == nil or n == nil then					--清理正文
 		n = j
 	end
 	
 	local body = string.sub(content, n + 1, -1)
 	
+	saveBulletinIndex(index)
+	
 	Log("parseBulletin: index-"..index.."  body-"..body)
 	return index, body, true
-end
-
-function saveBulletinIndex(title)
-	setStringConfig("BULLETIN_INDEX", title)
-end
-
-function getLastBulletinIndex()
-	return getStringConfig("BULLETIN_INDEX", "NULL")
 end

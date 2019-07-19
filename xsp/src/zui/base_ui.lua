@@ -438,22 +438,17 @@ local function showBulletin()
 	--local content, err = script.getBulletinBoard(CFG.BULLETIN_KEY, CFG.BULLETIN_TOKEN)
 	local content, err = getCloudContent(CFG.BULLETIN_KEY, CFG.BULLETIN_TOKEN, "fdf")
 	if err ~= 0 then
+		Log("getCloudContent err!")
 		return
 	end
 	
 	local index, body, res = parseBulletin(content)
 	if not res then		--获取失败
-		Log("parseBulletinIndex failed")
-		return
-	end
-
-	if index == getLastBulletinIndex() then	--此条公告已经播报过
-		Log("showed bulletin")
+		Log("abort bulletin!")
 		return
 	end
 	
 	dialog("公告\n"..body, 10)
-	saveBulletinIndex(index)
 end
 
 
