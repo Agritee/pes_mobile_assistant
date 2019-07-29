@@ -18,6 +18,7 @@ CFG.CACHING_MODE = false				--缓存模式
 -----------------脚本参数-----------------
 CFG.UserInfo = script.getUserInfo()
 CFG.ScriptInfo = script.getScriptInfo()
+CFG.SCRIPT_ID = "PES"
 
 -----------------调试参数-----------------
 CFG.LOG = true							--是否允许输出LOG信息并写入log.txt文件
@@ -44,6 +45,8 @@ CFG.APP_ID = "com.netease.pes"			--当前应用名
 CFG.DEFAULT_APP_ID = "com.netease.pes"	--缺省应用名
 CFG.BULLETIN_KEY = "pes_mobile_assistant_bulletin"		--公告key
 CFG.BULLETIN_TOKEN = "1F8BAC847D7A32CB"					--公告token(测试环境)
+CFG.HOST = "http://49.234.8.107:8001/"
+CFG.HEART_BEAT_INTERVAL = 300
 
 -----------------找色参数-----------------
 CFG.DEFAULT_FUZZY = 95					--默认颜色模糊相似度
@@ -95,7 +98,7 @@ CFG.SCRIPT_FUNC = {						--脚本功能列表
 		{scriptid = 24634, distributions = "内部测试",
 			func = {}},
 		{scriptid = 16489, distributions = "安卓-叉叉助手/小精灵版",
-			func = {"自动天梯","自动联赛","自动巡回","手动巡回","自动活动","自动冠军赛","一键卖球探"}},
+			func = {"自动天梯","自动联赛","自动巡回","手动巡回","自动挑战","自动冠军赛","一键卖球探"}},
 		{scriptid = 16498, distributions = "安卓-叉叉助手/小精灵测试版", 
 			func = {}},
 		{scriptid = 24391, distributions = "安卓-叉叉助手(国际服)版",
@@ -104,7 +107,7 @@ CFG.SCRIPT_FUNC = {						--脚本功能列表
 			func = {"国际服季节赛SIM","国际服巡回赛SIM","国际服巡回赛手动","一键卖球探"}},
 		--------------IOS--------------
 		{scriptid = 16947, distributions = "IOS-IPA版",
-			func = {"自动天梯","自动联赛","自动巡回","手动巡回","自动活动","自动冠军赛","一键卖球探"}},
+			func = {"自动天梯","自动联赛","自动巡回","手动巡回","自动挑战","自动冠军赛","一键卖球探"}},
 		{scriptid = 18134, distributions = "IOS-IPA测试版", 
 			func = {}},
 		{scriptid = 24173, distributions = "IOS-IPA(国际服)版",

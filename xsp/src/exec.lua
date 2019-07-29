@@ -40,6 +40,7 @@ end
 
 --执行任务，param:任务名称，任务重复次数
 function M.run(taskName, repeatTimes)
+	local lastHeartBeatTime = os.time()
 	local reTimes = repeatTimes or CFG.DEFAULT_REPEAT_TIMES
 	local lastBeforSkipFlag = false
 	
@@ -231,7 +232,21 @@ function M.run(taskName, repeatTimes)
 		end
 		
 		resetTaskData()		--重置部分数据
-		Log("-------------------------END OF THIS ROUND TASK: "..taskName.."-----------------------")
+		Log("-------------------------E-N-D OF THIS ROUND TASK: "..taskName.."-----------------------")
+		
+		if os.time() - lastHeartBeatTime > CFG.HEART_BEAT_INTERVAL then
+			lastHeartBeatTime = os.time()
+			local status = onlineHeartBeat()
+			if status == "fail" then
+				dialog("认证失败，请重新登录！")
+			elseif status == "relogin" then
+				dialog("重复登录！")
+			elseif status == "ignore" then
+				Log("heart beat ignore!")
+			elseif status == "success" then
+				Log("heart beat success!")
+			end
+		end
 	end
 end
 

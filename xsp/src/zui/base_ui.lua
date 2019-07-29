@@ -452,5 +452,5 @@ local function showBulletin()
 end
 
 
-showBulletin()
+--showBulletin()
 dispUI()		--先设置参数，后page init

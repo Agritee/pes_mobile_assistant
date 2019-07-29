@@ -2,15 +2,20 @@
 -- Author: cndy1860
 -- Date: 2018-12-25
 -- Descrip: 程序入口，注意require顺序会影响各文件的init，后续添加任务依次require
+--loadfile("good1.txt")
+--require("log")
+--loadstring(require("encrypt")())
 require("api")
-require("config")
+require("encrypt")
+encrequire("config")
 require("global")
 require("func")
+encrequire("login")
 require("init")
 require("zui/base_ui")
 require("scale")
 require("page")
-require("exec")
+encrequire("exec")
 require("project/projFunc")
 require("project/projPage")
 require("project/task/soldScout")
@@ -29,7 +34,7 @@ function main()
 	screen.keep(false)
 	
 	--dispUI()
-
+	
 	if PREV.restartedAPP then
 		if xmod.PROCESS_MODE == xmod.PROCESS_MODE_STANDALONE then	--通用模式的延时只能放在重启时
 			sleep(CFG.WAIT_RESTART * 1000)
@@ -37,15 +42,17 @@ function main()
 		
 		processInitPage()	--先跳过未定义界面
 	end
-
+	
 	exec.run(USER.TASK_NAME, USER.REPEAT_TIMES)
 	xmod.exit()
 end
 
 main()
+--print(_VERSION)
+--page.checkPage()
 
-page.checkPage()
 
+--"))()
 --sleep(2000)
 --CFG.SCALING_RATIO = 720/750
 --prt(scale.scalePos("1059|440|0xd0e2cf-0x2f1d30,987|434|0x335a26-0x232117,1123|475|0x335a26-0x232117,1016|500|0x335a26-0x232117,1098|379|0x335a26-0x232117"))
@@ -84,3 +91,13 @@ page.checkPage()
 
 --switchPlayer()
 
+
+--encrypt.genEncFile("good_")
+--encrequire("LAT")
+--tmp = base64.dec("HU1PT04jDRp/UAEBDwMAAAAEX0VOVgABAQMuLi4BAAD///8VDwACDDxjaHVuay1yb290PgAWAgECAAEXAQENAgoAAAACAQsADwEEAwJpbxEBBAQFd3JpdGUFAQQFEkhlbGxvIHdvcmxkLCBmcm9tIAsADwEEBghfVkVSU0lPTgUBBAcCIQoYAwgAAgEaAA==")
+--prt(tmp)
+
+
+
+encrequire("good")
+--encrypt.genEncFile("good")

@@ -105,7 +105,8 @@ end
 insertWaitFunc("终场统计", wfn)
 
 local fn = function()
-	page.tapNavigation("back")
+	--page.tapNavigation("back")
+	execNavigationQueue({"comfirm", "back"})
 end
 insertFunc("挑战赛完成", fn)
 
