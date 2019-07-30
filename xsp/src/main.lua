@@ -9,15 +9,15 @@ require("api")
 require("encrypt")
 encrequire("config")
 require("global")
-require("func")
+encrequire("func")
 encrequire("login")
-require("init")
+encrequire("init")
 require("zui/base_ui")
-require("scale")
-require("page")
+encrequire("scale")
+encrequire("page")
 encrequire("exec")
-require("project/projFunc")
-require("project/projPage")
+encrequire("project/projFunc")
+encrequire("project/projPage")
 require("project/task/soldScout")
 require("project/task/rankSim")
 require("project/task/leagueSim")
@@ -50,6 +50,8 @@ end
 main()
 --print(_VERSION)
 --page.checkPage()
+
+
 
 
 --"))()
@@ -98,6 +100,4 @@ main()
 --prt(tmp)
 
 
-
-encrequire("good")
 --encrypt.genEncFile("good")

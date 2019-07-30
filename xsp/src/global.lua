@@ -17,3 +17,6 @@ ERR_TASK_ABORT = "ERR_TASK_ABORT"
 lastPlayingPageTime = 0
 lastPenaltyPageTime = 0
 isPlayerRedCard = false
+
+remainingSec = 0
+userId = "NULL"

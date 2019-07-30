@@ -267,6 +267,21 @@ pageTestting:nextLine()
 pageTestting:nextLine()
 pageTestting:addLabel({text="    ",size=20, align="left"})
 
+local pageUserInfo = Page:new(myui,{text = "用户信息",size = 24, align="right"})
+pageUserInfo:nextLine()
+pageUserInfo:nextLine()
+pageUserInfo:addLabel({text="用户ID：",size=25,w=14,color="25,25,112",align="right"})
+pageUserInfo:addLabel({text=userId,size=25,color="0,201,87",align="left"})
+pageUserInfo:nextLine()
+pageUserInfo:addLabel({text="剩余时间：",size=25,w=14,color="25,25,112",align="right"})
+pageUserInfo:addLabel({text=string.format("%s天%s小时%s分",math.floor(remainingSec/86400) ,math.floor(remainingSec%86400/3600),math.floor(remainingSec%3600/60)),size=25,color="0,201,87", align="left"})
+pageUserInfo:nextLine()
+pageUserInfo:nextLine()
+pageUserInfo:nextLine()
+pageUserInfo:addLabel({text="请选用户操作 ",size=25,w=14,color="25,25,112",align="left"})
+pageUserInfo:addComboBox({id="comboBoxUserInfo",list = "正常玩游戏,登录新账号,注册新账号,激活CD-KEY",select=0,w=30,h=10, size = 22})
+
+
 
 --local pageNotice = Page:new(myui,{text = "最新公告",size = 24})
 --pageNotice:addWeb({id="noticeWebView", url="http://www.zybuluo.com/cndy1860/note/1497294", xpos = 0, ypos = 0, w = 100, h = 100})
@@ -351,6 +366,17 @@ function dispUI()
 		xmod.exit()
 	end
 	--prt(uiRet)
+	
+	if uiRet.comboBoxUserInfo == "登录新账号" then
+		setLoginAction("loginUI")
+		lua_restart()
+	elseif uiRet.comboBoxUserInfo == "注册新账号" then
+		setLoginAction("registUI")
+		lua_restart()
+	elseif uiRet.comboBoxUserInfo == "激活CD-KEY" then
+		setLoginAction("activateUI")
+		lua_restart()
+	end
 	
 	--check Todo list
 	local taskName = uiRet.comboBoxTask

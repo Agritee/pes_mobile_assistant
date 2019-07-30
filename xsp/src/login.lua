@@ -2,6 +2,7 @@
 -- Author: cndy1860
 -- Date: 2019-07-25
 -- Descrip: 在线验证
+if PREV.restarted then return end
 require("zui/Z_ui")
 local json = require("Zlibs/class/Json")
 
@@ -38,7 +39,7 @@ end
 
 ---------登录账户---------
 local loginUI=ZUI:new(DevScreen,{align="left",w=90,h=90,size=40,cancelname="取消",okname="登录",countdown=0,config="zui.dat",bg="bk.png"})
-local pageLogin = Page:new(loginUI,{text = "默认", size = 24, align="center"})
+local pageLogin = Page:new(loginUI,{text = "登录", size = 24, align="center"})
 pageLogin:nextLine()
 pageLogin:nextLine()
 pageLogin:nextLine()
@@ -77,8 +78,12 @@ pageRegist:addLabel({text="用户名",w=10,h=20,align="center",size=28})
 pageRegist:addEdit({id="editerRegistUid",color="0,0,255",w=40,h=15,align="left",size=26})
 pageRegist:nextLine()
 pageRegist:addLabel({text="",w=15,h=20,align="center",size=28})
-pageRegist:addLabel({text="  密码",w=10,h=20,align="center",size=28})
+pageRegist:addLabel({text="密  码",w=10,h=20,align="center",size=28})
 pageRegist:addEdit({id="editerRegistPwd",color="0,0,255",w=40,h=15,align="left",size=26})
+pageRegist:nextLine()
+pageRegist:addLabel({text="",w=15,h=20,align="center",size=28})
+pageRegist:addLabel({text="推荐人",w=10,h=20,align="center",size=28})
+pageRegist:addEdit({id="editerRegistAgent",color="0,0,255",w=40,h=15,align="left",size=26})
 
 local registUIData = {}
 local function showRegistUI()
@@ -90,12 +95,30 @@ local function showRegistUI()
 	
 	registUIData.uid = tostring(uiRet.editerRegistUid)
 	registUIData.pwd = tostring(uiRet.editerRegistPwd)
+	registUIData.agent = tostring(uiRet.editerRegistAgent)
+	
+	while true do
+		if string.len(registUIData.uid) < 6 or string.len(registUIData.pwd) < 6 then
+			dialog("用户名和密码不能小6位")
+			registUIData = {}
+			local uiRet = registUI:show(3)
+			if uiRet._cancel then
+				xmod.exit()
+			end
+			
+			registUIData.uid = tostring(uiRet.editerRegistUid)
+			registUIData.pwd = tostring(uiRet.editerRegistPwd)
+			registUIData.agent = tostring(uiRet.editerRegistAgent)
+		else
+			break
+		end
+	end
 end
 
 ----------------------------------UI-----------------------------
 
 --保存用户ID
-local function setUid(uid)
+function setUid(uid)
 	return setStringConfig("UID", uid)
 end
 
@@ -134,6 +157,21 @@ local function getLoggedDate()
 	return getStringConfig("LOGGED_DATA", "NULL")
 end
 
+--保存登录的action
+function setLoginAction(action)
+	setStringConfig("LOGIN_ACTION", action)
+end
+
+--获取登录的action
+function getLoginAction()
+	local act = getStringConfig("LOGIN_ACTION", "login")
+	if act ~= "login" then
+		setStringConfig("LOGIN_ACTION", "login")
+	end
+	
+	return act
+end
+
 
 --心跳包
 local  heartBeatFaildTimes = 0
@@ -146,7 +184,7 @@ function onlineHeartBeat()
 	send.Script = CFG.SCRIPT_ID
 	send.LoggedCode = getLoggedCode()
 	send.ReqTime = tostring(os.time())
-
+	
 	local http = require("Zlibs/class/Http")
 	local rspData = http.Post.tableByJson(CFG.HOST, send)
 	if rspData == "" then
@@ -248,14 +286,20 @@ local function onlineLogin()
 		if loginUIData.uid and loginUIData.pwd then 	--更新输入的用户信息
 			setUid(loginUIData.uid)
 			setPwd(loginUIData.pwd)
-		end	
+		end
 	end
 	
 	if recv.RspCode ~= "success" then
 		Log("recv.RspCode="..recv.RspCode)
 		if recv.RspCode == "err_uid" then
 			dialog(recv.RspMsg or "账号或密码错误，请重新登录！")
-			return "loginUI"
+			--return "loginUI"
+			local ret = dialogRet("欢迎使用萝卜脚本！", "登录账号", "注册账号", "", 0)
+			if ret == 0 then
+				return "loginUI"
+			elseif ret == 1 then
+				return "registUI"
+			end
 		elseif recv.RspCode == "err_baned_uid" then
 			dialog(recv.RspMsg or "账号异常，请联系管理员！")
 			return "exit"
@@ -294,6 +338,9 @@ local function onlineLogin()
 		return "activateUI"
 	end
 	
+	remainingSec = tonumber(recv.AuthRemaining)
+	userId = recv.Uid
+	
 	return "authorized"
 end
 
@@ -311,6 +358,7 @@ local function onlineRegist()
 	send.DevCode = getDeviceIMEI()..getDeviceIMSI()
 	send.Script = CFG.SCRIPT_ID
 	send.LoggedCode = getLoggedCode()
+	send.Agent = registUIData.agent or "NULL"
 	send.ReqTime = tostring(os.time())
 	
 	local http = require("Zlibs/class/Http")
@@ -376,7 +424,7 @@ local function onlineActivate()
 		dialog("输入的激活码异常！")
 		return "exit"
 	end
-
+	
 	local send = {}
 	
 	send.ReqType = "activate"
@@ -442,9 +490,8 @@ local function onlineActivate()
 end
 
 function login()
-	if PREV.restarted then return end
-	
-	local action = "login"
+	local action = getLoginAction()
+	Log("action="..action)
 	
 	if getUid() == "NULL" or getPwd() == "NULL" then		--检测账户信息是否存在
 		Log("not exsit user info!")

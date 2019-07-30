@@ -46,6 +46,7 @@ CFG.DEFAULT_APP_ID = "com.netease.pes"	--缺省应用名
 CFG.BULLETIN_KEY = "pes_mobile_assistant_bulletin"		--公告key
 CFG.BULLETIN_TOKEN = "1F8BAC847D7A32CB"					--公告token(测试环境)
 CFG.HOST = "http://49.234.8.107:8001/"
+--CFG.HOST = "http://192.168.8.101:81/"
 CFG.HEART_BEAT_INTERVAL = 300
 
 -----------------找色参数-----------------

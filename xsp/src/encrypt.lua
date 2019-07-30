@@ -46,18 +46,20 @@ end
 
 --加载加密过的文件
 function encrequire(modName)
-	local decStr = decode(require(modName.."_"))
-	if not decStr then
-		dialog("解码失败!")
-		lua_exit()
+	if false then
+		require(modName)
+	else
+		local decStr = decode(require(modName.."_"))
+		if not decStr then
+			dialog("解码失败!")
+			lua_exit()
+		end
+		local f = loadstring(decStr)
+		if not f then
+			dialog("加载文件失败!")
+			lua_exit()
+		end
+		f()
 	end
-	
-	local f = loadstring(decStr)
-	if not f then
-		dialog("加载文件失败!")
-		lua_exit()
-	end
-	
-	f()
 end
 
