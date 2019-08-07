@@ -3,7 +3,7 @@
 -- Date: 2019-07-14
 -- Descrip: 加密相关
 
-local function decode(str64)
+function decode(str64)
 	local b64chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/'
 	local temp={}
 	for i=1,64 do
@@ -43,23 +43,3 @@ local function decode(str64)
 	end
 	return str
 end
-
---加载加密过的文件
-function encrequire(modName)
-	if false then
-		require(modName)
-	else
-		local decStr = decode(require(modName.."_"))
-		if not decStr then
-			dialog("解码失败!")
-			lua_exit()
-		end
-		local f = loadstring(decStr)
-		if not f then
-			dialog("加载文件失败!")
-			lua_exit()
-		end
-		f()
-	end
-end
-

@@ -7,7 +7,7 @@ end
 
 --功能字符串，--只允许whiteList的功能出现
 local funcStr = ""
-for _, v in pairs(CFG.SCRIPT_FUNC.funcList) do
+--[[for _, v in pairs(CFG.SCRIPT_FUNC.funcList) do
 	local limit = false
 	for _, _v in pairs(CFG.SCRIPT_FUNC.whiteList) do
 		if _v.scriptid == CFG.ScriptInfo.id and #_v.func > 0 then
@@ -27,6 +27,26 @@ for _, v in pairs(CFG.SCRIPT_FUNC.funcList) do
 end
 if funcStr ~= "" then
 	funcStr = string.sub(funcStr, 1, -2)
+end]]
+
+if frontAppName() == "jp.konami.pesam" then
+	local intStr = ""
+	for _, v in pairs(CFG.SCRIPT_FUNC.funcList) do
+		if string.find(v, "国际服") then
+			intStr = intStr..v..","
+		else
+			funcStr = funcStr..v..","
+		end
+	end
+	funcStr = intStr..funcStr
+else
+	for _, v in pairs(CFG.SCRIPT_FUNC.funcList) do
+		funcStr = funcStr..v..","
+	end
+end
+
+if funcStr ~= "" then
+	funcStr = string.sub(funcStr, 1, -2)
 end
 
 local feildPositionStr = "不换,位置1,位置2,位置3,位置4,位置5,位置6,位置7,位置8,位置9,位置10,位置11"
@@ -40,13 +60,13 @@ local DevScreen={--开发设备的参数
 
 local myui=ZUI:new(DevScreen,{align="left",w=90,h=90,size=40,cancelname="取消",okname="OK",countdown=(PREV.restarted == true and 3 or 0),config="zui.dat",bg="bk.png"})--在page中传入的size会成为所有page中所有控件的默认字体大小,同时也会成为所有page控件的最小行距
 local pageBaseSet = Page:new(myui,{text = "基本设置", size = 24})
-local dispStr =  "欢迎使用"..CFG.SCRIPT_NAME
+--[[local dispStr =  "欢迎使用"..CFG.SCRIPT_NAME
 for _, v in pairs(CFG.SCRIPT_FUNC.whiteList) do 
 	if v.scriptid == CFG.ScriptInfo.id then
 		dispStr = dispStr.."-"..v.distributions
 		break
 	end
-end
+end]]
 pageBaseSet:addLabel({text=dispStr,size=18,w=90,align="center"})
 
 --pageBaseSet:nextLine()
@@ -270,6 +290,15 @@ pageTestting:addLabel({text="    ",size=20, align="left"})
 local pageUserInfo = Page:new(myui,{text = "用户信息",size = 24, align="right"})
 pageUserInfo:nextLine()
 pageUserInfo:nextLine()
+
+pageUserInfo:addLabel({text="当前脚本：",size=25,w=14,color="25,25,112",align="right"})
+pageUserInfo:addLabel({text=CFG.SCRIPT_NAME,size=25,color="0,201,87",align="left"})
+pageUserInfo:nextLine()
+
+pageUserInfo:addLabel({text="当前版本：",size=25,w=14,color="25,25,112",align="right"})
+pageUserInfo:addLabel({text=CFG.VERSION.."  "..CFG.BIULD_TIME,size=25,color="0,201,87",align="left"})
+pageUserInfo:nextLine()
+
 pageUserInfo:addLabel({text="用户ID：",size=25,w=14,color="25,25,112",align="right"})
 pageUserInfo:addLabel({text=userId,size=25,color="0,201,87",align="left"})
 pageUserInfo:nextLine()
@@ -368,13 +397,13 @@ function dispUI()
 	--prt(uiRet)
 	
 	if uiRet.comboBoxUserInfo == "登录新账号" then
-		setLoginAction("loginUI")
+		setAction("loginUI")
 		lua_restart()
 	elseif uiRet.comboBoxUserInfo == "注册新账号" then
-		setLoginAction("registUI")
+		setAction("registUI")
 		lua_restart()
 	elseif uiRet.comboBoxUserInfo == "激活CD-KEY" then
-		setLoginAction("activateUI")
+		setAction("activateUI")
 		lua_restart()
 	end
 	
@@ -402,7 +431,7 @@ function dispUI()
 		USER.RESTART_APP = false
 	end
 
-	CFG.LOG = not not uiRet.radioLog.开启
+	CFG.LOG = (not not uiRet.radioLog.开启) or CFG.DEBUG 
 	if CFG.LOG ~= PREV.writeLogStatus then
 		setWriteLogStatus(CFG.LOG)
 		if not CFG.LOG then

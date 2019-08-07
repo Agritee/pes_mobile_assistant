@@ -188,10 +188,10 @@ end
 --换人
 function switchPlayer()
 	page.tapWidget("阵容展示", "切换状态")
-	if USER.TASK_NAME == "自动巡回" or USER.TASK_NAME == "手动巡回" then		--跳过巡回赛声望
-		sleep(1200)
-		page.tapWidget("阵容展示", "切换状态")
-	end
+	--if USER.TASK_NAME == "自动巡回" or USER.TASK_NAME == "手动巡回" then		--跳过巡回赛声望
+	--	sleep(1200)
+	--	page.tapWidget("阵容展示", "切换状态")
+	--end
 	sleep(1400)		--点击切换状态之后，会弹出“状态”提示，需等待淡出
 	
 	--获取场上球员状态

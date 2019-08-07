@@ -5,24 +5,24 @@
 
 CFG = {}	--脚本配置表
 
+-----------------调试参数-----------------
+CFG.DEBUG = true
+CFG.LOG = true or CFG.DEBUG 							--是否允许输出LOG信息并写入log.txt文件
+
 -----------------版本信息-----------------
 CFG.SCRIPT_NAME = "实况助手"
-CFG.VERSION = "v0.0.1"
-CFG.BIULD_TIME = "20190104"
+CFG.VERSION = "v1.1.3"
+CFG.BIULD_TIME = "20190807"
+
+-----------------脚本参数-----------------
+CFG.UserInfo = script.getUserInfo()
+CFG.ScriptInfo = script.getScriptInfo()
+CFG.SCRIPT_ID = "pes_mobile_assistant"
 
 
 -----------------引擎属性-----------------
 CFG.COMPATIBLE = (string.sub(xmod.VERSION_NAME, 1, 3) == "1.9" and {true} or {false})[1]		--兼容(1.9引擎)模式
 CFG.CACHING_MODE = false				--缓存模式
-
------------------脚本参数-----------------
-CFG.UserInfo = script.getUserInfo()
-CFG.ScriptInfo = script.getScriptInfo()
-CFG.SCRIPT_ID = "PES"
-
------------------调试参数-----------------
-CFG.LOG = true							--是否允许输出LOG信息并写入log.txt文件
-
 
 -----------------分辨率参数-----------------
 CFG.SUPPORT_RESOLUTION = {max = {width = 5040, height = 2160}, min = {width = 600, height = 450}}	--分辨率支持范围
@@ -45,9 +45,8 @@ CFG.APP_ID = "com.netease.pes"			--当前应用名
 CFG.DEFAULT_APP_ID = "com.netease.pes"	--缺省应用名
 CFG.BULLETIN_KEY = "pes_mobile_assistant_bulletin"		--公告key
 CFG.BULLETIN_TOKEN = "1F8BAC847D7A32CB"					--公告token(测试环境)
-CFG.HOST = "http://49.234.8.107:8001/"
---CFG.HOST = "http://192.168.8.101:81/"
-CFG.HEART_BEAT_INTERVAL = 300
+CFG.HOST = CFG.DEBUG and "http://192.168.8.101:8002/" or "http://49.234.8.107:8002/"
+CFG.HEART_BEAT_INTERVAL = 120
 
 -----------------找色参数-----------------
 CFG.DEFAULT_FUZZY = 95					--默认颜色模糊相似度

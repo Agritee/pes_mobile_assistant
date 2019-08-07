@@ -58,7 +58,7 @@ function M.run(taskName, repeatTimes)
 	for i = 1, reTimes, 1 do
 		Log("-----------------------START RUN "..i.."st ROUND OF TASK: "..taskName.."-----------------------")
 		local hid = createHUD()     --创建一个HUD
-		showHUD(hid,taskName..": 第"..i.."场",60,"0xff0000ff","msgbox_click.png",1,0,0,800,80) 
+		showHUD(hid,taskName..": 第"..i.."场",60,"0xff0000ff","msgbox_click.png",1,0,0,800,80)
 		sleep(1000)
 		hideHUD(hid)
 		
@@ -228,25 +228,18 @@ function M.run(taskName, repeatTimes)
 				sleep(checkInterval)
 			end
 			
+			if os.time() - lastHeartBeatTime > CFG.HEART_BEAT_INTERVAL then
+				lastHeartBeatTime = os.time()
+				onlineHeartBeat()
+			end
+			
 			sleep(50)
 		end
 		
 		resetTaskData()		--重置部分数据
 		Log("-------------------------E-N-D OF THIS ROUND TASK: "..taskName.."-----------------------")
 		
-		if os.time() - lastHeartBeatTime > CFG.HEART_BEAT_INTERVAL then
-			lastHeartBeatTime = os.time()
-			local status = onlineHeartBeat()
-			if status == "fail" then
-				dialog("认证失败，请重新登录！")
-			elseif status == "relogin" then
-				dialog("重复登录！")
-			elseif status == "ignore" then
-				Log("heart beat ignore!")
-			elseif status == "success" then
-				Log("heart beat success!")
-			end
-		end
+		
 	end
 end
 
