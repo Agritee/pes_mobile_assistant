@@ -6,13 +6,13 @@
 CFG = {}	--脚本配置表
 
 -----------------调试参数-----------------
-CFG.DEBUG = true
+CFG.DEBUG = false
 CFG.LOG = true or CFG.DEBUG 							--是否允许输出LOG信息并写入log.txt文件
 
 -----------------版本信息-----------------
 CFG.SCRIPT_NAME = "实况助手"
-CFG.VERSION = "v1.1.7"
-CFG.BIULD_TIME = "2020022101"
+CFG.VERSION = "v1.1.8"
+CFG.BIULD_TIME = "20200221"
 
 -----------------脚本参数-----------------
 CFG.UserInfo = script.getUserInfo()
@@ -77,7 +77,7 @@ CFG.DEFAULT_PAGE_CHECK_INTERVAL = 100	--默认page的检测间隔/s
 CFG.SCRIPT_FUNC = {						--脚本功能列表
 	funcList = {
 		"自动天梯",
-		--"自动联赛",
+		"自动联赛",
 		--"自动巡回",
 		--"手动巡回",
 		--"自动挑战",

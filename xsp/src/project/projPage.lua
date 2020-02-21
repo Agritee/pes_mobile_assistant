@@ -324,21 +324,9 @@ local _pageList = {
 				anchor = "RT",
 				srcPos = "751|129|0x0079fe,752|123|0xfefefe,782|130|0x0079fe,752|198|0x0079fe,731|194|0xfefefe,772|194|0xfefefe,714|153|0xfefefe,790|155|0xfefefe",
 			},
-			{
-				tag = "手动联赛战绩",
-				enable = true,
-				anchor = "LB",
-				srcPos = "144|458|0xfefefe,106|451|0x12a12b,90|471|0x0079fe,77|419|0xfefefe,82|430|0x0079fe,95|421|0x0079fe,110|415|0xfefefe,104|428|0x0079fe",
-			},
-			{
-				tag = "教练模式联赛战绩",
-				enable = true,
-				anchor = "RB",
-				srcPos = "790|458|0xfefefe,750|455|0x12a12b,738|473|0x0079fe,716|423|0x0079fe,762|424|0x0079fe,718|414|0xfefefe,739|414|0xfefefe,762|414|0xfefefe",
-			},
 		},
 	},
-	{
+	--[[{
 		tag = "联赛教练模式",
 		widgetList = {
 			{
@@ -347,12 +335,18 @@ local _pageList = {
 				anchor = "LT",
 				srcPos = "65|171|0x0079fd,55|169|0xffffff,65|180|0xffffff,92|172|0x0079fd,91|180|0xffffff,124|176|0x12a42b",
 			},
+			--{
+			--	tag = "联赛信息框",
+			--	enable = true,
+			--	anchor = "A",
+			--	srcPos = "545|226|0x27ba36,480|170|0x2a2a2a,484|206|0x323232,1281|174|0x2a2a2a,1280|213|0x323232,515|570|0x484848,513|609|0x323232,1274|599|0x323232",
+			--},
 			{
-				tag = "联赛信息框",
+				tag = "比赛历史",
 				enable = true,
 				anchor = "A",
-				srcPos = "545|226|0x27ba36,480|170|0x2a2a2a,484|206|0x323232,1281|174|0x2a2a2a,1280|213|0x323232,515|570|0x484848,513|609|0x323232,1274|599|0x323232",
-			},
+				srcPos = "77|303|0xc0c7c7-0x141214,72|328|0x55bd74-0x441a4a,61|329|0x0079fe,93|328|0x0079fe,110|329|0x55bd74-0x441a4a,124|327|0x0079fe",
+			},			
 			{
 				tag = "跳过余下比赛",		--仅用于跳过余下比赛，enable == false，不参与matchPage/matchWidgets
 				enable = false,
@@ -366,7 +360,7 @@ local _pageList = {
 				srcPos = "652|708|0x98989c-0x0b0b0b,526|690|0xc5c5c8,527|719|0xc5c5c8,807|689|0xc5c5c8,804|722|0xc5c5c8",
 			},
 		},
-	},
+	},]]
 	{
 		tag = "点球",
 		widgetList = {
@@ -502,6 +496,18 @@ local _pageList = {
 				enable = true,
 				anchor = "RT",
 				srcPos = "1281|207|0x323232,487|210|0x323232,489|603|0x323232,1275|605|0x323232",
+			},
+			{
+				tag = "跳过余下比赛",		--仅用于跳过余下比赛，enable == false，不参与matchPage/matchWidgets
+				enable = false,
+				anchor = "MTB",
+				srcPos = "652|707|0x52a1f9-0x522904,526|689|0xeeeef4,528|724|0xeeeef4,799|691|0xeeeef4,801|718|0xeeeef4,667|662|0xdfdfe1,482|705|0xdfdfe1,861|708|0xdfdfe1",
+			},
+			{
+				tag = "跳过余下比赛-未激活",
+				enable = false,
+				anchor = "MTB",
+				srcPos = "652|708|0x98989c-0x0b0b0b,526|690|0xc5c5c8,527|719|0xc5c5c8,807|689|0xc5c5c8,804|722|0xc5c5c8",
 			},
 		}
 	},

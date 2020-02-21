@@ -12,7 +12,7 @@ local _task = {
 		{tag = "比赛", nextTag = "联赛", mode = "firstRun"},
 		{tag = "联赛", nextTag = "教练模式联赛", mode = "firstRun"},
 		
-		{tag = "联赛教练模式", nextTag = "next"},
+		{tag = "通用比赛界面", nextTag = "next"},
 		{tag = "阵容展示", nextTag = "next"},
 		{tag = "比赛中", timeout = 60},
 		{tag = "终场统计", nextTag = "next", timeout = 900, checkInterval = 1000},
@@ -44,15 +44,15 @@ insertFunc("合同", fn)
 
 local fn = function()
 	sleep(200)
-	skipComfirm("联赛教练模式")		--检测到界面后又弹出了确定提示按钮，如领取奖励，精神提升，点击所有的确定
+	skipComfirm("通用比赛界面")		--检测到界面后又弹出了确定提示按钮，如领取奖励，精神提升，点击所有的确定
 	
 	while true do
-		if page.matchWidget("联赛教练模式", "跳过余下比赛") then
+		if page.matchWidget("通用比赛界面", "跳过余下比赛") then
 			Log("checked need skip league level")
-			page.tapWidget("联赛教练模式", "跳过余下比赛")
+			page.tapWidget("通用比赛界面", "跳过余下比赛")
 			sleep(500)
-			skipComfirm("联赛教练模式")
-		elseif page.matchWidget("联赛教练模式", "跳过余下比赛-未激活") then
+			skipComfirm("通用比赛界面")
+		elseif page.matchWidget("通用比赛界面", "跳过余下比赛-未激活") then
 			Log("matched 跳过余下比赛-未激活")
 			sleep(200)
 			break
@@ -62,10 +62,10 @@ local fn = function()
 	end
 	
 	if page.isExsitCommonWidget("球队异常") and not isPlayerRedCard then
-		refreshUnmetCoach("联赛教练模式")
+		refreshUnmetCoach("通用比赛界面")
 	end
 end
-insertFunc("联赛教练模式", fn)
+insertFunc("通用比赛界面", fn)
 
 local fn = function()
 	if page.matchWidget("阵容展示", "身价溢出") then
