@@ -19,27 +19,34 @@ local _pageList = {
 				tag = "玩家信息",
 				enable = true,
 				anchor = "LM",
-				srcPos = "343|308|0xffffff,343|315|0x007aff,324|312|0x007aff,363|313|0x007aff,324|355|0x007aff,362|355|0x007aff",
+				--srcPos = "343|308|0xffffff,343|315|0x007aff,324|312|0x007aff,363|313|0x007aff,324|355|0x007aff,362|355|0x007aff",
 				--dstPos = "",
 				--dstArea = Rect.ZERO
+				--过年新色
+				srcPos = "343|320|0x1a083c,343|314|0xf9dfaf,343|326|0xf4dbac,331|316|0x1a083c,353|349|0x100038,346|358|0x100038,356|358|0xf2d8aa,343|365|0xf2d8aa",
 			},
 			{
 				tag = "游戏帮助",
 				enable = true,
 				anchor = "LB",
 				srcPos = "343|308|0xffffff,343|315|0x007aff,324|312|0x007aff,363|313|0x007aff,324|355|0x007aff,362|355|0x007aff",
+				--过年新色
+				srcPos = "343|595|0x1a083c,344|589|0xf9e0af,343|602|0xf5dbac,343|607|0x0f0337,343|612|0xf2d8aa,329|611|0xf2d8aa,337|622|0xf2d8aa",
 			},
-			{
+			--[[{
 				tag = "设置",
 				enable = true,
 				anchor = "RM",
 				srcPos = "962|334|0x007aff,1009|352|0x007aff,1008|315|0x007aff,989|318|0xffffff,974|334|0xffffff,989|348|0xffffff",
-			},
+				--过年新色
+			},]]
 			{
 				tag = "支持",
 				enable = true,
 				anchor = "RB",
-				srcPos = "985|575|0x007aff,1016|575|0x007aff,1017|594|0x007aff,993|589|0xffffff,965|606|0xffffff,979|598|0x007aff",
+				--srcPos = "985|575|0x007aff,1016|575|0x007aff,1017|594|0x007aff,993|589|0xffffff,965|606|0xffffff,979|598|0x007aff",
+				--过年新色
+				srcPos = "990|624|0xf4d9ac,994|615|0x1a083c,990|602|0xf2d8aa,1005|606|0xf2d8aa,1007|624|0xf2d8aa,1004|634|0x1a083c,1017|630|0x1a083c,873|538|0xe7e5f2",
 			},
 		},
 	},
@@ -50,13 +57,17 @@ local _pageList = {
 				tag = "我的球队",
 				enable = true,
 				anchor = "RM",
-				srcPos = "989|342|0xffffff,983|346|0x007aff,996|346|0x007aff,990|351|0xffffff,979|359|0xffffff,1000|359|0xffffff,1009|358|0x007aff,971|357|0x007aff,995|366|0x007aff",
+				--srcPos = "989|342|0xffffff,983|346|0x007aff,996|346|0x007aff,990|351|0xffffff,979|359|0xffffff,1000|359|0xffffff,1009|358|0x007aff,971|357|0x007aff,995|366|0x007aff",
+				--过年新色
+				srcPos = "989|333|0x1a083c,989|342|0x1a083c,1000|346|0xf2d8aa,969|326|0xf2d8aa,1010|365|0xf2d8aa,984|355|0x1a083c,997|356|0x1a083c",
 			},
 			{
 				tag = "成就",
 				enable = true,
 				anchor = "LB",
-				srcPos = "343|644|0x007aff,335|649|0xffffff,352|649|0xffffff,343|648|0x007aff,344|628|0x007aff,337|625|0xffffff,350|625|0xffffff,343|597|0x007aff",
+				--srcPos = "343|644|0x007aff,335|649|0xffffff,352|649|0xffffff,343|648|0x007aff,344|628|0x007aff,337|625|0xffffff,350|625|0xffffff,343|597|0x007aff",
+				--过年新色
+				srcPos = "343|647|0xf2d8aa,336|649|0x1a083c,351|649|0x1a083c,335|642|0xf2d8aa,352|642|0xf2d8aa,360|637|0x1a083c,331|596|0xf5dbac,332|590|0x19073c",
 			},
 		},
 	},
@@ -68,24 +79,32 @@ local _pageList = {
 				enable = true,
 				anchor = "LM",
 				srcPos = "331|312|0x007aff,356|311|0x007aff,326|323|0xffffff,361|322|0xffffff,343|348|0x007aff,338|354|0xffffff,350|354|0xffffff,344|362|0x007aff",
+				--过年新色
+				srcPos = "340|374|0xf2d8aa,343|358|0xf2d8aa,332|359|0x1a083c,361|335|0x1a083c,357|346|0x19083d,354|324|0xf2d8aa,369|329|0xf4d9ab,366|323|0x1a083c",
 			},
 			{
 				tag = "联赛",
 				enable = true,
 				anchor = "LB",
 				srcPos = "327|579|0x007aff,316|569|0xffffff,358|579|0x007aff,368|569|0xffffff,336|611|0x007aff,327|619|0xffffff,361|617|0xffffff,353|609|0x007aff",
+				--过年新色
+				srcPos = "328|605|0xf2d8aa,358|605|0xf2d8aa,332|631|0xf2d8aa,328|646|0x1a083c,343|641|0xf2d8aa,342|655|0x1a083c,363|642|0x1a083c,352|635|0xf2d8aa",
 			},
 			{
 				tag = "线上对战",
 				enable = true,
 				anchor = "RM",
 				srcPos = "985|310|0x007aff,987|302|0xffffff,1005|324|0xffffff,997|334|0x007aff,982|332|0x007aff,974|343|0xffffff",
+				--过年新色
+				srcPos = "973|330|0xf2d8aa,975|362|0xf2d8aa,1007|362|0xf2d8aa,980|336|0xff1e30,968|325|0xff1e30,981|355|0xff1e30,1007|330|0xf2d8aa,1015|332|0xff1e30",
 			},
 			{
 				tag = "本地比赛",
 				enable = true,
 				anchor = "RB",
 				srcPos = "979|581|0xffffff,991|571|0x007aff,1007|601|0xffffff,1003|614|0x007aff,989|611|0xffffff,977|614|0x007aff,992|595|0x007aff",
+				--过年新色
+				srcPos = "1001|606|0x1a083c,1007|600|0xfee7b2,991|598|0xf2d8aa,1011|612|0xf2d8aa,1002|613|0x1a083c,997|618|0xf2d8aa,1012|613|0xf2d8aa",
 			},
 		},
 	},
@@ -248,7 +267,14 @@ local _pageList = {
 				tag = "比赛信息",
 				enable = true,
 				anchor = "dLT",
-				srcPos = "186|22|0xeac278,184|42|0xeac278,289|22|0xeac278,290|39|0xeac278,45|63|0x001e30,153|83|0x001e30,322|60|0x001e30,430|80|0x001e30",
+				--srcPos = "186|22|0xeac278,184|42|0xeac278,289|22|0xeac278,290|39|0xeac278,45|63|0x001e30,153|83|0x001e30,322|60|0x001e30,430|80|0x001e30",
+				srcPos = "240|60|0xffffff,221|56|0x451d4d-0x101010,255|55|0x451d4d-0x101010,187|19|0x451d4d-0x101010,293|37|0x451d4d-0x101010,48|81|0x451d4d-0x101010,423|83|0x451d4d-0x101010",
+				dstArea = Rect(
+					0,
+					0,
+					math.floor(CFG.DST_RESOLUTION.width / 4),
+					math.floor(CFG.DST_RESOLUTION.height / 8)
+				)			
 			},
 			{
 				tag = "门球",
@@ -374,16 +400,22 @@ local _pageList = {
 		tag = "初始化界面",
 		widgetList = {
 			{
-				tag = "unreal",
-				enable = true,
-				anchor = "RT",
-				srcPos = "860|48|0xffffff,887|54|0x939295-0x060506,867|34|0x939295-0x060506,869|82|0x939295-0x060506,869|57|0x939295-0x060506,862|69|0xffffff,877|64|0xffffff",
-			},
-			{
 				tag = "实况足球",
 				enable = true,
-				anchor = "M",
-				srcPos = "468|367|0xdc0014,632|363|0xdc0014,726|362|0xdc0014,853|370|0xdc0014,467|128|0x959397,853|303|0x959396",
+				anchor = "LM",
+				srcPos = "149|305|0xffffff,232|374|0xffffff,301|336|0xffffff,413|351|0xffffff,541|341|0xffffff,388|481|0xffffff,356|515|0xffffff",
+			},
+			{
+				tag = "用户协议",
+				enable = true,
+				anchor = "LB",
+				srcPos = "34|569|0xcccccc,31|571|0xcccccc,34|579|0xcccccc,37|576|0xcccccc",
+			},
+			{
+				tag = "unreal",
+				enable = true,
+				anchor = "CRT",
+				srcPos = "1245|40|0xffffff,1252|42|0xffffff,1255|63|0xffffff,1269|61|0xffffff,1268|40|0xffffff,1243|99|0xc3c2c2-0x3c3d3d,1283|97|0xc3c2c2-0x3c3d3d",
 			},
 		},
 	},

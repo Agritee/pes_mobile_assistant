@@ -66,7 +66,7 @@ local function showLoginUI()
 		end
 		loginUIData.UID = string.lower(exstring.trim(tostring(uiRet.editerUid)))
 		loginUIData.pwd = exstring.trim(tostring(uiRet.editerPwd))
-
+		
 		if string.len(loginUIData.UID) < 6 or string.len(loginUIData.pwd) < 6 then
 			dialog("用户名和密码不能小6位！")
 		elseif exstring.utf8len(loginUIData.UID) ~= string.len(loginUIData.UID)
@@ -264,7 +264,7 @@ local function onlineLogin()
 	send.ReqType = "login"
 	send.UID = loginUIData.UID or getUID()
 	send.Pwd = loginUIData.pwd or getPwd()
-
+	
 	send.DeviceID = getDeviceIMEI()..getDeviceIMSI()
 	send.ScriptName = CFG.SCRIPT_ID
 	send.ScriptVersion = CFG.VERSION
@@ -351,13 +351,6 @@ local function onlineLogin()
 	elseif recv.LicenseType == "month" or recv.LicenseType == "sezon" or recv.LicenseType == "year" then
 		if tonumber(recv.LicenseRemaining) < 24 * 60 * 60 then
 			dialog("授权即将结束，请尽快购买激活码激活！", 5)
-		end
-	else
-		local ret = dialogRet("当前脚本未授权！", "使用激活码激活", "登录其他账号", "", 0)
-		if ret == 0 then
-			return "activateUI"
-		elseif ret == 1 then
-			return "loginUI"
 		end
 	end
 	
@@ -506,7 +499,7 @@ local function onlineActivate()
 	end
 	
 	if recv.RspCode ~= "success" then
-		Log("recv.RspCode="..recv.RspCode)		
+		Log("recv.RspCode="..recv.RspCode)
 		if string.find(recv.RspCode, "err_uid") then
 			dialog(recv.RspMsg)
 			return "loginUI"
@@ -580,7 +573,12 @@ end
 --setLogonDate()
 --setBulletinVersion("NULL")
 --setBulletinVersion("NULL")
-login()
+
+if not CFG.DEBUG then
+	login()
+else
+	Log("DEBUG MODE!")
+end
 
 
 

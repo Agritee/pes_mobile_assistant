@@ -1,8 +1,8 @@
 require("zui/Z_ui")
 
-if not CFG.COMPATIBLE then
-	return
-end
+--if not CFG.COMPATIBLE then
+--	return
+--end
 
 
 --功能字符串，--只允许whiteList的功能出现

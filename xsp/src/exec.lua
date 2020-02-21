@@ -228,9 +228,11 @@ function M.run(taskName, repeatTimes)
 				sleep(checkInterval)
 			end
 			
-			if os.time() - lastHeartBeatTime > CFG.HEART_BEAT_INTERVAL then
-				lastHeartBeatTime = os.time()
-				onlineHeartBeat()
+			if not CFG.DEBUG then
+				if os.time() - lastHeartBeatTime > CFG.HEART_BEAT_INTERVAL then
+					lastHeartBeatTime = os.time()
+					onlineHeartBeat()
+				end
 			end
 			
 			sleep(50)

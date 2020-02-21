@@ -75,11 +75,13 @@ function M.checkPage()
 	local cnt = 0
 	for _, v in pairs(M.pageList) do
 		local checked = false
+		--Log("try check page : "..v.tag)
 		for _, _v in pairs(v.widgetList) do
 			if _v.enable == true then
 				local pot = screen.findColor(_v.dstArea, _v.dstPos, _v.fuzzy or CFG.DEFAULT_FUZZY)
 				if pot == Point.INVALID then
 					checked = false
+					--Log("cant find widget: ".._v.tag)
 					break
 				else
 					checked = true

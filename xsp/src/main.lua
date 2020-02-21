@@ -5,6 +5,7 @@
 --loadfile("good1.txt")
 --require("log")
 --loadstring(require("encrypt")())
+
 require("api")
 require("global")
 require("encrypt")
@@ -49,7 +50,7 @@ end
 
 main()
 --print(_VERSION)
---page.checkPage()
+page.checkPage()
 
 
 
