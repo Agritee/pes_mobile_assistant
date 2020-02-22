@@ -7,12 +7,12 @@ CFG = {}	--脚本配置表
 
 -----------------调试参数-----------------
 CFG.DEBUG = false
-CFG.LOG = true or CFG.DEBUG 							--是否允许输出LOG信息并写入log.txt文件
+CFG.LOG = false or CFG.DEBUG 							--是否允许输出LOG信息并写入log.txt文件
 
 -----------------版本信息-----------------
 CFG.SCRIPT_NAME = "实况助手"
-CFG.VERSION = "v1.1.8"
-CFG.BIULD_TIME = "20200221"
+CFG.VERSION = "v1.1.9"
+CFG.BIULD_TIME = "20200222"
 
 -----------------脚本参数-----------------
 CFG.UserInfo = script.getUserInfo()
@@ -80,6 +80,7 @@ CFG.SCRIPT_FUNC = {						--脚本功能列表
 		"自动联赛",
 		--"自动巡回",
 		--"手动巡回",
+		"通用教练模式",
 		--"自动挑战",
 		--"自动冠军赛",
 		--"领取奖励",

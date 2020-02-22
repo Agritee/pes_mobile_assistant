@@ -29,6 +29,7 @@ require("project/task/championSim")
 require("project/task/IntSezonSim")
 require("project/task/IntTourSim")
 require("project/task/IntTourManuel")
+require("project/task/commonSim")
 
 
 function main()

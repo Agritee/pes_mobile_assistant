@@ -255,8 +255,8 @@ local _pageList = {
 			{
 				tag = "身价溢出",	--用于判断是否身价溢出而精神低迷
 				enable = false,
-				anchor = "R1/3",
-				srcPos = "1161|514|0xfd3830,1087|514|0xfd3830,1220|514|0xfd3830,1093|497|0x1f1f1f,1267|610|0x1f1f1f,1080|603|0x1f1f1f,1079|201|0x1f1f1f,1259|219|0x1f1f1f",
+				anchor = "RB",
+				srcPos = "1218|487|0xfe3b30,1216|492|0xfe3b30,1211|508|0xfe3b30,1209|515|0xfe3b30",
 			},
 		},
 	},
@@ -774,14 +774,14 @@ local _commonWidgetList = {
 		anchor = "A",
 		srcPos = "934|331|0x00f8ff,930|325|0x00f8ff,938|325|0x00f8ff",
 	},
-	{
+	--[[{
 		tag = "球队菜单",		--只在球队取了首点，后边的是点在替补席的球衣上，注意锚点
 		enable = true,
 		caching = false,
 		anchor = "LT",
 		srcPos = "52|329|0x1d3753-0x060605,106|422|0xfefefe,93|418|0x0079fe,107|408|0x0079fe,118|422|0x0079fe,113|452|0x0079fe,126|439|0xfefefe,63|440|0xfefefe",
 	},
-	--[[{
+	{
 		tag = "保存",
 		enable = true,
 		caching = false,

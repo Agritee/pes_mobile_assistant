@@ -400,7 +400,8 @@ function refreshUnmetCoach(taskPage)
 	
 	local startTime = os.time()
 	while true do
-		if page.isExsitCommonWidget("球队菜单") then
+		--if page.isExsitCommonWidget("球队菜单") then
+		if page.matchWidget("阵容展示", "替补席") then		--为了确认过度动画过度完成
 			break
 		end
 		
