@@ -6,7 +6,7 @@
 --教练合约到期或者球员红牌伤病，因此不使用一键替换功能）
 
 local _task = {
-	tag = "自动联赛",
+	tag = "教练联赛",
 	processes = {
 		{tag = "合同", mode = "firstRun"},
 		{tag = "比赛", nextTag = "联赛", mode = "firstRun"},

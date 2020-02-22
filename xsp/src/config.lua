@@ -6,13 +6,13 @@
 CFG = {}	--脚本配置表
 
 -----------------调试参数-----------------
-CFG.DEBUG = false
+CFG.DEBUG = false										--影响是否联网和log
 CFG.LOG = false or CFG.DEBUG 							--是否允许输出LOG信息并写入log.txt文件
 
 -----------------版本信息-----------------
 CFG.SCRIPT_NAME = "实况助手"
-CFG.VERSION = "v1.1.9"
-CFG.BIULD_TIME = "20200222"
+CFG.VERSION = "v1.2.1"
+CFG.BIULD_TIME = "20200223"
 
 -----------------脚本参数-----------------
 CFG.UserInfo = script.getUserInfo()
@@ -75,7 +75,7 @@ CFG.DEFAULT_LONG_TAP_TIME = 800			--默认longtap时间/ms
 CFG.DEFAULT_PAGE_CHECK_INTERVAL = 100	--默认page的检测间隔/s
 
 CFG.SCRIPT_FUNC = {						--脚本功能列表
-	funcList = {
+	--[[funcList = {
 		"自动天梯",
 		"自动联赛",
 		--"自动巡回",
@@ -88,6 +88,13 @@ CFG.SCRIPT_FUNC = {						--脚本功能列表
 		--"国际服巡回赛SIM",
 		--"国际服巡回赛手动",
 		--"一键卖球探",
+	},]]
+	funcList = {
+		"教练天梯",
+		"教练联赛",
+		"教练单场",
+		"教练巡回",
+		"手动巡回",
 	},
 	
 	whiteList = {						--功能限制列表，通过白名单形式限制个脚本的功能，用于同时维护多个脚本,func为空是代表全白名单

@@ -4,7 +4,7 @@
 -- Descrip: 自动刷巡回赛教练模式
 
 local _task = {
-	tag = "自动巡回",
+	tag = "教练巡回",
 	processes = {
 		{tag = "合同", mode = "firstRun"},
 		{tag = "比赛", nextTag = "活动模式", mode = "firstRun"},

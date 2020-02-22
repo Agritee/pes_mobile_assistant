@@ -29,7 +29,7 @@ require("project/task/championSim")
 require("project/task/IntSezonSim")
 require("project/task/IntTourSim")
 require("project/task/IntTourManuel")
-require("project/task/commonSim")
+require("project/task/roundSim")
 
 
 function main()
@@ -50,8 +50,11 @@ function main()
 end
 
 main()
---print(_VERSION)
-page.checkPage()
+
+while true do
+	page.checkPage()
+	sleep(200)
+end
 
 
 

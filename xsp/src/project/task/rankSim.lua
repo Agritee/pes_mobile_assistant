@@ -5,7 +5,7 @@
 --1.天梯赛教练模式中，替换红牌伤病球员，是通过直接点击确定进行一键替换的，因为"天梯教练模式"没有actionFunc
 
 local _task = {
-	tag = "自动天梯",
+	tag = "教练天梯",
 	processes = {
 		{tag = "合同", mode = "firstRun"},
 		{tag = "比赛", nextTag = "线上对战", mode = "firstRun"},

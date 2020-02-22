@@ -1,10 +1,10 @@
--- commonSim.lua
+-- roundSim.lua
 -- Author: cndy1860
 -- Date: 2020-02-22
--- Descrip: 通用教练模式
+-- Descrip: 教练单场模式
 
 local _task = {
-	tag = "通用教练模式",
+	tag = "教练单场",
 	processes = {
 		{tag = "通用比赛界面", nextTag = "next"},
 		{tag = "阵容展示", nextTag = "next"},
@@ -85,6 +85,11 @@ local wfn = function()
 end
 insertWaitFunc("终场统计", wfn)
 
+local fn = function()
+	dialog("已完成本场比赛！\r\n即将退出")
+	xmod.exit()
+end
+insertFunc("终场统计", fn)
 
 
 
