@@ -7,7 +7,7 @@
 local _task = {
 	tag = "教练天梯",
 	processes = {
-		{tag = "合同", mode = "firstRun"},
+		--{tag = "合同", mode = "firstRun"},
 		{tag = "比赛", nextTag = "线上对战", mode = "firstRun"},
 		{tag = "线上对战", nextTag = "自动比赛", mode = "firstRun"},
 		
@@ -35,12 +35,6 @@ local function insertWaitFunc(processTag, fn)
 		end
 	end
 end
-
-
-local fn = function()
-	switchMainPage("比赛")
-end
-insertFunc("合同", fn)
 
 local fn = function()
 	if page.matchWidget("阵容展示", "身价溢出") then

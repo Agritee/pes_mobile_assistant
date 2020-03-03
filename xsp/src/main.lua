@@ -51,15 +51,9 @@ end
 
 main()
 
-while true do
-	page.checkPage()
-	sleep(200)
-end
+page.checkPage()
 
 
-
-
---"))()
 --sleep(2000)
 --CFG.SCALING_RATIO = 720/750
 --prt(scale.scalePos("1059|440|0xd0e2cf-0x2f1d30,987|434|0x335a26-0x232117,1123|475|0x335a26-0x232117,1016|500|0x335a26-0x232117,1098|379|0x335a26-0x232117"))

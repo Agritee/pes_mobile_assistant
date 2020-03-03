@@ -11,8 +11,8 @@ CFG.LOG = false or CFG.DEBUG 							--是否允许输出LOG信息并写入log.tx
 
 -----------------版本信息-----------------
 CFG.SCRIPT_NAME = "实况助手"
-CFG.VERSION = "v1.2.1"
-CFG.BIULD_TIME = "20200223"
+CFG.VERSION = "v1.2.2"
+CFG.BIULD_TIME = "20200303"
 
 -----------------脚本参数-----------------
 CFG.UserInfo = script.getUserInfo()

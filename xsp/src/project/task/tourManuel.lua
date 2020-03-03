@@ -6,14 +6,12 @@
 local _task = {
 	tag = "手动巡回",
 	processes = {
-		{tag = "合同", mode = "firstRun"},
+		--{tag = "合同", mode = "firstRun"},
 		{tag = "比赛", nextTag = "活动模式", mode = "firstRun"},
-		{tag = "活动模式", nextTag = "控制球员", mode = "firstRun"},
-		
-		{tag = "巡回模式", nextTag = "next"},
+		{tag = "活动模式", mode = "firstRun"},
+		{tag = "通用比赛界面", nextTag = "next"},
 		{tag = "选择电脑级别", nextTag = "超巨"},
 		{tag = "阵容展示", nextTag = "next"},
-		--{tag = "主场开球", },
 		{tag = "比赛中", timeout = 60},
 		{tag = "终场统计", nextTag = "next", timeout = 900, checkInterval = 1000},
 	},
@@ -37,21 +35,36 @@ local function insertWaitFunc(processTag, fn)
 	end
 end
 
-
 local fn = function()
-	switchMainPage("比赛")
+	local startTime = os.time()
+	while true do
+		if page.matchWidget("活动模式", "手动巡回赛") then
+			ratioTap(700, 700, 500)		--hold
+			sleep(1000)
+			page.tapWidget("活动模式", "手动巡回赛")
+			sleep(500)
+			break
+		end
+		
+		ratioSlide(950, 640, 250, 640)
+		
+		if os.time() - startTime > CFG.DEFAULT_TIMEOUT then
+			catchError(ERR_TIMEOUT, "异常:未找到手动巡回赛!")
+		end
+		sleep(200)
+	end
 end
-insertFunc("合同", fn)
+insertFunc("活动模式", fn)
 
 local fn = function()
 	sleep(200)
-	skipComfirm("巡回模式")		--检测到界面后又弹出了确定提示按钮，如领取奖励，精神提升，点击所有的确定
+	skipComfirm("通用比赛界面")		--检测到界面后又弹出了确定提示按钮，如领取奖励，精神提升，点击所有的确定
 	
 	if page.isExsitCommonWidget("球队异常") and not isPlayerRedCard then
-		refreshUnmetCoach("巡回模式")
+		refreshUnmetCoach("通用比赛界面")
 	end
 end
-insertFunc("巡回模式", fn)
+insertFunc("通用比赛界面", fn)
 
 local fn = function()
 	if page.matchWidget("阵容展示", "身价溢出") then
