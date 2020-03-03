@@ -162,10 +162,14 @@ local wfn = function()
 	if lastPlayingPageTime == 0 then	--未检测到起始playing界面，跳过
 		return
 	end
-
+	
 	if page.matchPage("点球") then
 		lastPenaltyPageTime = os.time()
-		
+		Log("点球大战！！！")
+	end
+
+	if lastPenaltyPageTime > 0 then		--只检测到一次点球界面就作数，此界面特征点有在罚球结果圈上
+		lastPenaltyPageTime = os.time()
 		local posTb = screen.findColors(scale.getAnchorArea("A"),
 		scale.scalePos("934|331|0x00f8ff,930|325|0x00f8ff,938|325|0x00f8ff"),
 		95)

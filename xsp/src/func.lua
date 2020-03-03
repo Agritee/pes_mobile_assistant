@@ -116,6 +116,24 @@ function processInitPage()
 					sleep(2000)
 					if page.getCurrentPage(true) ~= pageInit then
 						Log("skiped init page")
+						Log("wait main page!")
+						sleep(1500)	
+						while true do		--这里让等到达主界面，以防止卡在主界面得通知处
+							if page.isExsitNavigation("notice") then		--防止通知消息
+								page.tapNavigation("notice")
+								sleep(1500)	
+							elseif page.getCurrentPage(true) == "比赛" then
+								sleep(1500)
+								if page.getCurrentPage(true) == "比赛" then		--稳定为比赛界面(notice完全关闭了)
+									return
+								end
+							end
+							
+							if os.time() - _startTime > CFG.DEFAULT_TIMEOUT * 2 then
+								catchError(ERR_TIMEOUT, "cant catch 比赛 page!")
+							end					
+						end						
+						
 						return
 					end
 				end

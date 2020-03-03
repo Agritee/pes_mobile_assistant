@@ -51,7 +51,10 @@ end
 
 main()
 
+--page.isExsitNavigation("notice")
 page.checkPage()
+--page.checkNavigation()
+--page.tapNavigation("notice")
 
 
 --sleep(2000)

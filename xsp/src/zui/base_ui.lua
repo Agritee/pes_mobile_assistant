@@ -481,7 +481,7 @@ function dispUI()
 		end
 	end
 	
-	
+	--[[
 	USER.SCOUT_STAR_LIST[1] = not not uiRet.checkBoxScoutStar.一星
 	USER.SCOUT_STAR_LIST[2] = not not uiRet.checkBoxScoutStar.二星
 	USER.SCOUT_STAR_LIST[3] = not not uiRet.checkBoxScoutStar.三星
@@ -495,6 +495,7 @@ function dispUI()
 	USER.SCOUT_FEATURE_LIST[6] = not not uiRet.checkBoxScoutFeature.年龄
 	USER.SCOUT_FEATURE_LIST[7] = not not uiRet.checkBoxScoutFeature.身高
 	USER.SCOUT_FEATURE_LIST[8] = not not uiRet.checkBoxScoutFeature.惯用脚
+	]]
 	
 	--prt(USER.SCOUT_STAR_LIST)
 	--prt(USER.SCOUT_FEATURE_LIST)

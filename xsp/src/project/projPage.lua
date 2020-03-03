@@ -149,6 +149,12 @@ local _pageList = {
 				srcPos = "728|557|0x3091fa-0x301804,133|454|0x8f8f94,736|559|0xcaddf0,793|572|0xcaddf0,687|541|0xcaddf0,133|454|0xa9a9ad-0x1b1b1a,161|452|0xa9a9ad-0x1b1b1a",
 			},
 			{
+				tag = "返回按钮",		--辅助唯一标识界面
+				enable = true,
+				anchor = "CLB",
+				srcPos = "59|706|0xbeddfe,51|684|0x0079fe,78|705|0x0079fe,295|723|0x0079fe",
+			},
+			{
 				tag = "手动巡回赛",		--取了教练模式左边的两点来实现区分标识
 				enable = false,
 				anchor = "B",
@@ -182,29 +188,6 @@ local _pageList = {
 				enable = true,
 				anchor = "R",
 				srcPos = "958|103|0x1f1f1f,1286|102|0x1f1f1f,958|623|0x1f1f1f,1283|621|0x1f1f1f,980|261|0x363636,1261|134|0x363636",
-			},
-		},
-	},
-	{
-		tag = "巡回模式",		--教练和手动都一样
-		widgetList = {
-			{
-				tag = "球队管理",
-				enable = true,
-				anchor = "LT",
-				srcPos = "123|175|0x12a42b,123|167|0xffffff,102|168|0x0079fd,67|169|0x0079fd,75|133|0x0079fd,110|132|0x0079fd,94|180|0xffffff",
-			},
-			{
-				tag = "比赛历史",
-				enable = true,
-				anchor = "LM",
-				srcPos = "77|303|0xc0c7c7-0x141214,72|328|0x55bd74-0x441a4a,61|329|0x0079fe,93|328|0x0079fe,110|329|0x55bd74-0x441a4a,124|327|0x0079fe",
-			},
-			{
-				tag = "巡回信息",
-				enable = true,
-				anchor = "A",
-				srcPos = "527|224|0xf44189,491|107|0x2a2a2a,500|588|0x323232,1243|107|0x2a2a2a,1238|582|0x323232",
 			},
 		},
 	},
