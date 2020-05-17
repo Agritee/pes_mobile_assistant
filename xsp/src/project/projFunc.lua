@@ -337,10 +337,12 @@ function refreshContract()
 		page.tapNavigation("comfirm")
 	end
 	
-	selectExpiredPlayer()
+	--已被系统整合
+	--selectExpiredPlayer()
 	
 	sleep(500)
 	execCommonWidgetQueue({"球员续约-点击签约", "球员续约-续约", "付款确认"})
+	Log("done 签约")
 	sleep(500)
 	
 	local startTime = os.time()
@@ -355,6 +357,7 @@ function refreshContract()
 		end
 		
 		if page.isExsitNavigation("next") then	--在比赛结束后续约
+			Log("exit here")
 			break
 		end
 		

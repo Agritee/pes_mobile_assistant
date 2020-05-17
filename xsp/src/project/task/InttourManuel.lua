@@ -1,4 +1,4 @@
--- IntTourManuel.lua
+-- IntTourManuel.lua/废弃
 -- Author: cndy1860
 -- Date: 2019-07-01
 -- Descrip: 国际服自动刷巡回手动模式

@@ -1,4 +1,4 @@
--- soldScout.lua
+-- soldScout.lua/废弃
 -- Author: cndy1860
 -- Date: 2019-07-06
 -- Descrip: 一键卖球探

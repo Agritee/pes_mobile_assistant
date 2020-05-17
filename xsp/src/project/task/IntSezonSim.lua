@@ -1,4 +1,4 @@
--- IntSezonSim.lua
+-- IntSezonSim.lua/废弃
 -- Author: cndy1860
 -- Date: 2019-06-19
 -- Descrip: 自动刷联赛赛教练模式

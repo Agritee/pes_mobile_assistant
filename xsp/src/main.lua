@@ -51,9 +51,11 @@ end
 
 main()
 
+--sleep(2000)
+
 --page.isExsitNavigation("notice")
 page.checkPage()
---page.checkNavigation()
+page.checkNavigation()
 --page.tapNavigation("notice")
 
 
@@ -64,7 +66,7 @@ page.checkPage()
 --execNavigationQueue({"comfirm", "notice", "back"})
 
 --page.checkNavigation()
---page.checkCommonWidget()
+page.checkCommonWidget()
 --page.tapWidget("比赛", "活动模式")
 
 --refreshUnmetCoach()

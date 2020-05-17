@@ -1,4 +1,4 @@
--- championSim.lua
+-- championSim.lua/废弃
 -- Author: cndy1860
 -- Date: 2019-06-17
 -- Descrip: 自动刷冠军赛教练模式

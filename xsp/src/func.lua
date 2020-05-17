@@ -119,15 +119,27 @@ function processInitPage()
 						Log("wait main page!")
 						sleep(1500)	
 						while true do		--这里让等到达主界面，以防止卡在主界面得通知处
-							if page.isExsitNavigation("notice") then		--防止通知消息
-								page.tapNavigation("notice")
-								sleep(1500)	
-							elseif page.getCurrentPage(true) == "比赛" then
+							if page.isExsitNavigation("comfirm") then			--恢复比赛提示/网络连接有问题弹出重连
+								page.tapNavigation("comfirm")
 								sleep(1500)
-								if page.getCurrentPage(true) == "比赛" then		--稳定为比赛界面(notice完全关闭了)
+							elseif page.isExsitNavigation("next") then			--天梯比赛判负后的下一步
+								page.tapNavigation("next")
+								sleep(1500)
+							elseif page.isExsitNavigation("notice") then		--防止通知消息
+								page.tapNavigation("notice")
+								sleep(1500)
+							elseif page.getCurrentPage(true) == "比赛" then		--返回到主界面
+								sleep(1500)
+								if page.getCurrentPage(true) == "比赛" then		--稳定为主界面(notice完全关闭了)
+									Log("自动重启成功返回主界面")
 									return
 								end
+							elseif page.getCurrentPage(true) == "比赛中" then		--返回到比赛界面
+								Log("自动重启成功返回比赛界面")
+								return
 							end
+							
+							sleep(200)
 							
 							if os.time() - _startTime > CFG.DEFAULT_TIMEOUT * 2 then
 								catchError(ERR_TIMEOUT, "cant catch 比赛 page!")

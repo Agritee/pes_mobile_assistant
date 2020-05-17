@@ -1,4 +1,4 @@
--- challengeSim.lua
+-- challengeSim.lua/废弃
 -- Author: cndy1860
 -- Date: 2018-12-28
 -- Descrip: 自动刷巡回赛教练模式

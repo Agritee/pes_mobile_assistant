@@ -13,40 +13,35 @@
 --界面
 local _pageList = {
 	{
-		tag = "其他",
+		tag = "比赛",
 		widgetList = {
 			{
-				tag = "玩家信息",
+				tag = "活动模式",
 				enable = true,
 				anchor = "LM",
-				--srcPos = "343|308|0xffffff,343|315|0x007aff,324|312|0x007aff,363|313|0x007aff,324|355|0x007aff,362|355|0x007aff",
-				--dstPos = "",
-				--dstArea = Rect.ZERO
-				--过年新色
-				srcPos = "343|320|0x1a083c,343|314|0xf9dfaf,343|326|0xf4dbac,331|316|0x1a083c,353|349|0x100038,346|358|0x100038,356|358|0xf2d8aa,343|365|0xf2d8aa",
+				srcPos = "331|312|0x007aff,356|311|0x007aff,326|323|0xffffff,361|322|0xffffff,343|348|0x007aff,338|354|0xffffff,350|354|0xffffff,344|362|0x007aff",
+				--春节红色srcPos = "340|374|0xf2d8aa,343|358|0xf2d8aa,332|359|0x1a083c,361|335|0x1a083c,357|346|0x19083d,354|324|0xf2d8aa,369|329|0xf4d9ab,366|323|0x1a083c",
 			},
 			{
-				tag = "游戏帮助",
+				tag = "联赛",
 				enable = true,
 				anchor = "LB",
-				srcPos = "343|308|0xffffff,343|315|0x007aff,324|312|0x007aff,363|313|0x007aff,324|355|0x007aff,362|355|0x007aff",
-				--过年新色
-				srcPos = "343|595|0x1a083c,344|589|0xf9e0af,343|602|0xf5dbac,343|607|0x0f0337,343|612|0xf2d8aa,329|611|0xf2d8aa,337|622|0xf2d8aa",
+				srcPos = "327|579|0x007aff,316|569|0xffffff,358|579|0x007aff,368|569|0xffffff,336|611|0x007aff,327|619|0xffffff,361|617|0xffffff,353|609|0x007aff",
+				--春节红色srcPos = "328|605|0xf2d8aa,358|605|0xf2d8aa,332|631|0xf2d8aa,328|646|0x1a083c,343|641|0xf2d8aa,342|655|0x1a083c,363|642|0x1a083c,352|635|0xf2d8aa",
 			},
-			--[[{
-				tag = "设置",
+			{
+				tag = "线上对战",
 				enable = true,
 				anchor = "RM",
-				srcPos = "962|334|0x007aff,1009|352|0x007aff,1008|315|0x007aff,989|318|0xffffff,974|334|0xffffff,989|348|0xffffff",
-				--过年新色
-			},]]
+				srcPos = "985|310|0x007aff,987|302|0xffffff,1005|324|0xffffff,997|334|0x007aff,982|332|0x007aff,974|343|0xffffff",
+				--春节红色srcPos = "973|330|0xf2d8aa,975|362|0xf2d8aa,1007|362|0xf2d8aa,980|336|0xff1e30,968|325|0xff1e30,981|355|0xff1e30,1007|330|0xf2d8aa,1015|332|0xff1e30",
+			},
 			{
-				tag = "支持",
+				tag = "本地比赛",
 				enable = true,
 				anchor = "RB",
-				--srcPos = "985|575|0x007aff,1016|575|0x007aff,1017|594|0x007aff,993|589|0xffffff,965|606|0xffffff,979|598|0x007aff",
-				--过年新色
-				srcPos = "990|624|0xf4d9ac,994|615|0x1a083c,990|602|0xf2d8aa,1005|606|0xf2d8aa,1007|624|0xf2d8aa,1004|634|0x1a083c,1017|630|0x1a083c,873|538|0xe7e5f2",
+				srcPos = "979|581|0xffffff,991|571|0x007aff,1007|601|0xffffff,1003|614|0x007aff,989|611|0xffffff,977|614|0x007aff,992|595|0x007aff",
+				--春节红色srcPos = "1001|606|0x1a083c,1007|600|0xfee7b2,991|598|0xf2d8aa,1011|612|0xf2d8aa,1002|613|0x1a083c,997|618|0xf2d8aa,1012|613|0xf2d8aa",
 			},
 		},
 	},
@@ -57,57 +52,68 @@ local _pageList = {
 				tag = "我的球队",
 				enable = true,
 				anchor = "RM",
-				--srcPos = "989|342|0xffffff,983|346|0x007aff,996|346|0x007aff,990|351|0xffffff,979|359|0xffffff,1000|359|0xffffff,1009|358|0x007aff,971|357|0x007aff,995|366|0x007aff",
-				--过年新色
-				srcPos = "989|333|0x1a083c,989|342|0x1a083c,1000|346|0xf2d8aa,969|326|0xf2d8aa,1010|365|0xf2d8aa,984|355|0x1a083c,997|356|0x1a083c",
+				srcPos = "989|342|0xffffff,983|346|0x007aff,996|346|0x007aff,990|351|0xffffff,979|359|0xffffff,1000|359|0xffffff,1009|358|0x007aff,971|357|0x007aff,995|366|0x007aff",
+				--春节红色srcPos = "989|333|0x1a083c,989|342|0x1a083c,1000|346|0xf2d8aa,969|326|0xf2d8aa,1010|365|0xf2d8aa,984|355|0x1a083c,997|356|0x1a083c",
 			},
 			{
 				tag = "成就",
 				enable = true,
 				anchor = "LB",
-				--srcPos = "343|644|0x007aff,335|649|0xffffff,352|649|0xffffff,343|648|0x007aff,344|628|0x007aff,337|625|0xffffff,350|625|0xffffff,343|597|0x007aff",
-				--过年新色
-				srcPos = "343|647|0xf2d8aa,336|649|0x1a083c,351|649|0x1a083c,335|642|0xf2d8aa,352|642|0xf2d8aa,360|637|0x1a083c,331|596|0xf5dbac,332|590|0x19073c",
+				srcPos = "343|644|0x007aff,335|649|0xffffff,352|649|0xffffff,343|648|0x007aff,344|628|0x007aff,337|625|0xffffff,350|625|0xffffff,343|597|0x007aff",
+				--春节红色srcPos = "343|647|0xf2d8aa,336|649|0x1a083c,351|649|0x1a083c,335|642|0xf2d8aa,352|642|0xf2d8aa,360|637|0x1a083c,331|596|0xf5dbac,332|590|0x19073c",
 			},
 		},
 	},
 	{
-		tag = "比赛",
+		tag = "合同",
 		widgetList = {
 			{
-				tag = "活动模式",
+				tag = "经纪人",
 				enable = true,
 				anchor = "LM",
-				--srcPos = "331|312|0x007aff,356|311|0x007aff,326|323|0xffffff,361|322|0xffffff,343|348|0x007aff,338|354|0xffffff,350|354|0xffffff,344|362|0x007aff",
-				--过年新色
-				srcPos = "340|374|0xf2d8aa,343|358|0xf2d8aa,332|359|0x1a083c,361|335|0x1a083c,357|346|0x19083d,354|324|0xf2d8aa,369|329|0xf4d9ab,366|323|0x1a083c",
+				srcPos = "343|337|0x007aff,335|340|0xffffff,351|340|0xffffff,357|332|0xffffff,329|332|0xffffff,343|326|0x007aff,322|354|0x007aff,360|343|0x007aff",
 			},
 			{
-				tag = "联赛",
+				tag = "拍卖",
 				enable = true,
 				anchor = "LB",
-				--srcPos = "327|579|0x007aff,316|569|0xffffff,358|579|0x007aff,368|569|0xffffff,336|611|0x007aff,327|619|0xffffff,361|617|0xffffff,353|609|0x007aff",
-				--过年新色
-				srcPos = "328|605|0xf2d8aa,358|605|0xf2d8aa,332|631|0xf2d8aa,328|646|0x1a083c,343|641|0xf2d8aa,342|655|0x1a083c,363|642|0x1a083c,352|635|0xf2d8aa",
+				srcPos = "339|587|0x007aff,326|587|0xffffff,339|600|0xffffff,334|580|0x007aff,345|591|0x007aff,345|581|0x007aff,319|607|0x007aff,316|594|0xffffff",
 			},
 			{
-				tag = "线上对战",
+				tag = "球探",
 				enable = true,
 				anchor = "RM",
-				--srcPos = "985|310|0x007aff,987|302|0xffffff,1005|324|0xffffff,997|334|0x007aff,982|332|0x007aff,974|343|0xffffff",
-				--过年新色
-				srcPos = "973|330|0xf2d8aa,975|362|0xf2d8aa,1007|362|0xf2d8aa,980|336|0xff1e30,968|325|0xff1e30,981|355|0xff1e30,1007|330|0xf2d8aa,1015|332|0xff1e30",
-			},
-			{
-				tag = "本地比赛",
-				enable = true,
-				anchor = "RB",
-				--srcPos = "979|581|0xffffff,991|571|0x007aff,1007|601|0xffffff,1003|614|0x007aff,989|611|0xffffff,977|614|0x007aff,992|595|0x007aff",
-				--过年新色
-				srcPos = "1001|606|0x1a083c,1007|600|0xfee7b2,991|598|0xf2d8aa,1011|612|0xf2d8aa,1002|613|0x1a083c,997|618|0xf2d8aa,1012|613|0xf2d8aa",
+				srcPos = "979|341|0x007aff,999|341|0x007aff,969|334|0xffffff,1008|333|0xffffff,983|350|0xffffff,996|350|0xffffff,965|356|0x007aff,1006|355|0x007aff",
 			},
 		},
 	},
+	{
+		tag = "其他",
+		widgetList = {
+			{
+				tag = "玩家信息",
+				enable = true,
+				anchor = "LM",
+				srcPos = "343|308|0xffffff,343|315|0x007aff,324|312|0x007aff,363|313|0x007aff,324|355|0x007aff,362|355|0x007aff",
+				--春节红色srcPos = "343|320|0x1a083c,343|314|0xf9dfaf,343|326|0xf4dbac,331|316|0x1a083c,353|349|0x100038,346|358|0x100038,356|358|0xf2d8aa,343|365|0xf2d8aa",
+			},
+			{
+				tag = "游戏帮助",
+				enable = true,
+				anchor = "LB",
+				srcPos = "343|308|0xffffff,343|315|0x007aff,324|312|0x007aff,363|313|0x007aff,324|355|0x007aff,362|355|0x007aff",
+				--春节红色srcPos = "343|595|0x1a083c,344|589|0xf9e0af,343|602|0xf5dbac,343|607|0x0f0337,343|612|0xf2d8aa,329|611|0xf2d8aa,337|622|0xf2d8aa",
+			},
+			{
+				tag = "支持",
+				enable = true,
+				anchor = "RB",
+				srcPos = "985|575|0x007aff,1016|575|0x007aff,1017|594|0x007aff,993|589|0xffffff,965|606|0xffffff,979|598|0x007aff",
+				--春节红色srcPos = "990|624|0xf4d9ac,994|615|0x1a083c,990|602|0xf2d8aa,1005|606|0xf2d8aa,1007|624|0xf2d8aa,1004|634|0x1a083c,1017|630|0x1a083c,873|538|0xe7e5f2",
+			},
+		},
+	},
+	
 	{
 		tag = "线上对战",
 		widgetList = {
@@ -120,17 +126,9 @@ local _pageList = {
 			{
 				tag = "自动比赛",
 				enable = true,
-				--anchor = "MTB",
-				--srcPos = "668|346|0x007aff,661|372|0x007aff,676|370|0x007aff,668|356|0xf8f9fb,673|408|0x007aff,523|140|0xE74C75-0x0F1C13,608|140|0xE74C75-0x0F1C13,655|391|0xf8f9fb",
 				anchor = "M",
 				srcPos = "670|340|0x007aff,670|351|0xf8f9fb,660|340|0xf8f9fb,680|340|0xf8f9fb,663|366|0x007aff,655|384|0xf8f9fb,641|391|0x0079ff,548|128|0xc8457a-0x181010,589|128|0xc8457a-0x181010",
 			},
-			--[[{		--被绿茵赛替代
-				tag = "在线比赛",
-				enable = true,
-				anchor = "RM",
-				srcPos = "1039|343|0xf8f9fb,1038|357|0x007bfd,1018|374|0x007bfd,1010|375|0xf8f9fb,1063|392|0x007bfd,1068|399|0xf8f9fb,1035|377|0x007bfd,1051|375|0x007bfd",
-			},]]
 			{
 				tag = "绿茵赛",
 				enable = true,
@@ -205,12 +203,12 @@ local _pageList = {
 	{
 		tag = "阵容展示",
 		widgetList = {
-			{
+			--[[{
 				tag = "主客场球衣",
 				enable = true,
 				anchor = "CLB",
 				srcPos = "175|697|0x000000,175|713|0x000000,137|698|0x353e5f,157|698|0x353e5f,198|718|0x353e5f,207|718|0x353e5f",
-			},
+			},]]
 			{
 				tag = "替补席",
 				enable = true,
@@ -321,41 +319,6 @@ local _pageList = {
 			},
 		},
 	},
-	--[[{
-		tag = "联赛教练模式",
-		widgetList = {
-			{
-				tag = "球队管理",
-				enable = true,
-				anchor = "LT",
-				srcPos = "65|171|0x0079fd,55|169|0xffffff,65|180|0xffffff,92|172|0x0079fd,91|180|0xffffff,124|176|0x12a42b",
-			},
-			--{
-			--	tag = "联赛信息框",
-			--	enable = true,
-			--	anchor = "A",
-			--	srcPos = "545|226|0x27ba36,480|170|0x2a2a2a,484|206|0x323232,1281|174|0x2a2a2a,1280|213|0x323232,515|570|0x484848,513|609|0x323232,1274|599|0x323232",
-			--},
-			{
-				tag = "比赛历史",
-				enable = true,
-				anchor = "A",
-				srcPos = "77|303|0xc0c7c7-0x141214,72|328|0x55bd74-0x441a4a,61|329|0x0079fe,93|328|0x0079fe,110|329|0x55bd74-0x441a4a,124|327|0x0079fe",
-			},			
-			{
-				tag = "跳过余下比赛",		--仅用于跳过余下比赛，enable == false，不参与matchPage/matchWidgets
-				enable = false,
-				anchor = "MTB",
-				srcPos = "652|707|0x52a1f9-0x522904,526|689|0xeeeef4,528|724|0xeeeef4,799|691|0xeeeef4,801|718|0xeeeef4,667|662|0xdfdfe1,482|705|0xdfdfe1,861|708|0xdfdfe1",
-			},
-			{
-				tag = "跳过余下比赛-未激活",
-				enable = false,
-				anchor = "MTB",
-				srcPos = "652|708|0x98989c-0x0b0b0b,526|690|0xc5c5c8,527|719|0xc5c5c8,807|689|0xc5c5c8,804|722|0xc5c5c8",
-			},
-		},
-	},]]
 	{
 		tag = "点球",
 		widgetList = {
@@ -393,7 +356,8 @@ local _pageList = {
 				tag = "实况足球",
 				enable = true,
 				anchor = "LM",
-				srcPos = "149|305|0xffffff,232|374|0xffffff,301|336|0xffffff,413|351|0xffffff,541|341|0xffffff,388|481|0xffffff,356|515|0xffffff",
+				--srcPos = "149|305|0xffffff,232|374|0xffffff,301|336|0xffffff,413|351|0xffffff,541|341|0xffffff,388|481|0xffffff,356|515|0xffffff",
+				srcPos = "158|307|0xffffff,154|375|0xffffff,416|335|0xffffff,540|307|0xffffff,564|362|0xffffff,563|301|0xffffff",
 			},
 			{
 				tag = "用户协议",
@@ -409,35 +373,7 @@ local _pageList = {
 			},
 		},
 	},
-	{
-		tag = "合同",
-		widgetList = {
-			{
-				tag = "经纪人",
-				enable = true,
-				anchor = "LM",
-				srcPos = "343|337|0x007aff,335|340|0xffffff,351|340|0xffffff,357|332|0xffffff,329|332|0xffffff,343|326|0x007aff,322|354|0x007aff,360|343|0x007aff",
-			},
-			{
-				tag = "拍卖",
-				enable = true,
-				anchor = "LB",
-				srcPos = "339|587|0x007aff,326|587|0xffffff,339|600|0xffffff,334|580|0x007aff,345|591|0x007aff,345|581|0x007aff,319|607|0x007aff,316|594|0xffffff",
-			},
-			{
-				tag = "球探",
-				enable = true,
-				anchor = "RM",
-				srcPos = "979|341|0x007aff,999|341|0x007aff,969|334|0xffffff,1008|333|0xffffff,983|350|0xffffff,996|350|0xffffff,965|356|0x007aff,1006|355|0x007aff",
-			},
-			--[[{
-				tag = "主教练",
-				enable = true,
-				anchor = "RB",
-				srcPos = "990|603|0xffffff,982|607|0x007aff,973|605|0x007aff,966|597|0xffffff,966|616|0x007aff,966|625|0xffffff,980|616|0x007aff,989|616|0xffffff,1014|615|0x007aff",
-			},]]
-		},
-	},
+
 	{
 		tag = "决战32强",
 		widgetList = {
@@ -671,11 +607,20 @@ local _navigationList = {
 			math.floor(CFG.DST_RESOLUTION.height - (CFG.EFFECTIVE_AREA[2] + (CFG.EFFECTIVE_AREA[4] - CFG.EFFECTIVE_AREA[2]) * 7 / 8))
 		)
 	},
+	--被整合，系统直接选是选择好了待续约球员的"球员续约-点击签约"状态
+	--{
+	--	tag = "球员续约-球员列表",
+	--	enable = true,
+	--	anchor = "TL",
+	--	srcPos = "279|175|0xffffff,279|167|0xff3b2f,267|184|0xff3b2f,290|184|0xff3b2f,278|198|0xff3b2f,100|189|0xffffff,1224|204|0xffffff",
+	--	actionFunc = refreshContract	--续约合同,
+	--},
 	{
-		tag = "球员续约-球员列表",
+		tag = "球员续约-点击签约",
 		enable = true,
-		anchor = "TL",
-		srcPos = "279|175|0xffffff,279|167|0xff3b2f,267|184|0xff3b2f,290|184|0xff3b2f,278|198|0xff3b2f,100|189|0xffffff,1224|204|0xffffff",
+		anchor = "B/4",
+		--srcPos = "822|698|0x0079fd,487|709|0x0079fd,614|702|0xeeeef4,728|707|0xeeeef4,1078|706|0x0079fd",
+		srcPos = "822|698|0x0079fd,487|709|0x0079fd,614|702|0xeeeef4,728|707|0xeeeef4",
 		actionFunc = refreshContract	--续约合同,
 	},
 	{
@@ -705,7 +650,7 @@ local _navigationList = {
 
 --全局导航优先级
 local _navigationPriorityList = {
-	"球员续约-球员列表",
+	"球员续约-点击签约",
 	"comfirm",
 	"next",
 	"notice",

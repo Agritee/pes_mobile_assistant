@@ -63,7 +63,7 @@ local wfn = function()
 	end
 
 	if lastPenaltyPageTime > 0 then		--发生了点球大战
-		if os.time() - lastPenaltyPageTime > CFG.DEFAULT_TIMEOUT + 10 then	--点球大战异常
+		if os.time() - lastPenaltyPageTime > CFG.DEFAULT_TIMEOUT * 2 + 10 then	--点球大战异常，包括了多个next的时间，适当延长
 			catchError(ERR_TIMEOUT, "异常:点球大战界面中断")
 		end
 		
